@@ -1,0 +1,143 @@
+/* ============================================
+   BASE BUTTON
+   ============================================ */
+button {
+  background-color: #5b7ae5;
+  color: white;
+  border: 1px solid #ff6f6f;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(91, 122, 229, 0.2);
+  margin: 4px;
+}
+
+button:hover {
+  background-color: #4a66d6;
+  box-shadow: 0 4px 12px rgba(91, 122, 229, 0.3);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(91, 122, 229, 0.2);
+}
+
+/* ============================================
+   DESK BUTTONS in desk list
+   ============================================ */
+.desk-btn {
+  width: 95%;
+  color: #00182f;
+  padding: 8px 10px;
+  text-align: left;
+  background: #becef4;
+  border: 3px solid #dcc4c4;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 30px;
+  max-height: 40px;
+  margin: 0;
+}
+
+.desk-btn:hover {
+  background-color: #f0f3ff;
+  border-color: #5b7ae5;
+  color: #5b7ae5;
+}
+
+/* ============================================
+   CONTEXT MENU BUTTON
+   ============================================ */
+.context-menu-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #4f4949;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+  width: 100%;
+  margin: 0;
+  box-shadow: none;
+}
+
+.context-menu-btn:hover {
+  background: #f0f0f0;
+  transform: none;
+}
+
+.context-menu-btn:active {
+  background: #e0e0e0;
+}
+
+/* ============================================
+   PROMPT BUTTONS (confirm/cancel)
+   ============================================ */
+.prompt-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.prompt-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  margin: 0;
+}
+
+.prompt-btn-confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+.prompt-btn-confirm:hover { background-color: #45a049; }
+.prompt-btn-confirm:active { transform: scale(0.95); }
+
+.prompt-btn-cancel {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.prompt-btn-cancel:hover { background-color: #e0e0e0; }
+.prompt-btn-cancel:active { transform: scale(0.95); }
+
+/* ============================================
+   BACK BUTTON
+   ============================================ */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+  color: #333;
+  margin: 0;
+  box-shadow: none;
+}
+
+.back-btn:hover {
+  background: #e0e0e0;
+  transform: none;
+}

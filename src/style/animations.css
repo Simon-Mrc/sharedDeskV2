@@ -1,0 +1,77 @@
+/* ============================================
+   KEYFRAMES
+   ============================================ */
+@keyframes slideOutLeft {
+  0%   { opacity: 1; width: 100%; transform: scaleX(1); transform-origin: left; }
+  70%  { opacity: 0; width: 0;    transform: scaleX(0); transform-origin: left; }
+  85%  { opacity: 0; width: 0;    transform: scaleX(0.05); transform-origin: left; }
+  100% { opacity: 0; width: 0;    transform: scaleX(0); transform-origin: left; }
+}
+
+@keyframes slideInLeft {
+  0%   { opacity: 0; width: 0;    transform: scaleX(0); transform-origin: left; }
+  100% { opacity: 1; width: 100%; transform: scaleX(1); transform-origin: left; }
+}
+
+@keyframes slideOutLeftMinimal {
+  0%   { opacity: 1; max-width: 100%; transform: scaleX(1);    transform-origin: left; }
+  70%  { opacity: 0; max-width: 2rem; transform: scaleX(0);    transform-origin: left; }
+  85%  { opacity: 0; max-width: 2rem; transform: scaleX(0.1);  transform-origin: left; }
+  100% { opacity: 0; max-width: 2rem; transform: scaleX(0);    transform-origin: left; }
+}
+
+@keyframes slideInLeftMinimal {
+  0%   { opacity: 0; max-width: 2rem; transform: scaleX(0); transform-origin: left; }
+  100% { opacity: 1; max-width: 100%; transform: scaleX(1); transform-origin: left; }
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translate(-50%, -55%); }
+  10%  { opacity: 1; transform: translate(-50%, -50%); }
+  90%  { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -45%); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-2px); }
+  75%       { transform: translateX(2px); }
+}
+
+/* ============================================
+   ANIMATION CLASSES
+   applied by React based on state
+   ============================================ */
+.section-exit {
+  animation: slideOutLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  border: 1px solid #bdbdbd;
+  background-color: #dcdbdb;
+  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.2);
+  border-radius: 6px;
+}
+
+.section-enter {
+  animation: slideInLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  border: 1px solid #bdbdbd;
+  background-color: #dcdbdb;
+  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.2);
+  border-radius: 6px;
+}
+
+.section-exit-minimal {
+  animation: slideOutLeftMinimal 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  max-width: 2rem;
+  overflow: hidden;
+  border: 1px solid #bdbdbd;
+  background-color: #dcdbdb;
+  border-radius: 6px;
+}
+
+.section-enter-minimal {
+  animation: slideInLeftMinimal 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  border: 1px solid #bdbdbd;
+  background-color: #dcdbdb;
+  border-radius: 6px;
+}
+
+.exist { opacity: 0.5; }

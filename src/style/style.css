@@ -1,0 +1,361 @@
+/* ============================================
+   RESET & ROOT
+   ============================================ */
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #2c3e50;
+  background-color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: #fafafa;
+  color: #2c3e50;
+}
+
+/* ============================================
+   APP SHELL — globalContainer in App.tsx
+   flex row : sidebar + desk side by side
+   ============================================ */
+.globalContainer {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================
+   SIDEBAR
+   collapsed by default (48px)
+   .expanded class added by React state
+   ============================================ */
+.sidebar {
+  background-color: #ffffff;
+  border-right: 3px solid #5b7ae5;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 48px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 12px rgba(91, 122, 229, 0.15);
+  overflow: hidden;
+}
+
+.sidebar.expanded {
+  width: 360px !important;
+  overflow-y: auto;
+}
+
+/* scrollbar for sidebar */
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+
+/* ============================================
+   TOGGLE + LOGIN ROW
+   ============================================ */
+.toggleAndLog {
+  display: grid;
+  grid-template-columns: 65fr 35fr;
+  gap: 3%;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   SIDEBAR TOGGLE BUTTON
+   always visible even when collapsed
+   ============================================ */
+.sidebar-toggle {
+  width: 100%;
+  padding: 12px;
+  background-color: #7a85ac;
+  border: none;
+  border-bottom: 1px solid #bcb8fe;
+  cursor: pointer;
+  font-size: 18px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.sidebar-toggle:hover {
+  background-color: #bfc6e3;
+}
+
+/* ============================================
+   SIDEBAR SECTIONS (account, moreStuff)
+   ============================================ */
+.sidebar-section {
+  padding: 12px;
+  margin: 6px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  min-width: 280px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   FUNCTIONS PART — grid of action buttons
+   ============================================ */
+.functionsPart {
+  overflow-x: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-shrink: 0;
+  min-width: 280px;
+  column-gap: 10px;
+  row-gap: 3px;
+  padding: 6px;
+}
+
+.functionsPart button {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+/* ============================================
+   DESKS SIDE SECTION
+   flex: 1 = takes all remaining sidebar space
+   ============================================ */
+.desksSide {
+  padding: 12px;
+  margin: 6px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  flex: 1;
+  min-height: 40%;
+  min-width: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   DESK LIST
+   ============================================ */
+.deskList {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+  gap: 4px;
+  padding-top: 8px;
+  max-width: 100%;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.section-header h3 {
+  font-size: 11px;
+  font-weight: 600;
+  color: #a0a0a0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.search-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* ============================================
+   USER DISPLAY in account section
+   ============================================ */
+.user-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #5b7ae5;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.user-type {
+  font-size: 11px;
+  color: #a0a0a0;
+}
+
+/* ============================================
+   CENTER DISPLAY — DeskDisplay.tsx
+   flex: 1 takes all width after sidebar
+   ============================================ */
+.centerDisplayed {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: #ecebeb;
+  position: relative;
+  height: 100%;
+  margin: 12px;
+  border-radius: 8px;
+  border: 2px solid #e8e8e8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   GLOBAL HOME — where desks are displayed
+   flex row so desks sit side by side
+   ============================================ */
+.globalHome {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  background-color: #eeeded;
+  border-radius: 6px;
+  position: relative;
+}
+
+/* ============================================
+   DESK COLUMNS
+   desk-column-large = active desk
+   ranged = minimized desk (sliver)
+   ============================================ */
+.desk-column-large {
+  flex: 0 0 90%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #e9e8e8;
+  border: 1px solid #bdbdbd;
+  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.2);
+  border-radius: 6px;
+  transition: box-shadow 0.2s ease;
+}
+
+.desk-column-large:hover {
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+}
+
+.ranged {
+  flex: 0 0 2rem;
+  width: 2rem;
+  max-width: 2rem;
+  padding: 0;
+  border: 1px solid #bdbdbd;
+  background-color: #dcdbdb;
+  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ============================================
+   MODAL OVERLAY
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+  z-index: 500;
+}
+
+/* ============================================
+   INPUTS (global)
+   ============================================ */
+input, textarea, select {
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+  color: #2c3e50;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #5b7ae5;
+  box-shadow: 0 0 0 3px rgba(91, 122, 229, 0.1);
+}
+
+input::placeholder { color: #a0a0a0; }
+
+/* ============================================
+   SCROLLBAR (global)
+   ============================================ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+
+/* ============================================
+   MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .sideBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10vw;
+    height: 100vh;
+    z-index: 100;
+    margin: 0;
+  }
+
+  .sideBar.expanded {
+    width: 80vw;
+  }
+
+  .centerDisplayed {
+    position: fixed;
+    left: 10vw;
+    top: 0;
+    width: calc(100vw - 10vw);
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+}

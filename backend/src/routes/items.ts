@@ -1,0 +1,19 @@
+import { Router } from 'express';
+import itemController from '../controllers/itemController';
+import { authenticateToken } from '../middleware/authMiddleware';
+import { validate } from '../middleware/validateMiddleware';
+import { ItemSchema, UpdateItemSchema } from '../validation/schemas';
+
+const router = Router();
+
+router.get('/user',authenticateToken,itemController.getAllItemByUserId);
+
+router.get('/:id',authenticateToken,itemController.getItemById);
+
+router.post('/',authenticateToken,  itemController.createItem);
+
+router.put('/:id',authenticateToken, itemController.updateItemById);
+
+router.delete('/:id',authenticateToken,itemController.deleteItemById);
+
+export default router
