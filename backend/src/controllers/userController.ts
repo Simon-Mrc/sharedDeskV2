@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import db from '../db/database';
-import { User, JwtPayload } from "../../shared/types";
+import { User, JwtPayload } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

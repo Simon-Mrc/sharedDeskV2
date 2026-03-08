@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const DB_PATH = process.env.DB_PATH || './src/db/database.db';
+const DB_PATH = path.join(__dirname, 'database.db');
 
-const db = new Database(path.resolve(DB_PATH));
+const db = new Database(DB_PATH);
 db.pragma('foreign_keys = ON');
 
 db.exec(`
