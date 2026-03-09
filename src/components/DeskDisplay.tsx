@@ -9,7 +9,7 @@ export function DeskDisplay():JSX.Element{
     const sectionContext = useContext(SectionContext);
     const deskContext = useContext(DeskContext);
     const arrayOfItem = deskContext?.items?.filter(
-        item=>item.parentId===sectionContext?.currentSection
+    item=>item.parentId===sectionContext?.currentSection
     ) ?? [];
 
     return(
@@ -26,6 +26,7 @@ export function DeskDisplay():JSX.Element{
                 : <PlaceFile key = {item.id} item = {item}/>
             )
             )}
+
             </div>
 
         </div>

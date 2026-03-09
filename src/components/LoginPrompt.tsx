@@ -12,13 +12,13 @@ export function LoginPrompt({onClose} :{onClose : ()=>void}){
         if(userContext?.logged){
             onClose();
             navigate('/');
-
         }
     },[userContext?.logged])
     async function handleLogin(){
         setError(null);
         try{
             await userContext?.login(mail,password);
+            if(!userContext?.logged){setError('wrong Email or Password')}
         }catch(error){
             setError('wrong Email or Password')
         }

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { loginUser, registerUser } from "../api/user";
 import type { User } from "../../shared/types";
@@ -13,6 +13,13 @@ export function RegisterPrompt({onClose} : {onClose : ()=>void}){
     const [password,setPassword] = useState<string>('');
     const [error,setError] = useState('');
 
+    useEffect(()=>{
+        if(userContext?.logged){
+            onClose();
+            navigate('/');
+        }
+
+    },[userContext?.logged])
     async function handleRegister (){
         try{
             const newUser : Omit<User,'password'> = await registerUser({name,userName,mail,password});
@@ -20,12 +27,9 @@ export function RegisterPrompt({onClose} : {onClose : ()=>void}){
             if(newUser?.id){
                 console.log('test2');
                 await userContext?.login(mail,password);
-                console.log(userContext?.user?.id);
-                if (userContext?.user?.id){
-                    console.log('test3');
-                    onClose();
-                    navigate('/');
-                }
+                console.log(userContext?.logged);
+            }else{
+                setError('Email or UserName already taken');
             }
         }catch{
             setError('Server issue plz try again later')

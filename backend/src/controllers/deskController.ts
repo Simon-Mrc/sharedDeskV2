@@ -15,30 +15,32 @@ import * as bcrypt from 'bcrypt';
 const createDesk =async (req : Request<{},{},Desk>,res : Response<{message :string}|{error:string}>)=>{
     try{
         const userId = (req as any).user.userId;
+        const id = crypto.randomUUID();
+        const createdAt = Date.now();
         if(req.body.accessPassword){
             db.prepare(`
                 INSERT INTO desks
                 (id,name,ownerId,urlLink,accessPassword,createdAt)
                 VALUES
                 (?,?,?,?,?,?)
-                `).run(req.body.id,req.body.name,userId,req.body.urlLink,await bcrypt.hash(req.body.accessPassword,10),req.body.createdAt);
+                `).run(id,req.body.name,userId,req.body.urlLink,await bcrypt.hash(req.body.accessPassword,10),createdAt);
             db.prepare(`
                 INSERT INTO deskAccess
                 (deskId,userId,accessType)
                 VALUES(?,?,?)
-                `).run(req.body.id,userId,'admin');
+                `).run(id,userId,'admin');
         }else{
             db.prepare(`
                 INSERT INTO desks
                 (id,name,ownerId,urlLink,accessPassword,createdAt)
                 VALUES
                 (?,?,?,?,?,?)
-                `).run(req.body.id,req.body.name,userId,req.body.urlLink,req.body.accessPassword,req.body.createdAt);
+                `).run(id,req.body.name,userId,req.body.urlLink,req.body.accessPassword,createdAt);
                 db.prepare(`
                     INSERT INTO deskAccess
                     (deskId,userId,accessType)
                     VALUES(?,?,?)
-                    `).run(req.body.id,userId,'admin');
+                    `).run(id,userId,'admin');
         }
             res.json({message : 'desk got Created !'});
     }catch(error){
