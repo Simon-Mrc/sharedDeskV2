@@ -32,16 +32,23 @@ const getAll = (req : Request, res : Response<(Omit<User,'password'>)[] | {error
 }
 
 ////////////////////////////////////CREATE USER /////////////////////////////////////
-const createUser =async (req : Request<{},{},User>,res: Response<{message : string}|{error:string}>)=>{
+const createUser =async (req : Request<{},{},User>,res: Response<Omit<User,'password'>|{error:string}>)=>{
     try{
         const id = crypto.randomUUID();
+        const {name,userName,mail,accountType,friendList,notif,userColor} = req.body
         db.prepare(`
             INSERT INTO users
             (id,name,userName,mail,accountType,friendList,notif,userColor,password)
             VALUES
             (?,?,?,?,?,?,?,?,?)
             `).run(id,req.body.name,req.body.userName,req.body.mail,req.body.accountType,req.body.friendList,req.body.notif,req.body.userColor,await bcrypt.hash(req.body.password,10));
-            return res.status(201).json({ message: 'User created' });
+            const user = db.prepare(`
+                SELECT * FROM users
+                WHERE id=?
+                `).get(id) as User;
+            const {password,... userWithoutPassword} =user
+            console.log(userWithoutPassword);
+            return res.json(userWithoutPassword);
     }catch(error){
         console.log(error) ;
         res.status(500).json({ error: 'Failed to create user' });
@@ -107,7 +114,10 @@ const login = async (req : Request <{},{},{mail : string,password:string}> , res
             return res.status(404).json({error : 'wrong adressmail'})
         }
         else{
+            console.log('checking password')
             const validPassword = await bcrypt.compare(req.body.password, user.password);
+            console.log(validPassword);
+            console.log(req.body.password);
             if(!validPassword){return res.status(404).json({error:'wrong password'})} 
             const payload: JwtPayload = {
                 userId: user.id,
@@ -116,6 +126,8 @@ const login = async (req : Request <{},{},{mail : string,password:string}> , res
             };
             const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: '24h' });
             const {password,...userWithoutPassword } = user;
+            console.log(token);
+            console.log(userWithoutPassword)
             return res.json({user : userWithoutPassword,token : token});
         }
     }catch(error){

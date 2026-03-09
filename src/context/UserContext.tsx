@@ -44,8 +44,8 @@ export function UserProvider({children} : {children : ReactNode}){
     async function login(mail : User['mail'],password :string){
         try{
             const {user,token} = await loginUser({mail,password});
-            localStorage.setItem('token',token);
             if(token){
+                localStorage.setItem('token',token);
                 setUser(user);
                 setLogged(true);
             }

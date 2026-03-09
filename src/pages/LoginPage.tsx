@@ -1,5 +1,6 @@
 import { useState, type JSX } from "react";
 import { LoginPrompt } from "../components/LoginPrompt";
+import { RegisterPrompt } from "../components/RegisterPrompt";
 
 export function LoginPage(): JSX.Element {
     const [showLogin, setShowLogin] = useState<boolean>(false);
@@ -48,6 +49,9 @@ export function LoginPage(): JSX.Element {
                 <button onClick={()=>setShowRegister(true)}>New to SharedDesk ? Create an account !</button>
                 {showLogin && 
                 <LoginPrompt onClose = {()=> setShowLogin(false)}/>
+                }
+                {showRegister &&
+                <RegisterPrompt onClose = {()=> setShowRegister(false)}/>
                 }
             </div>
 
