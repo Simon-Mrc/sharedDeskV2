@@ -8,6 +8,8 @@ const router = Router();
 
 router.get('/user',authenticateToken,itemController.getAllItemByUserId);
 
+router.get('/desks/:deskId', authenticateToken, itemController.getAllItemByDeskId);
+
 router.get('/:id',authenticateToken,itemController.getItemById);
 
 router.post('/',authenticateToken,  itemController.createItem);

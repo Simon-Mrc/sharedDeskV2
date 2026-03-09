@@ -4,6 +4,7 @@ import { DeskContext } from "./DeskContext";
 
 export const SectionContext = createContext<SectionContextType|null>(null);
 
+///////////////////////////// SECTION CONTEXT PROVIDER //////////////////////////
 export function SectionProvider({children} : {children : ReactNode}){
     const [currentSection , setCurrentSection] = useState<SectionContextType['currentSection']>(null);
     const [sectionExist , setSectionExists] = useState<boolean>(false);

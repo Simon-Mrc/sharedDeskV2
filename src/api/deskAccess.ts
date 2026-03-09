@@ -1,6 +1,7 @@
 const BASE_URL = 'http://localhost:3000'
 import { authHeaders } from "./user"
 
+////////////////////// GET ALL DESKS USER HAS ACCESS TO /////////////////////
 export async function getAllDesk(){
     try{
         const response = await fetch(`${BASE_URL}/deskAccess/desks`,{
@@ -11,7 +12,7 @@ export async function getAllDesk(){
         console.log(result);
         return result;
     }catch(error){
-        console.log('User has desk to access')
+        console.log('User has no desks to access')
     }
 
 }

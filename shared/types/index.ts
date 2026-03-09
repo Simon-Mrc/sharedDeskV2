@@ -34,10 +34,11 @@ export interface DeskAccess {
 
 export interface DeskContextType {
     currentDesk : Desk | null;
-    desks : Desk[];
+    desks : Desk[]|null;
     items : Item[]|null;
     loaded : boolean;
     switchDesk : (deskId : Desk['id'])=>void;
+    refreshDesks : ()=>void;
 }
 
 export interface Item {

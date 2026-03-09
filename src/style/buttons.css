@@ -3,11 +3,12 @@
    purple accent — matches the global dark theme
    ============================================ */
 button {
-  background-color: #b29cf0;
+  background-color: #9582ca;
   color: #0e0e0e;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
+  border: 3px solid #497565;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;

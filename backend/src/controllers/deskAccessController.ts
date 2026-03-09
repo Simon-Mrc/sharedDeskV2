@@ -49,13 +49,14 @@ const getAccessType = (req : Request<{deskId:string}>,res : Response<{accessType
 }
 
 /////////////////////////////// GET ALL DESK USER HAS ACCESS TO //////////////////////////
-const getAllSharedDeskIdByUserId = (req : Request,res : Response<{deskId : string}[]|{error:string}>)=>{
+const getAllSharedDeskIdByUserId = (req : Request,res : Response<Desk[]|{error:string}>)=>{
     try{
         const userId = (req as any).user.userId;
         const arrayOfDeskId = db.prepare(`
-            SELECT deskId FROM deskAccess
-            WHERE userId = ?
-            `).all(userId) as {deskId : string}[];
+            SELECT desks.* FROM desks
+            JOIN deskAccess ON deskAccess.deskId = desks.id
+            AND deskAccess.userId = ?
+            `).all(userId) as Desk[];
         res.json(arrayOfDeskId);
     }catch(error){
         res.status(404).json({error:'no desk found'})

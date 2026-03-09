@@ -1,9 +1,46 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Desk, DeskContextType, Item } from "../../shared/types";
 import { UserContext } from "./UserContext";
+import { getAllDesk } from "../api/deskAccess";
+import { getItemByDeskId } from "../api/item";
+import { getDeskById } from "../api/desk";
 
 export const DeskContext = createContext<DeskContextType|null>(null)
 
+///////////////////////////// DESK CONTEXT PROVIDER //////////////////////////
+export function DeskProvider({children} : {children : ReactNode}){
+        const [currentDesk , setCurrentDesk] = useState<Desk|null>(null);
+        const [items , setItems] = useState<DeskContextType['items']|null>(null);
+        const [loaded , setLoaded] = useState<boolean>(false);
+        const [desks , setDesks] = useState<Desk[]|null>(null);
+        const userContext = useContext(UserContext);
+        async function refreshDesks(){
+            console.log('test alldesk handler');
+            setDesks(await getAllDesk());
+        }
+        async function allItemHandler(deskId: string){
+            setItems(await getItemByDeskId(deskId)as Item[]);
+            if(currentDesk){setLoaded(true)};
+        }
+//////////////////////// REFRESH ITEM ON DESK CHANGES ///////////////////
+        useEffect(()=>{
+            if(currentDesk?.id){allItemHandler(currentDesk.id);}
+        },[currentDesk]);
+//////////////////////// REFRESH DESKS ON USER CHANGES ///////////////////
+        useEffect(()=>{
+            if(userContext?.user){refreshDesks();}
+        },[userContext?.user])
+
+        async function switchDesk(deskId : string){
+            setCurrentDesk(await getDeskById(deskId))
+        }
+        return(
+            <DeskContext.Provider value={{currentDesk,desks,items,loaded,switchDesk,refreshDesks}}>
+                {children}
+            </DeskContext.Provider>
+        )
+       
+}
 /////////////////////////////MOCK FOR BUILDING ///////////////////////////////
 const mockDesk = {
     id: "desk0",
@@ -32,65 +69,28 @@ const mockItems2 = [
 ]as Item[];
 
 
-export function DeskProvider({children} : {children : ReactNode}){
-    const [currentDesk , setCurrentDesk] = useState<Desk|null>(mockDesk)
-    const [items , setItems] = useState<DeskContextType['items']|null>(mockItems);
-    const [loaded , setLoaded] = useState<boolean>(true);
-    const [desks , setDesks] = useState([mockDesk,mockDesk2])
-
-    async function switchDesk (deskId : Desk['id']){
-        if(currentDesk?.id === mockDesk.id){ 
-            setCurrentDesk(mockDesk2);
-            setItems(mockItems2);        
-        }else{
-            setCurrentDesk(mockDesk);
-            setItems(mockItems);
-        }
-    
-    }
-    return(
-        <DeskContext.Provider value = {{currentDesk,desks,items,loaded,switchDesk}}>
-            {children}
-        </DeskContext.Provider>
-    )
- 
-}
-
-/////////////////////////////END MOCK FOR BUILDING ///////////////////////////////
-
-
-// export function DeskProvider({children} : {chidren : ReactNode}){
-//     const [currentDesk , setCurrentDesk] = useState<Desk|null>(null)
-//     const [items , setItems] = useState<DeskContextType['items']|null>(null);
-//     const [loaded , setLoaded] = useState<boolean>(false);
-//     const [allDesks , setAllDesks] = useState<Desk[]|null>(null);
-//     const userContext = useContext(UserContext);
-//     if(userContext?.user){
-//         try{
-//             let alldesks = await getAllDeskByUserId(userContext?.user.id);
-//             setAllDesks(allDesks);
-//         }
-//     }
+// export function DeskProvider({children} : {children : ReactNode}){
+//     const [currentDesk , setCurrentDesk] = useState<Desk|null>(mockDesk)
+//     const [items , setItems] = useState<DeskContextType['items']|null>(mockItems);
+//     const [loaded , setLoaded] = useState<boolean>(true);
+//     const [desks , setDesks] = useState([mockDesk,mockDesk2])
 
 //     async function switchDesk (deskId : Desk['id']){
-//         try{
-//             let desk = await getDesk<Desk|{error : string}>(deskId);
-//         if(!desk.error){
-//             setCurrentDesk(desk);
-//             let items = await getItemsByDeskId<Item[]|null>(desk.id)
-//             setItems(items);
-//             setLoaded(true);
+//         if(currentDesk?.id === mockDesk.id){ 
+//             setCurrentDesk(mockDesk2);
+//             setItems(mockItems2);        
 //         }else{
-//             console.log('The desk you re looking doesn t exist anymore')
+//             setCurrentDesk(mockDesk);
+//             setItems(mockItems);
 //         }
-//         }catch(error){
-//             console.log('couldn t connect to db');
-//         }
+    
 //     }
 //     return(
-//         <DeskContext.Provider value = {{currentDesk,items,loaded,switchDesk}}>
+//         <DeskContext.Provider value = {{currentDesk,desks,items,loaded,switchDesk}}>
 //             {children}
 //         </DeskContext.Provider>
 //     )
  
 // }
+
+/////////////////////////////END MOCK FOR BUILDING ///////////////////////////////

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////
 //////////////////////////    IMPORT HERE     ////////////////////////
 //////////////////////////////////////////////////////////////////////
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import db from '../db/database';
 import { Desk, Item } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
@@ -96,4 +96,17 @@ const deleteItemById = (req : Request<{id:string}>,res:Response<{message:string}
     }
 }
 
-export default {getAllItemByUserId,getItemById,createItem,updateItemById,deleteItemById}
+/////////////////////////////// GET ALL ITEM BY DESK ID /////////////////////////////
+const getAllItemByDeskId = (req : Request<{deskId : string}>,res : Response <Item[]|{error : string}>)=>{
+    try{
+        const arrayOfItems = db.prepare(`
+            SELECT * FROM items
+            WHERE deskId = ?
+            `).all(req.params.deskId) as Item[]
+        return res.json(arrayOfItems);
+    }catch(error){
+        res.status(404).json({error : 'DeskId not existing'})
+    }
+}
+
+export default {getAllItemByUserId,getItemById,createItem,updateItemById,deleteItemById, getAllItemByDeskId}
