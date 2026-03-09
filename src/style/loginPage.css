@@ -1,0 +1,162 @@
+/* ─── PAGE LAYOUT ─────────────────────────────────────────── */
+.login-page {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #0e0e0e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    position: relative;
+}
+
+/* ─── LEFT — PRESENTATION ──────────────────────────────────── */
+.presentation-container {
+    flex: 1 1 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(160deg, #1a1a2e 0%, #0e0e0e 100%);
+    border-right: 1px solid #2a2a2a;
+}
+
+.presentation-content {
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* logo */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 2.5rem;
+}
+
+.logo-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+/* tagline */
+.presentation-tagline {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #c8b4ff;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* description */
+.presentation-description {
+    font-size: 1rem;
+    color: #aaaaaa;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* feature list */
+.presentation-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: #cccccc;
+}
+
+.feature-icon {
+    font-size: 1.2rem;
+    width: 1.8rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* ─── CENTER — LOGIN ───────────────────────────────────────── */
+.login-container {
+    flex: 1 1 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background-color: #0e0e0e;
+}
+
+/* ─── FOOTER ───────────────────────────────────────────────── */
+.footer-container {
+    width: 100%;
+    flex-basis: 100%;
+    background-color: #0a0a0a;
+    border-top: 1px solid #2a2a2a;
+    padding: 1rem 2rem;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-text {
+    font-size: 0.8rem;
+    color: #555555;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #888888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #c8b4ff;
+}
+
+/* ─── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .login-page {
+        flex-direction: column;
+    }
+
+    .presentation-container {
+        border-right: none;
+        border-bottom: 1px solid #2a2a2a;
+        padding: 2rem 1.5rem;
+    }
+
+    .presentation-tagline {
+        font-size: 1.3rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}

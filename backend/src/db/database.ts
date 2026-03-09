@@ -15,7 +15,7 @@ db.exec(`
     name            TEXT NOT NULL,
     userName        TEXT NOT NULL UNIQUE,
     mail            TEXT NOT NULL,
-    accountType     TEXT CHECK(accountType IN('admin' ,'user','premium')),
+    accountType     TEXT CHECK(accountType IN('admin' ,'user','premium')) DEFAULT 'user',
     friendList      TEXT DEFAULT '[]',
     notif           TEXT DEFAULT '[]',
     userColor       TEXT DEFAULT '#FF5733',

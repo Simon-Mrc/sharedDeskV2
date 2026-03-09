@@ -34,12 +34,13 @@ const getAll = (req : Request, res : Response<(Omit<User,'password'>)[] | {error
 ////////////////////////////////////CREATE USER /////////////////////////////////////
 const createUser =async (req : Request<{},{},User>,res: Response<{message : string}|{error:string}>)=>{
     try{
+        const id = crypto.randomUUID();
         db.prepare(`
             INSERT INTO users
             (id,name,userName,mail,accountType,friendList,notif,userColor,password)
             VALUES
             (?,?,?,?,?,?,?,?,?)
-            `).run(req.body.id,req.body.name,req.body.userName,req.body.mail,req.body.accountType,req.body.friendList,req.body.notif,req.body.userColor,await bcrypt.hash(req.body.password,10));
+            `).run(id,req.body.name,req.body.userName,req.body.mail,req.body.accountType,req.body.friendList,req.body.notif,req.body.userColor,await bcrypt.hash(req.body.password,10));
             return res.status(201).json({ message: 'User created' });
     }catch(error){
         console.log(error) ;
