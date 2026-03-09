@@ -5,8 +5,8 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   font-weight: 400;
-  color: #2c3e50;
-  background-color: #ffffff;
+  color: #e0e0e0;
+  background-color: #0e0e0e;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -26,35 +26,33 @@ body {
   display: flex;
   height: 100vh;
   width: 100%;
-  background-color: #fafafa;
-  color: #2c3e50;
+  background-color: #0e0e0e;
+  color: #e0e0e0;
 }
 
 /* ============================================
    APP SHELL — globalContainer in App.tsx
-   flex row : sidebar + desk side by side
    ============================================ */
 .globalContainer {
   display: flex;
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  background-color: #3b3a3a;
 }
 
 /* ============================================
    SIDEBAR
-   collapsed by default (48px)
-   .expanded class added by React state
    ============================================ */
 .sidebar {
-  background-color: #ffffff;
-  border-right: 3px solid #5b7ae5;
+  background-color: #565681;
+  border-right: 1px solid #2a2a3e;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 48px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 12px rgba(91, 122, 229, 0.15);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
 
@@ -66,8 +64,8 @@ body {
 /* scrollbar for sidebar */
 .sidebar::-webkit-scrollbar { width: 6px; }
 .sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
-.sidebar::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+.sidebar::-webkit-scrollbar-thumb { background: #50507e; border-radius: 3px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: #5b5b8e; }
 
 /* ============================================
    TOGGLE + LOGIN ROW
@@ -81,22 +79,23 @@ body {
 
 /* ============================================
    SIDEBAR TOGGLE BUTTON
-   always visible even when collapsed
    ============================================ */
 .sidebar-toggle {
   width: 100%;
   padding: 12px;
-  background-color: #7a85ac;
+  background-color: #1a1a2e;
   border: none;
-  border-bottom: 1px solid #bcb8fe;
+  border-bottom: 1px solid #2a2a3e;
   cursor: pointer;
   font-size: 18px;
   flex-shrink: 0;
   text-align: center;
+  color: #c8b4ff;
+  transition: background 0.2s ease;
 }
 
 .sidebar-toggle:hover {
-  background-color: #bfc6e3;
+  background-color: #282847;
 }
 
 /* ============================================
@@ -105,13 +104,14 @@ body {
 .sidebar-section {
   padding: 12px;
   margin: 6px;
-  border: 1px solid #e8e8e8;
+  border: 1px solid #2a2a3e;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: #2c2c53;
   min-width: 280px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   flex-shrink: 0;
+  color: #e0e0e0;
 }
 
 /* ============================================
@@ -135,21 +135,21 @@ body {
 
 /* ============================================
    DESKS SIDE SECTION
-   flex: 1 = takes all remaining sidebar space
    ============================================ */
 .desksSide {
   padding: 12px;
   margin: 6px;
-  border: 1px solid #e8e8e8;
+  border: 1px solid #2a2a3e;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  background-color: #272747;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   flex: 1;
   min-height: 40%;
   min-width: 280px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  color: #e0e0e0;
 }
 
 /* ============================================
@@ -176,7 +176,7 @@ body {
 .section-header h3 {
   font-size: 11px;
   font-weight: 600;
-  color: #a0a0a0;
+  color: #888888;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -200,8 +200,8 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #5b7ae5;
-  color: white;
+  background-color: #c8b4ff;
+  color: #0e0e0e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,65 +213,62 @@ body {
 .user-name {
   font-size: 13px;
   font-weight: 500;
-  color: #2c3e50;
+  color: #e0e0e0;
 }
 
 .user-type {
   font-size: 11px;
-  color: #a0a0a0;
+  color: #888888;
 }
 
 /* ============================================
    CENTER DISPLAY — DeskDisplay.tsx
-   flex: 1 takes all width after sidebar
+   stays white — this is the "desk" workspace
    ============================================ */
 .centerDisplayed {
   flex: 1;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: #ecebeb;
+  background-color: #ffffff;
   position: relative;
   height: 100%;
   margin: 12px;
-  border-radius: 8px;
-  border: 2px solid #e8e8e8;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  border: 1px solid #2a2a3e;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* ============================================
    GLOBAL HOME — where desks are displayed
-   flex row so desks sit side by side
    ============================================ */
 .globalHome {
   flex: 1;
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  background-color: #eeeded;
+  background-color: #f5f5f5;
   border-radius: 6px;
   position: relative;
 }
 
 /* ============================================
    DESK COLUMNS
-   desk-column-large = active desk
-   ranged = minimized desk (sliver)
    ============================================ */
 .desk-column-large {
   flex: 0 0 90%;
   height: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #e9e8e8;
-  border: 1px solid #bdbdbd;
-  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.2);
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   transition: box-shadow 0.2s ease;
 }
 
 .desk-column-large:hover {
-  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+  box-shadow: 0 12px 40px rgba(200, 180, 255, 0.2);
 }
 
 .ranged {
@@ -279,9 +276,9 @@ body {
   width: 2rem;
   max-width: 2rem;
   padding: 0;
-  border: 1px solid #bdbdbd;
-  background-color: #dcdbdb;
-  box-shadow: 0 4px 15px rgba(31, 38, 135, 0.2);
+  border: 1px solid #2a2a3e;
+  background-color: #383858;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   border-radius: 6px;
   overflow: hidden;
   pointer-events: none;
@@ -301,41 +298,41 @@ body {
 }
 
 /* ============================================
-   INPUTS (global)
+   INPUTS (global — inside sidebar dark area)
    ============================================ */
 input, textarea, select {
-  border: 1px solid #e8e8e8;
+  border: 1px solid #333333;
   border-radius: 6px;
   padding: 8px 12px;
   font-family: inherit;
   font-size: 14px;
   transition: all 0.2s ease;
-  background-color: #ffffff;
-  color: #2c3e50;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  background-color: #0e0e0e;
+  color: #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: #5b7ae5;
-  box-shadow: 0 0 0 3px rgba(91, 122, 229, 0.1);
+  border-color: #c8b4ff;
+  box-shadow: 0 0 0 3px rgba(200, 180, 255, 0.15);
 }
 
-input::placeholder { color: #a0a0a0; }
+input::placeholder { color: #555555; }
 
 /* ============================================
    SCROLLBAR (global)
    ============================================ */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+::-webkit-scrollbar-thumb { background: #3a3a5e; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #5b5b8e; }
 
 /* ============================================
    MOBILE
    ============================================ */
 @media (max-width: 768px) {
-  .sideBar {
+  .sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -345,7 +342,7 @@ input::placeholder { color: #a0a0a0; }
     margin: 0;
   }
 
-  .sideBar.expanded {
+  .sidebar.expanded {
     width: 80vw;
   }
 
