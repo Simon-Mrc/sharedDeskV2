@@ -1,0 +1,55 @@
+/* ============================================
+   NOT ASHAMED TREE CONTAINER
+   ============================================ */
+.notAshamedtreeContainer {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: 2px solid #c8b4ff;
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 9999;
+    max-height: 40vh;
+    max-width: 30vw;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 8px 24px rgba(200, 180, 255, 0.2);
+    animation: popIn 0.2s ease;
+}
+
+/* ============================================
+   TREE TEXT
+   ============================================ */
+.notAshamedtreeContainer pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #d4d4d4;
+    white-space: pre;
+}
+
+/* ============================================
+   TREE HEADER
+   ============================================ */
+.notAshamedtreeContainer pre::first-line {
+    color: #c8b4ff;
+    font-weight: 700;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+.notAshamedtreeContainer::-webkit-scrollbar { width: 6px; }
+.notAshamedtreeContainer::-webkit-scrollbar-track { background: transparent; }
+.notAshamedtreeContainer::-webkit-scrollbar-thumb { 
+    background: #3a3a5e; 
+    border-radius: 3px; 
+}
+.notAshamedtreeContainer::-webkit-scrollbar-thumb:hover { 
+    background: #c8b4ff; 
+}

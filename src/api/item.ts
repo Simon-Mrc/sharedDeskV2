@@ -30,3 +30,17 @@ export async function createItem(item : Omit<Item,'id'>) : Promise <Item|undefin
         console.log('fail to access db');
     }
 }
+
+export async function getItemById(id : string) : Promise<Item|null|undefined>{
+    try{
+        const result = await fetch(`${BASE_URL}/items/${id}`,{
+            method : 'GET',
+            headers : authHeaders()
+        })
+        const item = await result.json();
+        console.log(item);
+        return item
+    }catch(error){
+        console.log('there is no existing item with this id ')
+    }
+}

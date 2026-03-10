@@ -35,13 +35,12 @@ const getAll = (req : Request, res : Response<(Omit<User,'password'>)[] | {error
 const createUser =async (req : Request<{},{},User>,res: Response<Omit<User,'password'>|{error:string}>)=>{
     try{
         const id = crypto.randomUUID();
-        const {name,userName,mail,accountType,friendList,notif,userColor} = req.body
         db.prepare(`
             INSERT INTO users
-            (id,name,userName,mail,accountType,friendList,notif,userColor,password)
+            (id,name,userName,mail,password)
             VALUES
-            (?,?,?,?,?,?,?,?,?)
-            `).run(id,req.body.name,req.body.userName,req.body.mail,req.body.accountType,req.body.friendList,req.body.notif,req.body.userColor,await bcrypt.hash(req.body.password,10));
+            (?,?,?,?,?)
+            `).run(id,req.body.name,req.body.userName,req.body.mail,await bcrypt.hash(req.body.password,10));
             const user = db.prepare(`
                 SELECT * FROM users
                 WHERE id=?

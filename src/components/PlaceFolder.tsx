@@ -10,10 +10,10 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
     return (
         <div className="icon" onDoubleClick={()=>{switchSection?.(item.id);updateDepth?.(depth+1)}}/*onContextMenu={()=>openMenu()}*/ id={item.id} 
         style={{left : item.x, top :item.y,
-            boxShadow : `0 8px 20px ${item.creatorColor}`
+            background : item.creatorColor
         }} >
-            <img src="/icons/folder.jpg" alt="folder"></img>
-            <span>{item.name}</span>
+            <img  src="/icons/folder.jpg" alt="folder"></img>
+            <span className = "icon-label">{item.name}</span>
         </div>
     )
 

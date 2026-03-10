@@ -1,14 +1,19 @@
-import type { JSX } from "react";
+import { useState, type JSX } from "react";
 import type { Item } from "../../shared/types";
 
 export function PlaceFile ({item} : {item : Item}) : JSX.Element{
+    const [optionMenu , setOptionMenu] = useState<boolean>(false);
     return (
-        <div className="icon" /*onContextMenu={()=>openMenu()}*/ id={item.id} 
+        <div>
+        <div className="icon" onContextMenu={()=>setOptionMenu(true)} id={item.id} 
         style={{left : item.x, top :item.y,
-            boxShadow : `0 8px 20px ${item.creatorColor}`
+            background : `${item.creatorColor}`
         }} >
             <img src="/icons/file.png" alt="file"></img>
-            <span>{item.name}</span>
+            <span className = "icon-label">{item.name}</span>
+        </div>
+        {optionMenu &&
+        <OptionMenu />}
         </div>
     )
 

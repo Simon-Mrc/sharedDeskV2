@@ -14,14 +14,9 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
     const [name , setName] = useState<string>('');
     const [error,setError] = useState<string>('');
     async function itemHandler(){
-        console.log(userContext?.user?.id);
-        console.log('desk:', deskContext?.currentDesk?.id)
-console.log('user:', userContext?.user?.id)
-console.log('section:', sectionContext?.currentSection)
 /////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
 ///////////////////////////////LATER CONCERN /////////////////////////////
         if(deskContext?.currentDesk?.id && userContext?.user?.id){   
-                console.log('test1');
             const newItem = await deskContext.createItemDesk({
                 deskId : deskContext?.currentDesk?.id,
                 name : name,
@@ -33,7 +28,6 @@ console.log('section:', sectionContext?.currentSection)
                 creatorColor : userContext?.user?.userColor,
                 parentId : sectionContext?.currentSection ?? null  
             })
-            console.log('test2');
             onClose();       
         }
         else{
@@ -41,8 +35,8 @@ console.log('section:', sectionContext?.currentSection)
         }
     }
     return(
-    <div className="overlay">
-        <div className="PopupWithBlurr">
+    <div className="overlay" onClick={()=>onClose()}>
+        <div className="PopupWithBlurr" onClick={(e)=>e.stopPropagation()}>
             <button className="popup-close" onClick={onClose}>✕</button>
             <h2 className="popup-title">Do you want a new note , file , or folder ?</h2>
             <p className="popup-subtitle">Choose wisely</p>

@@ -58,6 +58,7 @@ export interface Item {
 export interface SectionContextType { //to tell react what dom to display 
     currentSection : null | Item['id'];
     depth : number;
+    count : number;
     updateDepth : (number : number)=>void;
     sectionExist : boolean;
     switchSection : (sectionId : string|null)=>void;

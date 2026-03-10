@@ -9,6 +9,7 @@ export function SectionProvider({children} : {children : ReactNode}){
     const [currentSection , setCurrentSection] = useState<SectionContextType['currentSection']>(null);
     const [sectionExist , setSectionExists] = useState<boolean>(false);
     const [depth , setDepth] = useState<number>(0);
+    const [count, setCount] = useState<number>(0);
     const deskContext = useContext(DeskContext);
     useEffect(()=>{
         setCurrentSection(null);
@@ -21,9 +22,10 @@ export function SectionProvider({children} : {children : ReactNode}){
     function switchSection (sectionId : string|null){
         setCurrentSection(sectionId);
         setSectionExists(true);
+        setCount(prev => prev + 1);
     }
     return(
-        <SectionContext.Provider value = {{currentSection,depth,updateDepth,sectionExist,switchSection}}>
+        <SectionContext.Provider value = {{currentSection,depth,count,updateDepth,sectionExist,switchSection}}>
             {children}
         </SectionContext.Provider>
     )
