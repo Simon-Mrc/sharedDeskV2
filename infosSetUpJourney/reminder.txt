@@ -1,0 +1,37 @@
+req  // everything the FRONTEND sent TO you
+     // req.params  → stuff in the URL       /users/:id
+     // req.body    → stuff in the body      { name: 'Simon' }
+     // req.query   → stuff after ?          /users?search=simon
+     // req.headers → stuff like JWT token
+
+res  // your tools to respond TO the frontend
+     // res.json()      → send JSON back
+     // res.status(404) → set the status code
+     // res.send()      → send plain text
+
+
+Omit<Type, Keys>      // remove fields
+Pick<Type, Keys>      // keep only these fields
+Partial<Type>         // make all fields optional
+Required<Type>        // make all fields required
+Readonly<Type>        // make all fields read-only
+Record<Keys, Type>    // create object with specific keys
+
+// Make ONLY name and userColor optional:
+Partial<Pick<User, 'name' | 'userColor'>>
+// = {
+//     name?: string;      ← optional
+//     userColor?: string; ← optional
+//     ← everything else doesn't exist!
+// }
+
+interface UpdateUser {
+    name?: string;        // ← ? makes it optional
+    userName?: string;
+    mail?: string;
+    accountType?: 'admin' | 'user' | 'premium';
+    friendList?: string;
+    notif?: string;
+    userColor?: string;
+    // no password, no id!
+}
