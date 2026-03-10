@@ -1,0 +1,62 @@
+import { useContext, useState, type JSX } from "react";
+import { DeskContext } from "../context/DeskContext";
+import { UserContext } from "../context/UserContext";
+import type { Item } from "../../shared/types";
+import { SectionContext } from "../context/SectionContext";
+import { createItem } from "../api/item";
+
+
+export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{
+    const deskContext = useContext(DeskContext);
+    const userContext = useContext(UserContext);
+    const sectionContext= useContext(SectionContext);
+    const [type , setType] = useState<Item['type']>("file");
+    const [name , setName] = useState<string>('');
+    const [error,setError] = useState<string>('');
+    async function itemHandler(){
+        console.log(userContext?.user?.id);
+        console.log('desk:', deskContext?.currentDesk?.id)
+console.log('user:', userContext?.user?.id)
+console.log('section:', sectionContext?.currentSection)
+/////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
+///////////////////////////////LATER CONCERN /////////////////////////////
+        if(deskContext?.currentDesk?.id && userContext?.user?.id){   
+                console.log('test1');
+            const newItem = await deskContext.createItemDesk({
+                deskId : deskContext?.currentDesk?.id,
+                name : name,
+                type : type,
+                x: coord.x,
+                y : coord.y,
+                accessPassword : null,
+                createdBy : userContext?.user?.id,
+                creatorColor : userContext?.user?.userColor,
+                parentId : sectionContext?.currentSection ?? null  
+            })
+            console.log('test2');
+            onClose();       
+        }
+        else{
+            setError('You need to have permission to create an item !')
+        }
+    }
+    return(
+    <div className="overlay">
+        <div className="PopupWithBlurr">
+            <button className="popup-close" onClick={onClose}>✕</button>
+            <h2 className="popup-title">Do you want a new note , file , or folder ?</h2>
+            <p className="popup-subtitle">Choose wisely</p>
+            <button onClick={()=> setType('file')}>a file 📑!</button>
+            <button onClick={()=> setType('folder')}>a folder 📁 !</button>
+            <span className="error">You chose a {type}</span>
+            <input className="ModernInput"
+            onChange={(input)=>setName(input.target.value)}
+            placeholder='Enter your new item name' />
+            {error && <span className="error">⚒️{error}</span>}
+            <button onClick={()=>itemHandler()}> Create your item</button>
+        </div>
+    </div>
+
+    )
+
+}

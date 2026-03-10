@@ -43,7 +43,7 @@ export function DeskProvider({children} : {children : ReactNode}){
                     const newArray = [...items,newItem];
                     setItems(newArray);
                 }else{
-                    setItems([newItem])
+                    setItems([newItem]);
                 }
             }
         }
