@@ -39,6 +39,7 @@ export interface DeskContextType {
     loaded : boolean;
     switchDesk : (deskId : Desk['id'])=>void;
     refreshDesks : ()=>void;
+    createItemDesk : (item : Omit<Item,'id'>) => void;
 }
 
 export interface Item {

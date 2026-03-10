@@ -12,7 +12,7 @@ import * as bcrypt from 'bcrypt';
 //////////////////////////////////////////////////////////////////////
 
 /////////////////////////////// CREATE DESK FUNCTION ////////////////////
-const createDesk =async (req : Request<{},{},Desk>,res : Response<{message :string}|{error:string}>)=>{
+const createDesk =async (req : Request<{},{},Desk>,res : Response<Desk |{error:string}>)=>{
     try{
         const userId = (req as any).user.userId;
         const id = crypto.randomUUID();
@@ -42,7 +42,10 @@ const createDesk =async (req : Request<{},{},Desk>,res : Response<{message :stri
                     VALUES(?,?,?)
                     `).run(id,userId,'admin');
         }
-            res.json({message : 'desk got Created !'});
+        const newDesk = db.prepare(`
+            SELECT * FROM desks
+            WHERE id = ?`).get(id) as Desk;
+            return res.json(newDesk);
     }catch(error){
         res.status(500).json({ error: 'Failed to create desk' });
     }

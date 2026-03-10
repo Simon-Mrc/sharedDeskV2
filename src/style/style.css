@@ -46,7 +46,8 @@ body {
    ============================================ */
 .sidebar {
   background-color: #565681;
-  border-right: 1px solid #2a2a3e;
+  border-radius: 8px;
+  border: 3px solid #4925ac;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 48px;
   flex-shrink: 0;
@@ -233,9 +234,10 @@ body {
   background-color: #ffffff;
   position: relative;
   height: 100%;
-  margin: 12px;
-  border-radius: 12px;
-  border: 1px solid #2a2a3e;
+  margin: 6px;
+  margin-left: 12px;  
+  border-radius: 15px;
+  border: 3px solid #412299;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 

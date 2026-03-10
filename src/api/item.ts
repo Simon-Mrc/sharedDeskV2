@@ -2,7 +2,7 @@ const BASE_URL = 'http://localhost:3000'
 import type { Item } from "../../shared/types"
 import { authHeaders } from "./user"
 
-export async function getItemByDeskId (deskId : string) {
+export async function getItemByDeskId (deskId : string) : Promise <Item[]|undefined |null> {
     try{
         const result = await fetch(`${BASE_URL}/items/desks/${deskId}`,{
             method : 'GET',
@@ -13,5 +13,20 @@ export async function getItemByDeskId (deskId : string) {
         return arrayOfItem;
     }catch(error){
         console.log('get a life')
+    }
+}
+
+export async function createItem(item : Omit<Item,'id'>) : Promise <Item|undefined |null>{
+    try{
+        const result = await fetch(`${BASE_URL}/items`,{
+            method : 'POST',
+            headers : authHeaders(),
+            body : JSON.stringify(item)            
+        })
+        const newItem = await result.json();
+        console.log(newItem);
+        return newItem;
+    }catch(error){
+        console.log('fail to access db');
     }
 }
