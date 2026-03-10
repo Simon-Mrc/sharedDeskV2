@@ -2,9 +2,9 @@
 .overlay {
     position: fixed;
     inset: 0;                /* covers full screen */
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(117, 117, 117, 0.6);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -13,8 +13,8 @@
 
 /* ─── POPUP BOX ────────────────────────────────────────────── */
 .PopupWithBlurr {
-    background: #1a1a2e;
-    border: 1px solid #2a2a2a;
+    background: #272752;
+    border: 4px solid #497247;
     border-radius: 16px;
     padding: 2.5rem 2rem;
     display: flex;
@@ -25,6 +25,21 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     z-index: 101;
     animation: popIn 0.2s ease;
+}
+
+.PopupWithBlurrOption{
+    background: #272752;
+    border: 4px solid #497247;
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    z-index: 101;
+    animation: popIn 0.4s ease;
 }
 
 /* ─��─ POPUP TITLE (optional — add <h2> in your JSX) ───────── */
@@ -47,8 +62,8 @@
 .ModernInput {
     width: 100%;
     padding: 0.75rem 1rem;
-    background: #222121;
-    border: 1px solid #333333;
+    background: #1f1d1d;
+    border: 1px solid #5d7a69;
     border-radius: 8px;
     color: #e0e0e0;
     font-size: 0.95rem;
@@ -58,7 +73,7 @@
 }
 
 .ModernInput::placeholder {
-    color: #555555;
+    color: #707070;
 }
 
 .ModernInput:focus {
@@ -106,7 +121,14 @@
     cursor: pointer;
     transition: color 0.2s ease;
 }
-
+.popup-closeOption {
+    background: transparent;
+    border: none;
+    color: #888888;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
 .popup-close:hover {
     color: #ffffff;
 }
