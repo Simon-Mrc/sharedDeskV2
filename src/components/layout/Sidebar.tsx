@@ -4,6 +4,7 @@ import { DeskSide } from "../desk/Deskside";
 import { FunctionsPart } from "./FunctionsPart";
 import { UserContext } from "../../context/UserContext";
 
+//////////////// PURE JSX SIDEBAR FUNCTION ////// NOT MUCH MORE TO COMMENT ON //////////////////
 export function Sidebar():JSX.Element{
     const userContext = useContext(UserContext);
     const [isToggle,setIsToggle] = useState<boolean>(false)

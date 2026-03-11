@@ -2,6 +2,11 @@ const BASE_URL = 'http://localhost:3000'
 import type { Item } from "../../shared/types"
 import { authHeaders } from "./user"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// ITEMS API CALLS ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////GET ALL ITEMS FROM DESKID /////////////////////////////////////////
 export async function getItemByDeskId (deskId : string) : Promise <Item[]|undefined |null> {
     try{
         const result = await fetch(`${BASE_URL}/items/desks/${deskId}`,{
@@ -9,13 +14,12 @@ export async function getItemByDeskId (deskId : string) : Promise <Item[]|undefi
             headers : authHeaders()
         })
         const arrayOfItem = (await result.json()) as Item[]|null;
-        console.log(arrayOfItem);
         return arrayOfItem;
     }catch(error){
         console.log('get a life')
     }
 }
-
+//////////////////////////////////////// CREATE ITEM  /////////////////////////////////////////
 export async function createItem(item : Omit<Item,'id'>) : Promise <Item|undefined |null>{
     try{
         const result = await fetch(`${BASE_URL}/items`,{
@@ -24,13 +28,13 @@ export async function createItem(item : Omit<Item,'id'>) : Promise <Item|undefin
             body : JSON.stringify(item)            
         })
         const newItem = await result.json();
-        console.log(newItem);
         return newItem;
     }catch(error){
         console.log('fail to access db');
     }
 }
 
+////////////////////////////////////////GET ALL ITEMS BY ID /////////////////////////////////////////
 export async function getItemById(id : string) : Promise<Item|null|undefined>{
     try{
         const result = await fetch(`${BASE_URL}/items/${id}`,{
@@ -38,13 +42,13 @@ export async function getItemById(id : string) : Promise<Item|null|undefined>{
             headers : authHeaders()
         })
         const item = await result.json();
-        console.log(item);
         return item
     }catch(error){
         console.log('there is no existing item with this id ')
     }
 }
 
+//////////////////////////////////////// UPDATE ITEM /////////////////////////////////////////
 export async function updateItem(item : Item){
     try{
         const result = await fetch(`${BASE_URL}/items/${item.id}`,{
@@ -58,6 +62,7 @@ export async function updateItem(item : Item){
     }
 }
 
+//////////////////////////////////////// DELETE ITEM /////////////////////////////////////////
 export async function deleteItem(itemId : string){
     try{
         const result = await fetch(`${BASE_URL}/items/${itemId}`,{

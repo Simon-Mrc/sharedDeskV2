@@ -2,13 +2,14 @@ import { useState, type JSX } from "react";
 import { LoginPrompt } from "../components/prompts/LoginPrompt";
 import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
 
+///////////// LOGIN PAGE YOU DON T SAY ///////////////////
 export function LoginPage(): JSX.Element {
     const [showLogin, setShowLogin] = useState<boolean>(false);
     const [showRegister, setShowRegister] = useState<boolean>(false);
     return (
         <div className="login-page">
 
-            {/* LEFT — presentation */}
+            {/* CORE APP PRESENTATION */}
             <div className="presentation-container">
                 <div className="presentation-content">
                     <div className="logo-area">
@@ -43,7 +44,7 @@ export function LoginPage(): JSX.Element {
                 </div>
             </div>
 
-            {/* CENTER — login (you fill this!) */}
+            {/* LOGIN AND REGISTER PART */}
             <div className="login-container">
                 <button onClick={()=>setShowLogin(true)}>Welcome Back ! Let's Login</button>
                 <button onClick={()=>setShowRegister(true)}>New to SharedDesk ? Create an account !</button>
@@ -55,7 +56,7 @@ export function LoginPage(): JSX.Element {
                 }
             </div>
 
-            {/* BOTTOM — footer */}
+            {/* SMALL FOOTER PART */}
             <footer className="footer-container">
                 <div className="footer-content">
                     <span className="footer-text">SharedDesk v2 — open source project</span>

@@ -13,7 +13,6 @@ import itemsRouter from './routes/items';
 //////////  SET APP FUNCTION FROM INSTALLED MODULES  FIRST  ////////////
 ///////////////////////////////////////////////////////////////////////
 dotenv.config({ path: 'backend/.env' });
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
 const app = express(); 
 const PORT = process.env.PORT || 3000;
 app.use(cors());

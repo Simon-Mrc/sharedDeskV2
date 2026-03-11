@@ -4,6 +4,10 @@ import { SectionContext } from "../../context/SectionContext";
 import { OptionMenu } from "./OptionMenu";
 import { AccessPrompt } from "./../prompts/AccessPrompt";
 
+////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
+////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
+/////// WAY MORE COMPLICATED THAN FILE PART DUE TO POSSIBILITY TO NAVIGATE THROUGH SECTION /////////
+/////// VIA FOLDER ///// ALSO ADDED SECURITY RIGHT AWAY TO PREVENT NAVIGATION IF PASSWORD ///////////
 export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
     const sectionContext = useContext(SectionContext);
     const switchSection = sectionContext?.switchSection;

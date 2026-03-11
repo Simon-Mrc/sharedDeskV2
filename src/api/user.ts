@@ -1,5 +1,7 @@
+import type { User } from "../../shared/types";
 const BASE_URL = 'http://localhost:3000'
 
+//////////////////////////// AUTH HEADER FOR NEEDED API CALLS /////////////////////////
 export function authHeaders() {
     const token = localStorage.getItem('token')
     return {
@@ -7,7 +9,25 @@ export function authHeaders() {
         'Authorization': `Bearer ${token}`
     }
 }
+//////////////////////////// PARSE HELPER FOR STRING[] PROPS /////////////////////////
+export function parseHelper(user : Omit<User,'password'>|null){
+    if(!user){
+        return null
+    }
+    else{
+        return {
+            ...user,
+            notif : typeof user.notif === "string" ? JSON.parse(user.notif) : user.notif,
+            friendList : typeof user.friendList === "string" ? JSON.parse(user.friendList) : user.friendList
+        }
+    }
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// USERS API CALLS ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////// REGISTER NEW USER /////////////////////////
 export async function registerUser(userData : {
     name : string,
     userName : string;
@@ -20,14 +40,16 @@ export async function registerUser(userData : {
             headers : {'content-type' : 'application/json'},
             body : JSON.stringify(userData)
         })
-        const result = await response.json()
-        return result;
+        const result = await response.json();
+        const safeResult = parseHelper(result);
+        return safeResult;
     }catch(error){
         console.log({error : 'VerifyURL must be wrong'})
-        return {error : 'VerifyURL must be wrong'}
+        return null
     }
 }
 
+//////////////////////////// LOGIN CALL /////////////////////////
 export async function loginUser(userData : {
     mail : string;
     password : string;
@@ -39,11 +61,43 @@ export async function loginUser(userData : {
             body : JSON.stringify(userData)
         }
     )
-    const result = await response.json()
-    console.log(result);
-    return result;
+    const result = await response.json();
+    const {user,token} = result;
+    const safeResult = parseHelper(user);
+    return {user : safeResult,token};
     }catch(error){
-        console.log('Wrong Email or Password')
+        console.log('Wrong Email or Password');
+        return {user : null, token : null};
     }
 }
 
+//////////////////////////// SEARCH ROUTE ADAPTED FOR STUPID USERS WHO CAN T TYPE  /////////////////////////
+export async function getUserBySearch(search : string) : Promise<Omit<User,'password'>[]|null>{
+    try{
+        const arrayOfFriend = await fetch(`${BASE_URL}/users/search`,{
+            method : 'POST',
+            headers : authHeaders(),
+            body : JSON.stringify({search})
+        })
+        const result = await arrayOfFriend.json();
+        const safeResult = result.map(parseHelper);
+        return safeResult;
+    }catch(error){
+        console.log('fail to access db');
+        return null;
+    }
+}
+
+//////////////////////////// UPDATE USER CALL /////////////////////////
+export async function updateUserById(user : Omit<User,'password'>){
+    try{
+        const result = await fetch(`${BASE_URL}/users/${user.id}`,{
+            method : 'PUT',
+            headers : authHeaders(),
+            body : JSON.stringify(user)
+        })
+    }catch(error){
+        console.log('fail to access db')
+        return null;
+    }
+}

@@ -35,3 +35,7 @@ interface UpdateUser {
     userColor?: string;
     // no password, no id!
 }
+
+const safeUsers = arrayOfUser.map(({password,...safeUser})=> {return safeUser}); // Get used to this pattern as it is so usefull
+
+Parse string[] recieved from db !

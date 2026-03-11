@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import type { Item } from "../../../shared/types"
 import { NamePrompt, PasswordPrompt, DeletePrompt } from "./../prompts/OptionPrompts";
 
+////////////////////////////////////BIG ONE HERE OPTION MENU FOR FILES AND FOLDERS ////////////////////////////////////
+////////////////////////////USE EFFECT FOR ARRAY OF TRUTH ACTUALLY NOT NEEDED FOR NOW ////////////////////////////////////
 export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord : {x:number,y:number}, item : Item}){
     const [namePrompt , setNamePrompt] = useState<boolean>(false);
     const [deletePrompt , setDeletePrompt] = useState<boolean>(false);
@@ -16,6 +18,8 @@ export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord 
         setHidden('')
     }
     },[namePrompt,deletePrompt,duplicatePrompt,passwordPrompt])
+
+//////////////////////////////////// JSX PART //// LAUNCHING ALL STATES FOR OPTIONS FUNCTIONS ////////////////////////////////////
     return(
         <div className="overlay" onClick={()=>onClose()}>
             <div className={`PopupWithBlurrOption ${hidden}`} onClick={(e)=>e.stopPropagation()} style={{

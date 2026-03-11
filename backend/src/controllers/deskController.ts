@@ -12,10 +12,10 @@ import * as bcrypt from 'bcrypt';
 //////////////////////////////////////////////////////////////////////
 
 /////////////////////////////// CREATE DESK FUNCTION ////////////////////
-const createDesk =async (req : Request<{},{},Desk>,res : Response<Desk |{error:string}>)=>{
+const createDesk =async (req : Request<{},{},Desk>,res : Response<Desk |null>)=>{
     try{
         const userId = (req as any).user.userId;
-        const id = crypto.randomUUID();
+        const id = userId+req.body.name;
         const createdAt = Date.now();
         if(req.body.accessPassword){
             db.prepare(`
@@ -47,26 +47,26 @@ const createDesk =async (req : Request<{},{},Desk>,res : Response<Desk |{error:s
             WHERE id = ?`).get(id) as Desk;
             return res.json(newDesk);
     }catch(error){
-        res.status(500).json({ error: 'Failed to create desk' });
+        res.status(500).json(null);
     }
 }
 
 ////////////////////////////////////GET DESK BY ID /////////////////////////////////////
-const getDeskById = (req : Request<{id : string}>, res : Response<Desk |{error : string}>)=>{
+const getDeskById = (req : Request<{id : string}>, res : Response<Desk |null>)=>{
     try{
         let getDatDesk = db.prepare(`
             SELECT * FROM desks 
             WHERE id = ?
             `).get(req.params.id) as Desk;
-            if(!getDatDesk) return res.status(404).json({ error: 'Desk not found' });
+            if(!getDatDesk) return res.status(404).json(null);
             return res.json(getDatDesk);
     }catch(error){
-        res.status(404).json({error : 'Desk not found'});
+        res.status(404).json(null);
     }
 }
 
 ////////////////////////////////////GET ALL DESK BY userId /////////////////////////////////////
-const getAllDesksByUserId = (req: Request, res: Response<Desk[] | {error: string}>) => {
+const getAllDesksByUserId = (req: Request, res: Response<Desk[] | null>) => {
     try {
         const userId = (req as any).user.userId;
         let desks = db.prepare(`
@@ -75,7 +75,7 @@ const getAllDesksByUserId = (req: Request, res: Response<Desk[] | {error: string
         `).all(userId) as Desk[];
         return res.json(desks);
     } catch(error) {
-        return res.status(500).json({ error: 'Failed to get desks' });
+        return res.status(500).json(null);
     }
 }
 

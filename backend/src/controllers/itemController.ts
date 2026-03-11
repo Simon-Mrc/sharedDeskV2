@@ -13,7 +13,7 @@ import { randomUUID } from 'crypto';
 //////////////////////////////////////////////////////////////////////
 
 /////////////////////////////// GET ALL ITEM BY USER /////////////////////////////
-const getAllItemByUserId = (req : Request,res : Response<Item[]|{error:string}>)=>{
+const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
     try{
         const userId = (req as any).user.userId
         let arrayOfItems = db.prepare(`
@@ -22,12 +22,12 @@ const getAllItemByUserId = (req : Request,res : Response<Item[]|{error:string}>)
             `).all(userId) as Item[];
         res.json(arrayOfItems);
     }catch(error){
-        res.status(404).json({error : 'User doesn t have any item'})
+        res.status(404).json(null)
     }
 }
 
 /////////////////////////////// GET ITEM BY ID /////////////////////////////
-const getItemById = (req: Request<{id : string}>,res:Response<Item|{error:string}>)=>{
+const getItemById = (req: Request<{id : string}>,res:Response<Item|null>)=>{
     try{
         let item = db.prepare(`
             SELECT * FROM items
@@ -35,12 +35,12 @@ const getItemById = (req: Request<{id : string}>,res:Response<Item|{error:string
             `).get(req.params.id) as Item;
         res.json(item)
     }catch(error){
-        res.status(404).json({error:'fail to find desired item'})
+        res.status(404).json(null)
     }
 }
 
 /////////////////////////////// CREATE ITEM  /////////////////////////////
-const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|{error : string}>)=>{
+const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|null>)=>{
     try{
         const id = randomUUID();
         const userId =(req as any).user.userId;
@@ -65,7 +65,7 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|
             `).get(id) as Item;
         return res.json(newItem)
     }catch(error){
-        res.status(404).json({error : 'Item creation failure'})
+        res.status(404).json(null)
     }
 }
 
@@ -104,7 +104,7 @@ const deleteItemById = (req : Request<{id:string}>,res:Response<{message:string}
 }
 
 /////////////////////////////// GET ALL ITEM BY DESK ID /////////////////////////////
-const getAllItemByDeskId = (req : Request<{deskId : string}>,res : Response <Item[]|{error : string}>)=>{
+const getAllItemByDeskId = (req : Request<{deskId : string}>,res : Response <Item[]|null>)=>{
     try{
         const arrayOfItems = db.prepare(`
             SELECT * FROM items
@@ -112,7 +112,7 @@ const getAllItemByDeskId = (req : Request<{deskId : string}>,res : Response <Ite
             `).all(req.params.deskId) as Item[]
         return res.json(arrayOfItems);
     }catch(error){
-        res.status(404).json({error : 'DeskId not existing'})
+        res.status(404).json(null)
     }
 }
 

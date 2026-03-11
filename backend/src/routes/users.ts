@@ -8,6 +8,8 @@ const router = Router();
 
 router.post('/login', userController.login);
 
+router.post(`/search`, authenticateToken, userController.getBySearch);
+
 router.get('/search/:userName',authenticateToken, userController.getUserByUserName);
 
 router.post('/', userController.createUser);

@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./components/shared/ProtectedRoute";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 
+////////////////// POLICEMAN AT WORK HERE /////////////////
 export function App(): JSX.Element {
     return (
         <Routes>

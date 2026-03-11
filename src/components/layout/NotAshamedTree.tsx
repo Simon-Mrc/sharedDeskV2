@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { DeskContext } from "../../context/DeskContext";
 import type { DeskContextType} from "../../../shared/types";
 
+////////////////// USED TO BE ASHAMED AI GENERATED TREE //////////////////
+////////////////// WELL NOT ANYMORE !! REWRITE IT WITH REACT ANT TS //////////////////
 export function NotAshamedTree({onClose} : {onClose : ()=>void }){
     const deskContext = useContext(DeskContext);
     function buildTree(items :DeskContextType['items'], parentId : string | null, prefix = '') {

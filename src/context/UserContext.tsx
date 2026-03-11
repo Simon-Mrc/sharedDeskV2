@@ -7,12 +7,12 @@ export const UserContext = createContext<UserContextType|null>(null)
 
 ///////////////////////////// USER CONTEXT PROVIDER //////////////////////////
 export function UserProvider({children} : {children : ReactNode}){
-    const [user,setUser] = useState<null|Omit<User,'password'>>(null);
+    const [user,setUser] = useState<Omit<User,'password'>|null>(null);
     const [logged,setLogged] = useState<boolean>(false);
     async function login(mail : User['mail'],password :string){
         try{
             const {user,token} = await loginUser({mail,password});
-            if(token){
+            if(token && user ){
                 localStorage.setItem('token',token);
                 setUser(user);
                 setLogged(true);

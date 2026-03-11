@@ -1,0 +1,9 @@
+############## GLOBAL LIST NO PARTICULAR ORDER ##################
+ /!\ work on animations and css
+ /!\ finish all social feature
+ /!\ reset db with proper datas
+ /!\ finish all account setting (actually didn t even started yet)
+ /!\ finish all item setting
+ /!\ finish all desk setting (actually didn t even started yet)
+ /!\ Poilish all 
+ /!\ Add mail system and struggle with massive backend changes !

@@ -4,7 +4,7 @@ import { UserContext } from "../../context/UserContext";
 import type { Item } from "../../../shared/types";
 import { SectionContext } from "../../context/SectionContext";
 
-
+//////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
 export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
@@ -45,7 +45,11 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
             <input className="ModernInput"
             onChange={(input)=>setName(input.target.value)}
             placeholder='Enter your new item name' />
-            {error && <span className="error">⚒️{error}</span>}
+            {error && 
+                 <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
+                 <span  className="error">{error}</span>
+                 </div>
+            }
             <button onClick={()=>itemHandler()}> Create your item</button>
         </div>
     </div>

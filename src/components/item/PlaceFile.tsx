@@ -2,6 +2,8 @@ import { useState, type JSX } from "react";
 import type { Item } from "../../../shared/types";
 import { OptionMenu } from "./OptionMenu";
 
+////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
+////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
 export function PlaceFile ({item} : {item : Item}) : JSX.Element{
     const [optionMenu , setOptionMenu] = useState<boolean>(false);
     const [coord , setCoord] = useState<{x : number,y : number}>({x:0,y:0})
@@ -27,5 +29,5 @@ export function PlaceFile ({item} : {item : Item}) : JSX.Element{
         />}
         </div>
     )
-
 }
+////////// NEED TO ADD CHECKS FOR SECURITY SAME AS FOLDER BUT FOR NOW USELESS /////////////

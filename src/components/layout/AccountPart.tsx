@@ -2,7 +2,7 @@ import { useContext, type JSX } from "react";
 import { UserContext } from "../../context/UserContext";
 
 
-
+//////////////////// ACCOUNT PART PUR JSX NOTHING TO SEE FOR NOW ///////////////////
 export function AccountPart():JSX.Element{
     const context= useContext(UserContext)
     return(

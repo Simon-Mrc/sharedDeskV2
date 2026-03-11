@@ -5,6 +5,10 @@ import { PlaceFile } from "../item/PlaceFile";
 import { PlaceFolder } from "../item/PlaceFolder";
 import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
 
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////// DESK DISPLAY JSX /////////////////////////
+///////THIS IS WHERE DESKS GET RECREATED //// ANIMATIONS HANDLER TOO ///////
+//////////////////////////////////////////////////////////////////////////////////////////
 export function DeskDisplay():JSX.Element{
     const sectionContext = useContext(SectionContext);
     const deskContext = useContext(DeskContext);
@@ -13,16 +17,16 @@ export function DeskDisplay():JSX.Element{
     const depth  = sectionContext?.depth as number;
     const updateDepth = sectionContext?.updateDepth;
     const [animationClass, setAnimationClass] = useState<"hidden"|"section-enter">("hidden");
-
+////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
         const timer = setTimeout(()=>{
             setAnimationClass('section-enter')
         },100);
         return () => clearTimeout(timer); 
-
     },[sectionContext?.count])
 
+////////////////// NAVIGATION + ITEM BY DESK HANDLER //////////////////
     const arrayOfItem = deskContext?.items?.filter(
     item=>item.parentId===sectionContext?.currentSection
     ) ?? [];
@@ -35,10 +39,10 @@ export function DeskDisplay():JSX.Element{
             }
         }
     }
-
+//////////////////  JSX ELEMENT  //////////   EMPTY ARRAY TRICK FOR DEPTH UPDATES   //////////////////////////
+/////////////////// getBoundingClientRect() for mouse positionning not depending on parent //////////////////
     return(
-        <div className="centerDisplayed">
-
+      <div className="centerDisplayed">
         <div className="globalHome">
             {Array.from({ length: sectionContext?.depth ?? 0 }).map((_, index) => (
                 <div key={index} className="ranged"/>
@@ -62,9 +66,7 @@ export function DeskDisplay():JSX.Element{
                 : <PlaceFile key = {item.id} item = {item}/>
             )
             )}
-
             </div>
-
         </div>
       </div>
     )

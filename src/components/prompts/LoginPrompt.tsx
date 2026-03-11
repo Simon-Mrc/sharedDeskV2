@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
+/////////////////// LOGIN PROMPT ////////////// NAVIGATE TO HOME IF LOGGED ////////// PROTECTED ROUTE PREVENTS IF NOT //////////////
 export function LoginPrompt({onClose} :{onClose : ()=>void}){
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
@@ -35,7 +36,11 @@ export function LoginPrompt({onClose} :{onClose : ()=>void}){
                 <input className="ModernInput" type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>
-                {error && <span className="error">{error}</span>}
+                {error && 
+                 <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
+                 <span  className="error">{error}</span>
+                 </div>
+                }
                 <button onClick={handleLogin}> LOG IN FRIEND !</button>
             </div>
         </div>

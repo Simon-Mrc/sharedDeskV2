@@ -11,6 +11,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     }
 
     try {
+        // JtwPayload in interface let you choose what s gonna be hold by .user ! Modify if needed
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
         (req as any).user = decoded;
         next(); // ← "all good, continue to controller!"

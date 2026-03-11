@@ -35,7 +35,7 @@ const inviteToDeskByUserId = (req : Request<{deskId : string},{},{userId : strin
 }
 
 /////////////////////////////// GET ACCESSTYPE //////////////////////////
-const getAccessType = (req : Request<{deskId:string}>,res : Response<{accessType:string}|{error:string}>)=>{
+const getAccessType = (req : Request<{deskId:string}>,res : Response<{accessType:string}|null>)=>{
     try{
         const currentUserId = (req as any).user.userId;
         const accessType = db.prepare(`
@@ -44,12 +44,12 @@ const getAccessType = (req : Request<{deskId:string}>,res : Response<{accessType
             `).get(req.params.deskId,currentUserId) as {accessType : string};
             res.json(accessType);
     }catch(error){
-        res.status(404).json({error:'SharedDesk not found'})
+        res.status(404).json(null)
     }
 }
 
 /////////////////////////////// GET ALL DESK USER HAS ACCESS TO //////////////////////////
-const getAllSharedDeskIdByUserId = (req : Request,res : Response<Desk[]|{error:string}>)=>{
+const getAllSharedDeskIdByUserId = (req : Request,res : Response<Desk[]|null>)=>{
     try{
         const userId = (req as any).user.userId;
         const arrayOfDeskId = db.prepare(`
@@ -59,12 +59,12 @@ const getAllSharedDeskIdByUserId = (req : Request,res : Response<Desk[]|{error:s
             `).all(userId) as Desk[];
         res.json(arrayOfDeskId);
     }catch(error){
-        res.status(404).json({error:'no desk found'})
+        res.status(404).json(null)
     }
 }
 
 /////////////////////////////// GET ALL USER OF GIVEN DESK //////////////////////////
-const getAllUsersByDeskId = (req : Request<{deskId : string}>,res: Response<{userId : string}[]|{error:string}>)=>{
+const getAllUsersByDeskId = (req : Request<{deskId : string}>,res: Response<{userId : string}[]|null>)=>{
     try{
         let arrayOfId = db.prepare(`
             SELECT userId FROM deskAccess
@@ -72,7 +72,7 @@ const getAllUsersByDeskId = (req : Request<{deskId : string}>,res: Response<{use
             `).all(req.params.deskId) as {userId : string}[];
         res.json(arrayOfId)
     }catch(error){
-        res.status(404).json({error:'No user found for current desk'});
+        res.status(404).json(null);
     }
 }
 

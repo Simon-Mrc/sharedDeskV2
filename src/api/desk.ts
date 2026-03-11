@@ -1,6 +1,10 @@
 const BASE_URL = 'http://localhost:3000'
 import { authHeaders } from "./user"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// DESKS API CALLS ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 ///////////////////////////////// CREATE DESK ///////////////////////////////
 export async function createDesk(name : string){
     try{
@@ -9,10 +13,12 @@ export async function createDesk(name : string){
             headers : authHeaders(),
             body : JSON.stringify({name})
         })
-        console.log(response);
-        return await response.json();
+        const desk = await response.json();
+        if (desk.id){return desk}
+        else{return null};
     }catch(error){
-        console.log('failed to access db')
+        console.log('failed to access db');
+        return null
     }
 }
 
@@ -24,9 +30,10 @@ export async function getDeskById(id : string){
             headers : authHeaders()
         })
         const desk = await response.json();
-        console.log(desk);
-        return desk;
+        if (desk.id){return desk}
+        else{return null};
     }catch(error){
-        console.log('404 DESK NOT FOUND BOY')
+        console.log('404 DESK NOT FOUND BOY');
+        return null
     }
 }
