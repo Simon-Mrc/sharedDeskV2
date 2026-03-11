@@ -1,7 +1,8 @@
 import { useContext, useState, type JSX } from "react";
-import { updateItem } from "../api/item";
-import type { Item } from "../../shared/types";
-import { DeskContext } from "../context/DeskContext";
+import { deleteItem, updateItem } from "../../api/item";
+import type { Item } from "../../../shared/types";
+import { DeskContext } from "../../context/DeskContext";
+import { UserContext } from "../../context/UserContext";
 
 export function NamePrompt({onClose, item} : {onClose :()=>void, item: Item}) : JSX.Element{
     const [name , setName] = useState<string>(item.name);
@@ -63,4 +64,35 @@ export function PasswordPrompt({onClose, item} : {onClose :()=>void, item: Item}
     </div>
     )
 
+}
+
+
+export function DeletePrompt({onClose , item} : {onClose : ()=>void , item : Item}) : JSX.Element{
+    const deskContext = useContext(DeskContext);
+    const userContext = useContext(UserContext);
+    const [input,setInput] = useState<string>('');
+    const [error , setError] = useState<string>('');
+    async function deleteHandler(){
+        if(input === item.name && userContext?.user?.id === item.createdBy){
+            await deleteItem(item.id);
+            await deskContext?.refreshItems();
+            onClose()
+        }else{
+            setError('You have to be the creator in order to delete this !')
+        }
+    }
+    return(
+    <div className="overlay">
+        <div className="PopupWithBlurr">
+            <button onClick={onClose}>✕</button>
+            <h2 className="popup-title">{`enter ${item.name} to confirm the delete`}</h2>
+            <input className="ModernInput" 
+            onChange={(input)=>setInput(input.target.value)}
+            placeholder={`enter ${item.name} to confirm`}/>
+            {error && <span className="error">{error}</span>}
+            <button onClick={()=>deleteHandler()}> Delete Item</button>
+            <button onClick={()=>onClose()}> Cancel Delete</button>
+        </div>
+    </div>
+    )
 }

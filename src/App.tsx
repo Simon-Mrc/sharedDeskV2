@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/shared/ProtectedRoute";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 

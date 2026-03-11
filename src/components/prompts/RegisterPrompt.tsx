@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
-import { loginUser, registerUser } from "../api/user";
-import type { User } from "../../shared/types";
+import { UserContext } from "../../context/UserContext";
+import { loginUser, registerUser } from "../../api/user";
+import type { User } from "../../../shared/types";
 import { useNavigate } from "react-router-dom";
 
 export function RegisterPrompt({onClose} : {onClose : ()=>void}){

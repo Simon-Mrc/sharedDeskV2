@@ -48,16 +48,22 @@ export function DeskProvider({children} : {children : ReactNode}){
             }
         }
 
-        ///////////////////////// UPDATE ITEM LIST //////////////////////
+///////////////////////////// UPDATE ITEM LIST //////////////////////
     function setAllItems(items : DeskContextType['items'] ){
         setItems(items);
     }
 
+///////////////////////// REFRESH ALL ITEMS //////////////////////
+    async function refreshItems(){
+        if(currentDesk){
+            setItems(await getItemByDeskId(currentDesk.id)as Item[]);
+        }
+}
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// PROVIDES !! ////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
         return(
-            <DeskContext.Provider value={{currentDesk,desks,items,loaded,switchDesk,refreshDesks,createItemDesk,setAllItems}}>
+            <DeskContext.Provider value={{currentDesk,desks,items,loaded,switchDesk,refreshDesks,createItemDesk,setAllItems,refreshItems}}>
                 {children}
             </DeskContext.Provider>
         )

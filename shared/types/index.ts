@@ -41,6 +41,7 @@ export interface DeskContextType {
     refreshDesks : ()=>void;
     createItemDesk : (item : Omit<Item,'id'>) => void;
     setAllItems : (items : DeskContextType['items']) => void;
+    refreshItems : () => void;
 }
 
 export interface Item {

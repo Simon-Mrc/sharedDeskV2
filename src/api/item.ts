@@ -47,7 +47,7 @@ export async function getItemById(id : string) : Promise<Item|null|undefined>{
 
 export async function updateItem(item : Item){
     try{
-        const result = fetch(`${BASE_URL}/items/${item.id}`,{
+        const result = await fetch(`${BASE_URL}/items/${item.id}`,{
             method : 'PUT',
             headers : authHeaders(),
             body : JSON.stringify(item)
@@ -55,5 +55,17 @@ export async function updateItem(item : Item){
         console.log('update success')
     }catch(error){
         console.log('fail to access db')
+    }
+}
+
+export async function deleteItem(itemId : string){
+    try{
+        const result = await fetch(`${BASE_URL}/items/${itemId}`,{
+            method : 'DELETE',
+            headers : authHeaders()
+        })
+        console.log('item Deleted')
+    }catch(error){
+        console.log('Fail to access db')
     }
 }

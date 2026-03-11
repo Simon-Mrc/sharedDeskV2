@@ -1,5 +1,5 @@
 import { useState, type JSX } from "react";
-import { CreatingDeskPrompt } from "./creatingDeskPrompt";
+import { CreatingDeskPrompt } from "../prompts/creatingDeskPrompt";
 import { NotAshamedTree } from "./NotAshamedTree";
 
 export function FunctionsPart():JSX.Element{

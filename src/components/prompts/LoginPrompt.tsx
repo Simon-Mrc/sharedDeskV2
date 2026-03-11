@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 export function LoginPrompt({onClose} :{onClose : ()=>void}){

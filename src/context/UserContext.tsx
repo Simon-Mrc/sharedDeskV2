@@ -33,34 +33,3 @@ export function UserProvider({children} : {children : ReactNode}){
         </UserContext.Provider>
     )
 }
-/////////////////////////////MOCK FOR BUILDING ///////////////////////////////
-const mockUser = {
-    id: "user0",
-    name: "Simon",
-    userName: "simon",
-    mail: "simon@mail.com",
-    accountType: "admin" as const,
-    userColor: "#FF5733",
-    friendList: [],
-    notif: []
-}
-
-// export function UserProvider({children} : {children : ReactNode}){
-//     const [user,setUser] = useState<null|Omit<User,'password'>>(mockUser);
-//     const [logged,setLogged] = useState<boolean>(false);
-//     function login(mail : User['mail'],password :string){
-//         setUser(mockUser);
-//         setLogged(true);
-//     }
-//     function logout(){
-//         setUser(null);
-//         setLogged(false)
-//     }
-//     return(
-//         <UserContext.Provider value = {{user,logged,login,logout}}>
-//             {children}
-//         </UserContext.Provider>
-//     )
-// }
-
-//////////////////////////////END OF MOCK /////////////////////////////

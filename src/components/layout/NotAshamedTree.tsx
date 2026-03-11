@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { DeskContext } from "../context/DeskContext";
-import type { DeskContextType} from "../../shared/types";
+import { DeskContext } from "../../context/DeskContext";
+import type { DeskContextType} from "../../../shared/types";
 
 export function NotAshamedTree({onClose} : {onClose : ()=>void }){
     const deskContext = useContext(DeskContext);

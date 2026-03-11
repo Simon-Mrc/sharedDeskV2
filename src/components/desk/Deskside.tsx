@@ -1,5 +1,5 @@
 import { useContext, type JSX } from "react";
-import { DeskContext } from "../context/DeskContext";
+import { DeskContext } from "../../context/DeskContext";
 
 export function DeskSide():JSX.Element{
     const deskContext = useContext(DeskContext)

@@ -1,6 +1,5 @@
 import { useContext, type JSX } from "react";
-import { UserContext } from "../context/UserContext";
-import type { UserContextType } from "../../shared/types";
+import { UserContext } from "../../context/UserContext";
 
 
 

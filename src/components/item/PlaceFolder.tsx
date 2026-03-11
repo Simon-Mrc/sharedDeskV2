@@ -1,8 +1,8 @@
 import { useContext, useState, type JSX } from "react";
-import type { Item } from "../../shared/types";
-import { SectionContext } from "../context/SectionContext";
+import type { Item } from "../../../shared/types";
+import { SectionContext } from "../../context/SectionContext";
 import { OptionMenu } from "./OptionMenu";
-import { AccessPrompt } from "./AccessPrompt";
+import { AccessPrompt } from "./../prompts/AccessPrompt";
 
 export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
     const sectionContext = useContext(SectionContext);

@@ -1,9 +1,8 @@
 import { useContext, useState, type JSX } from "react";
-import { DeskContext } from "../context/DeskContext";
-import { UserContext } from "../context/UserContext";
-import type { Item } from "../../shared/types";
-import { SectionContext } from "../context/SectionContext";
-import { createItem } from "../api/item";
+import { DeskContext } from "../../context/DeskContext";
+import { UserContext } from "../../context/UserContext";
+import type { Item } from "../../../shared/types";
+import { SectionContext } from "../../context/SectionContext";
 
 
 export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{

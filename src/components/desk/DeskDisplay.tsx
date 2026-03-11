@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState, type JSX } from "react";
-import { SectionContext } from "../context/SectionContext";
-import { DeskContext } from "../context/DeskContext";
-import { PlaceFile } from "./PlaceFile";
-import { PlaceFolder } from "./PlaceFolder";
-import { CreateItemPrompt } from "./CreateItemPrompt";
+import { SectionContext } from "../../context/SectionContext";
+import { DeskContext } from "../../context/DeskContext";
+import { PlaceFile } from "../item/PlaceFile";
+import { PlaceFolder } from "../item/PlaceFolder";
+import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
 
 export function DeskDisplay():JSX.Element{
     const sectionContext = useContext(SectionContext);

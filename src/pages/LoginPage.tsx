@@ -1,6 +1,6 @@
 import { useState, type JSX } from "react";
-import { LoginPrompt } from "../components/LoginPrompt";
-import { RegisterPrompt } from "../components/RegisterPrompt";
+import { LoginPrompt } from "../components/prompts/LoginPrompt";
+import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
 
 export function LoginPage(): JSX.Element {
     const [showLogin, setShowLogin] = useState<boolean>(false);

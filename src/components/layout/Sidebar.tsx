@@ -1,8 +1,8 @@
 import { useContext, useState, type JSX } from "react";
 import { AccountPart } from "./AccountPart";
-import { DeskSide } from "./Deskside";
+import { DeskSide } from "../desk/Deskside";
 import { FunctionsPart } from "./FunctionsPart";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 
 export function Sidebar():JSX.Element{
     const userContext = useContext(UserContext);

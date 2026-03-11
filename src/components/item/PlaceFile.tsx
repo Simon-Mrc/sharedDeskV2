@@ -1,5 +1,5 @@
 import { useState, type JSX } from "react";
-import type { Item } from "../../shared/types";
+import type { Item } from "../../../shared/types";
 import { OptionMenu } from "./OptionMenu";
 
 export function PlaceFile ({item} : {item : Item}) : JSX.Element{

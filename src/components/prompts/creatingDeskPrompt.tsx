@@ -1,6 +1,6 @@
 import { useContext, useState, type JSX } from "react";
-import { createDesk } from "../api/desk";
-import { DeskContext } from "../context/DeskContext";
+import { createDesk } from "../../api/desk";
+import { DeskContext } from "../../context/DeskContext";
 
 export function CreatingDeskPrompt({onClose} :{onClose : ()=>void}):JSX.Element{
     const deskContext = useContext(DeskContext);

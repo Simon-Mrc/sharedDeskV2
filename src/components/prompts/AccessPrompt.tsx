@@ -1,5 +1,5 @@
 import { useState, type JSX } from "react";
-import type { Item } from "../../shared/types";
+import type { Item } from "../../../shared/types";
 
 export function AccessPrompt({onClose , setHasAccess ,switchSection,updateDepth,setOptionMenu, item, check} : 
     {onClose : ()=>void , setHasAccess : ()=>void, switchSection : ()=>void ,updateDepth : ()=>void , setOptionMenu :() => void  , item : Item , check : number}): JSX.Element {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import type { Item } from "../../shared/types"
-import { NamePrompt, PasswordPrompt } from "./OptionPrompts";
+import type { Item } from "../../../shared/types"
+import { NamePrompt, PasswordPrompt, DeletePrompt } from "./../prompts/OptionPrompts";
 
 export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord : {x:number,y:number}, item : Item}){
     const [namePrompt , setNamePrompt] = useState<boolean>(false);
@@ -27,12 +27,12 @@ export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord 
                 onClose = {()=> setNamePrompt(false)}
                 item = {item}
                 />}
-                <button >Delete!</button>
-                {/* {deletePrompt &&
+                <button onClick={()=> setDeletePrompt(true)} >Delete!</button>
+                {deletePrompt &&
                 <DeletePrompt 
                 onClose = {()=> setDeletePrompt(false)} 
                 item = {item}
-                />} */}
+                />}
                 <button onClick={()=> setPasswordPrompt(true)}>Set Password!</button>
                 {passwordPrompt &&
                 <PasswordPrompt 
