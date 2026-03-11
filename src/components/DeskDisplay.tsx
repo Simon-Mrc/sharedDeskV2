@@ -50,7 +50,7 @@ export function DeskDisplay():JSX.Element{
                 e.preventDefault()
                 }}>
                     {sectionContext?.currentSection &&
-                    <button className="back-btn" onClick={()=>goBack()}>⏮️</button>}
+                    <button className="back-btn" onClick={()=>goBack()}>←</button>}
                     {showItemPrompt &&
                 <CreateItemPrompt 
                 onClose = {()=>setShowItemPrompt(false)}

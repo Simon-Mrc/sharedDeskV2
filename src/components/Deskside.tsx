@@ -15,7 +15,10 @@ export function DeskSide():JSX.Element{
             </div>
             <div className="deskList">
                 {desks?.map((desk,index)=>(
-                    <button key = {desk.id} onClick={()=>deskContext?.switchDesk(desk.id)}>{desk.name}</button>
+                    <div key = {desk.id} className="deskListInside">
+                        <button  onClick={()=>deskContext?.switchDesk(desk.id)}>{desk.name}</button>
+                        <button>⚙️</button>
+                    </div>
                 ))}
 
             </div>

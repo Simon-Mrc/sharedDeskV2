@@ -134,22 +134,26 @@ button:active {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: #2a2a3e;
-  border: 1px solid #3a3a5e;
+  padding: 3px 5px;
+  background: transparent;
+  border: 3px solid #8f8fdb;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 500;
   transition: background 0.2s ease;
-  color: #e0e0e0;
+  color: #6961cf;
   margin: 0;
   box-shadow: none;
 }
+.back-btn .arrow {
+  font-size: 2rem;
+  color: #555;  
+}
 
 .back-btn:hover {
-  background: #3a3a55;
-  color: #c8b4ff;
+  background: #9b9bc5;
+  color: #c0b1eb;
   transform: none;
   box-shadow: none;
 }

@@ -44,3 +44,16 @@ export async function getItemById(id : string) : Promise<Item|null|undefined>{
         console.log('there is no existing item with this id ')
     }
 }
+
+export async function updateItem(item : Item){
+    try{
+        const result = fetch(`${BASE_URL}/items/${item.id}`,{
+            method : 'PUT',
+            headers : authHeaders(),
+            body : JSON.stringify(item)
+        })
+        console.log('update success')
+    }catch(error){
+        console.log('fail to access db')
+    }
+}

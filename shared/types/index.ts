@@ -40,6 +40,7 @@ export interface DeskContextType {
     switchDesk : (deskId : Desk['id'])=>void;
     refreshDesks : ()=>void;
     createItemDesk : (item : Omit<Item,'id'>) => void;
+    setAllItems : (items : DeskContextType['items']) => void;
 }
 
 export interface Item {

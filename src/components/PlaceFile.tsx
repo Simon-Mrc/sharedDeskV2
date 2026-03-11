@@ -17,7 +17,7 @@ export function PlaceFile ({item} : {item : Item}) : JSX.Element{
             background : `${item.creatorColor}`
         }} >
             <img src="/icons/file.png" alt="file"></img>
-            <span className = "icon-label">{item.name}</span>
+            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}</span>
         </div>
         {optionMenu &&
         <OptionMenu 

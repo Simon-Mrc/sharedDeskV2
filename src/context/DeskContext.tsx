@@ -47,11 +47,17 @@ export function DeskProvider({children} : {children : ReactNode}){
                 }
             }
         }
+
+        ///////////////////////// UPDATE ITEM LIST //////////////////////
+    function setAllItems(items : DeskContextType['items'] ){
+        setItems(items);
+    }
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// PROVIDES !! ////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
         return(
-            <DeskContext.Provider value={{currentDesk,desks,items,loaded,switchDesk,refreshDesks,createItemDesk}}>
+            <DeskContext.Provider value={{currentDesk,desks,items,loaded,switchDesk,refreshDesks,createItemDesk,setAllItems}}>
                 {children}
             </DeskContext.Provider>
         )

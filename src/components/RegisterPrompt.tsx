@@ -52,8 +52,9 @@ export function RegisterPrompt({onClose} : {onClose : ()=>void}){
                 <input className="ModernInput"
                  onChange={(input)=>setMail(input.target.value)}
                  placeholder="Enter Your mail"/>
-                <input className="ModernInput" 
-                onChange={(input)=>setPassword(input.target.value)}/>
+                <input className="ModernInput" type="password"
+                onChange={(input)=>setPassword(input.target.value)}
+                placeholder="Enter Your Password"/>
                 {error && <span className="error">{error}</span>}
                 <button onClick={handleRegister}> REGISTER MY FRIEND !</button>
             </div>

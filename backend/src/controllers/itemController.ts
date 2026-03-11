@@ -79,9 +79,10 @@ const updateItemById = (req:Request<{id : string},{},Omit<Item,'id'>>,res:Respon
             type = ?,
             x= ?,
             y=?,
+            accessPassword = ?,
             creatorColor = ?
             WHERE id = ?
-            `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.creatorColor,req.params.id);
+            `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.body.creatorColor,req.params.id);
             res.json({message:'item successfully updated'})
         }catch(error){
             res.status(404).json({error:'fail to find item'});
