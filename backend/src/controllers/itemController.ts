@@ -44,25 +44,34 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|
     try{
         const id = randomUUID();
         const userId =(req as any).user.userId;
-        if(req.body.accessPassword!=null){
-        db.prepare(`
-            INSERT INTO items
-            (id,deskId,name,type,x,y,accessPassword,createdBy,creatorColor,parentId)
-            VALUES
-            (?,?,?,?,?,?,?,?,?,?)
-            `).run(id,req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,await bcrypt.hash(req.body.accessPassword,10),userId,req.body.creatorColor,req.body.parentId)
-        }else{
+        const hashPswrd = req.body.accessPassword ? await bcrypt.hash(req.body.accessPassword,10) :null;
+        const myTransaction = db.transaction(()=>{
             db.prepare(`
                 INSERT INTO items
                 (id,deskId,name,type,x,y,accessPassword,createdBy,creatorColor,parentId)
                 VALUES
                 (?,?,?,?,?,?,?,?,?,?)
-                `).run(id,req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,null,userId,req.body.creatorColor,req.body.parentId)
-        }
-        const newItem = db.prepare(`
-            SELECT * FROM items
-            WHERE id = ?
-            `).get(id) as Item;
+                `).run(id,req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,hashPswrd,userId,req.body.creatorColor,req.body.parentId);
+                const arrayOfUserId = db.prepare(`
+                SELECT userId FROM deskAccess
+                WHERE deskId = ?    
+                `).all(req.body.deskId) as {userId : string}[];
+                arrayOfUserId.forEach(object => {
+                    db.prepare(`
+                    INSERT INTO itemUpdates
+                    (itemId,userId,lastModified,lastViewed)
+                    VALUES
+                    (?,?,?,?)
+                    `).run(id,object.userId,Date.now(),0)                    
+                });
+                const newItem = db.prepare(`
+                    SELECT * FROM items
+                    WHERE id = ?
+                    `).get(id) as Item;        
+            return newItem
+            }
+        )
+        const newItem = myTransaction();
         return res.json(newItem)
     }catch(error){
         res.status(404).json(null)
@@ -72,17 +81,31 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|
 /////////////////////////////// UPDATE ITEM BY ID /////////////////////////////
 const updateItemById = (req:Request<{id : string},{},Omit<Item,'id'>>,res:Response<{message : string}|{error:string}>)=>{
     try{
-        db.prepare(`
-            UPDATE items SET
-            deskId = ?,
-            name=?,
-            type = ?,
-            x= ?,
-            y=?,
-            accessPassword = ?,
-            creatorColor = ?
-            WHERE id = ?
-            `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.body.creatorColor,req.params.id);
+        const userId = (req as any).user.userId;
+        const myTransaction = db.transaction(()=>{
+            db.prepare(`
+                UPDATE items SET
+                deskId = ?,
+                name=?,
+                type = ?,
+                x= ?,
+                y=?,
+                accessPassword = ?,
+                creatorColor = ?
+                WHERE id = ?
+                `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.body.creatorColor,req.params.id);     
+                db.prepare(`
+                    UPDATE itemUpdates SET
+                    lastModified = ?
+                    WHERE itemId = ?
+                    `).run(Date.now(),req.params.id)
+                db.prepare(`
+                    UPDATE itemUpdates SET
+                    lastViewed = ?
+                    WHERE (userId = ? AND itemId = ?)
+                `).run(Date.now(),userId,req.params.id);
+            })
+            myTransaction();
             res.json({message:'item successfully updated'})
         }catch(error){
             res.status(404).json({error:'fail to find item'});

@@ -62,6 +62,18 @@ db.exec(`
     FOREIGN KEY (createdBy) REFERENCES users(id)
     ON DELETE SET NULL 
     );
+
+    CREATE TABLE IF NOT EXISTS itemUpdates(
+    itemId          TEXT NOT NULL,
+    userId          TEXT NOT NULL,
+    lastModified    NUMBER NOT NULL,
+    lastViewed       NUMBER NOT NULL DEFAULT 0,
+    PRIMARY KEY (itemId,userId),
+    FOREIGN KEY (userId) REFERENCES users(id)
+    ON DELETE CASCADE,
+    FOREIGN KEY (itemId) REFERENCES items(id)
+    ON DELETE CASCADE
+    );
 `)
 
 

@@ -15,20 +15,37 @@ import * as bcrypt from 'bcrypt';
 const inviteToDeskByUserId = (req : Request<{deskId : string},{},{userId : string}> , res : Response<{message : string}|{error:string}>)=>{
     try {
         const currentUserId = (req as any).user.userId;
-        const inDesk = db.prepare(`
-            SELECT * FROM deskAccess
-            WHERE deskId = ? AND  userId = ?
-            `).get(req.params.deskId,currentUserId) as DeskAccess;
-            if(inDesk.accessType != 'read'){
-                db.prepare(`
-                    INSERT INTO deskAccess
-                    (deskId,userId,accessType)
-                    VALUES
-                    (?,?,?)
-                    `).run(req.params.deskId,req.body.userId,'read');
-                return res.json({message : 'invite sent !'})
-            }
-           return  res.json({message:'You have no right for this '})
+        const myTransaction = db.transaction(()=>{
+            let check : boolean = false;
+            const inDesk = db.prepare(`
+                SELECT * FROM deskAccess
+                WHERE deskId = ? AND  userId = ?
+                `).get(req.params.deskId,currentUserId) as DeskAccess;
+                if(inDesk.accessType != 'read'){
+                    check = true;
+                    db.prepare(`
+                        INSERT INTO deskAccess
+                        (deskId,userId,accessType)
+                        VALUES
+                        (?,?,?)
+                        `).run(req.params.deskId,req.body.userId,'read');
+                    const arrayOfItemsId = db.prepare(`
+                        SELECT id FROM items
+                        WHERE deskId = ?
+                    `).all(req.params.deskId) as {id : string}[];
+                    arrayOfItemsId.forEach(object => {
+                        db.prepare(`
+                            INSERT INTO itemUpdates
+                            (itemId,userId,lastModified,lastViewed)
+                            VALUES
+                            (?,?,?,?)
+                            `).run(object.id,req.body.userId,1,0)                       
+                    });
+                }
+        return check
+        })
+        const check = myTransaction();
+        return  check ? res.json({message:'If it didn t work, wasnt because of the right xD'}) : res.json({message:'You have no right on this !'})
     }catch(error){
     res.status(404).json({message:'Desk not found or user already in desk'});
     }

@@ -58,7 +58,6 @@ export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , 
 ///////////////////////////////// SEND INVITE PART ///////////////////////////////////
 export function InviteMenu({onClose,currentFriend} : {onClose : ()=>void, currentFriend : Omit<User,'password'>|null}) : JSX.Element{
     const userContext = useContext(UserContext);
-    const [animation,setAnimation] = useState<string>('');
     const [error , setError] = useState<string>('');
     async function inviteHandler(){
         if(userContext?.user && currentFriend){
@@ -244,7 +243,7 @@ export function AcceptOrNot ({onClose,selectedUser} : {onClose : ()=>void , sele
     ////////////////////////////////////////////////////////////////////////////////
   
     return(
-    <div className={`overlay`} onClick={()=>endwithease()}>
+    <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
         <div className="PopupWithBlurrOption" onClick={(e)=>{
             e.stopPropagation()
         }}>
