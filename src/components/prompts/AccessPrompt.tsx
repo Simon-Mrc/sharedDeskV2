@@ -6,6 +6,7 @@ export function AccessPrompt({onClose , setHasAccess ,switchSection,updateDepth,
     {onClose : ()=>void , setHasAccess : ()=>void, switchSection : ()=>void ,updateDepth : ()=>void , setOptionMenu :() => void  , item : Item , check : number}): JSX.Element {
     const [password, setPassword] = useState<string>('');
     const [error ,setError] = useState<string>('');
+    const [inputAnimation, setInputAnimation] = useState<string>('');
     function accessHandler(){
         if(password === item.accessPassword){
             if(check ===1){
@@ -16,7 +17,11 @@ export function AccessPrompt({onClose , setHasAccess ,switchSection,updateDepth,
             }
             onClose();
         }else{
-            setError('Wrong password ! try again')
+            setError('Wrong password ! try again');
+            setInputAnimation('shake');
+            setTimeout(()=>{
+                setInputAnimation('');
+            },500)
         }
     }
     return(
@@ -25,7 +30,7 @@ export function AccessPrompt({onClose , setHasAccess ,switchSection,updateDepth,
                 <button className="popup-close" onClick={onClose}>✕</button>
                 <h2 className="popup-title">Oops it s protected</h2>
                 <p className="popup-subtitle">Try to hack it ? </p>
-                <input className="ModernInput" type="password"
+                <input className={`ModernInput ${inputAnimation}`}  type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>
                 {error && 

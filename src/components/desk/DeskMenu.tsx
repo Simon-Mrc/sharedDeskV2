@@ -1,7 +1,10 @@
 import { useContext, useState, type JSX } from "react";
 import type { Desk } from "../../../shared/types";
 import { UserContext } from "../../context/UserContext";
+import { InviteMenu } from "./DeskMenuFunctions";
 
+////////////////////////////////////BIG ONE HERE OPTION MENU  ////////////////////////////////////
+//////////////////////////// ROOT OF ALL STATE FOR SHAREDDESK MENU FUNCTIONS ////////////////////////////////////
 export function DeskMenu ({onClose,selectedDesk} : {onClose : ()=>void , selectedDesk : Desk|null}) : JSX.Element{
     const [input , setInput] = useState<string>('');
     const [inviteMenu , setInviteMenu] = useState<boolean>(false);
@@ -16,7 +19,10 @@ export function DeskMenu ({onClose,selectedDesk} : {onClose : ()=>void , selecte
 
                     <button style={{maxWidth :"20%"}}>🔍</button>
                 </div>
-                <button >Invite Friends !</button>
+                <button onClick={()=>setInviteMenu(true)}>Invite Friends !</button>
+                {inviteMenu&&
+                <InviteMenu 
+                onClose={()=>setInviteMenu(false)}/>}
                 <button >Quit Desk</button>
                 <button >Delete Desk</button>
                 <button >Give Desk</button>

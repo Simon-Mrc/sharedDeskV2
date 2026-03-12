@@ -9,7 +9,7 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
     const [mail , setMail] = useState<string>(''); 
     const [password, setPassword] = useState<string>('');
     const [error,setError] = useState<string|null>(null);
-    const [inputAnimtation , setInputAnimation] = useState<string>('');
+    const [inputAnimation , setInputAnimation] = useState<string>('');
     useEffect(()=>{
         if(userContext?.logged){
             onClose();
@@ -26,7 +26,7 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
                 setError('wrong Email or Password');
                 setInputAnimation('shake');
                 setTimeout(()=>{
-                    setInputAnimation('')
+                    setInputAnimation('');
                 },500)  
             }
         }catch(error){
@@ -42,7 +42,7 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
                 <input className="ModernInput"
                  onChange={(input)=>setMail(input.target.value)}
                  placeholder="Enter Your mail"/>
-                <input className={`ModernInput ${inputAnimtation}`} type="password"
+                <input className={`ModernInput ${inputAnimation}`} type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>
                 {error && 

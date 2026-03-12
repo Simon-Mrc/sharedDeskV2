@@ -13,23 +13,25 @@
 
 /* ─── POPUP BOX ────────────────────────────────────────────── */
 .PopupWithBlurr {
-    background: #272752;
-    border: 4px solid #497247;
+    background: #282853;
+    border: 3px solid #20212b;
     border-radius: 16px;
-    padding: 2.5rem 2rem;
+    padding: 1rem 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 0.3rem;
     width: 100%;
     max-width: 380px;
+    max-height: 60vh;
+    overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     z-index: 101;
-    animation: popIn 0.2s ease;
+    animation: popIn 0.5s ease;
 }
 
 .PopupWithBlurrOption{
-    background: #272752;
-    border: 4px solid #497247;
+    background: #282853;
+    border: 3px solid #20212b;
     border-radius: 16px;
     position: absolute;
     padding: 1.5rem 1rem;
@@ -38,6 +40,8 @@
     gap: 1.2rem;
     width: 100%;
     max-width: 380px;
+    max-height: 60vh;
+    overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     z-index: 101;
     animation: popIn 0.4s ease;
@@ -70,20 +74,24 @@
 
 /* ─── MODERN INPUT ─────────────────────────────────────────── */
 .ModernInput {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background: #1f1d1d;
-    border: 1px solid #5d7a69;
-    border-radius: 8px;
-    color: #e0e0e0;
-    font-size: 0.95rem;
+    border: 1px solid #8a7e2d;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25 ease;
+    background-color: #0e0e0e;
+    color: #8a7e2d;;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     box-sizing: border-box;
 }
 
 .ModernInput::placeholder {
-    color: #707070;
+    color: #8a7e2d;
+    font-weight: 300;
 }
 
 .ModernInput:focus {
@@ -121,7 +129,6 @@
 }
 
 .popup-close {
-    position: absolute;
     top: 1rem;
     right: 1rem;
     background: transparent;
@@ -146,10 +153,12 @@
 /* ─── POP IN ANIMATION ─────────────────────────────────────── */
 @keyframes popIn {
     from {
+        filter: blur(1px);
         opacity: 0;
         transform: scale(0.95) translateY(10px);
     }
     to {
+        filter: blur(0px);
         opacity: 1;
         transform: scale(1) translateY(0);
     }

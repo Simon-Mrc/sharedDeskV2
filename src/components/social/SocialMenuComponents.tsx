@@ -11,13 +11,14 @@ import { getUserById, updateUserById } from "../../api/user";
 export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , arrayOfFriends : Omit<User,'password'>[]|null}): JSX.Element{
     const [inviteMenu , setInviteMenu] = useState<boolean>(false);
     const [currentFriend , setCurrentFriend] = useState<Omit<User,'password'>|null>(null);
+    const userContext = useContext(UserContext);
     
     return(
         <div className="overlay" onClick={()=>onClose()}>
             <div className="PopupWithBlurrOption" onClick={(e)=>e.stopPropagation()}>
-                {arrayOfFriends?.map((user)=>(
+                {arrayOfFriends?.map((user)=>!userContext?.user?.friendList.includes(user.id) && (
                     <div key= {user.id}>
-                        <button style={{border: `3px solid ${user.userColor}`}}
+                        <button style={{border: `1.5px solid ${user.userColor}`}}
                         onClick={()=>{
                             setCurrentFriend(user);
                             setInviteMenu(true);

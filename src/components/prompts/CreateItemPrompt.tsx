@@ -37,20 +37,19 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
     <div className="overlay" onClick={()=>onClose()}>
         <div className="PopupWithBlurr" onClick={(e)=>e.stopPropagation()}>
             <button className="popup-close" onClick={onClose}>✕</button>
-            <h2 className="popup-title">Do you want a new note , file , or folder ?</h2>
+            <h2 className="popup-title">New note , file , or folder ?</h2>
             <p className="popup-subtitle">Choose wisely</p>
             <button onClick={()=> setType('file')}>a file 📑!</button>
             <button onClick={()=> setType('folder')}>a folder 📁 !</button>
-            <span className="error">You chose a {type}</span>
             <input className="ModernInput"
             onChange={(input)=>setName(input.target.value)}
-            placeholder='Enter your new item name' />
+            placeholder={`Enter your ${type} name`} />
             {error && 
                  <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
                  <span  className="error">{error}</span>
                  </div>
             }
-            <button onClick={()=>itemHandler()}> Create your item</button>
+            <button onClick={()=>itemHandler()}> {`Create your ${type} `}</button>
         </div>
     </div>
 
