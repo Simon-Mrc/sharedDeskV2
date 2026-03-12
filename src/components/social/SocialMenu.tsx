@@ -1,11 +1,13 @@
-import { useState, type JSX } from "react";
+import { useContext, useState, type JSX } from "react";
 import type { User } from "../../../shared/types";
 import { getUserBySearch } from "../../api/user";
 import { SearchFriend, Invit, FriendList } from "./SocialMenuComponents";
+import { UserContext } from "../../context/UserContext";
 
 /////////////////////////////// SOCIAL MENU PURE JSX FUNCTION ////////////////////////////////
 //////////// ROOT FOR ALL SOCIAL FEATURES ///////// HANDLES THE STATES OF PROMPTS////////////////
 export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
+    const userContext = useContext(UserContext);
     const [searchFriend, setSearchFriend] = useState<boolean>(false);
     const [friendList, setFriendList] = useState<boolean>(false);
     const [invit , setInvit] = useState<boolean>(false);
@@ -41,7 +43,7 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
                     <FriendList 
                     onClose = {()=> setFriendList(false)} 
                     />}
-                    <button onClick={()=> setInvit(true)}>Show Invits</button>
+                    <button onClick={()=> setInvit(true)}>Show Invits{userContext?.user?.notif.length!=0 && ('🔴')}</button>
                     {invit &&
                     <Invit 
                     onClose = {()=> setInvit(false)}

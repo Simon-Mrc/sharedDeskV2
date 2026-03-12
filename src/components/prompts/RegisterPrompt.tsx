@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 //////////////////////////////////// REGISTER PROMPT ////////////////////////////////////
 /////////// AUTOMATIC LOG AFTER CREATION OF USER //// NAVIGATE TO HOMEPAGE //////////////
-export function RegisterPrompt({onClose} : {onClose : ()=>void}){
+export function RegisterPrompt({onClose, setAnimation} : {onClose : ()=>void, setAnimation : ()=>void}){
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [name,setName] = useState<string>('');
@@ -16,11 +16,14 @@ export function RegisterPrompt({onClose} : {onClose : ()=>void}){
     const [password,setPassword] = useState<string>('');
     const [error,setError] = useState('');
 /////// AS SOON AS CREATED ===> NAVIGATE TO HOME PAGE /////////////
-    useEffect(()=>{
-        if(userContext?.logged){
-            onClose();
+useEffect(()=>{
+    if(userContext?.logged){
+        onClose();
+        setAnimation();
+        setTimeout(()=>{
             navigate('/');
-        }
+        },500)
+    }
     },[userContext?.logged])
     
     async function handleRegister (){

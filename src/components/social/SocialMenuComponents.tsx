@@ -42,21 +42,24 @@ export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , 
 ///////////////////////////////// SEND INVITE PART ///////////////////////////////////
 export function InviteMenu({onClose,currentFriend} : {onClose : ()=>void, currentFriend : Omit<User,'password'>|null}) : JSX.Element{
     const userContext = useContext(UserContext);
+    const [animation,setAnimation] = useState<string>('');
     const [error , setError] = useState<string>('');
     async function inviteHandler(){
         if(userContext?.user && currentFriend){
-            console.log(currentFriend?.notif.includes(userContext?.user?.id))
-            console.log(currentFriend?.friendList?.includes(userContext?.user?.id))
-            console.log(currentFriend?.friendList)
-            console.log(userContext?.user?.id)
             if(currentFriend?.notif.includes(userContext?.user?.id) || currentFriend?.friendList?.includes(userContext?.user?.id)){
                 setError('He is already your friend or you already send an invite');
-                console.log('error')
+                setTimeout(()=>{
+                    setError('');
+                },1500)
+
             }else{
                 const newArray = [...currentFriend.notif,userContext.user.id];
                 currentFriend.notif = newArray;
                 await updateUserById(currentFriend);
-                onClose();
+                setError('Invite sent =D');
+                setTimeout(()=>{
+                    onClose();
+                },1500)
             }
         }
     }

@@ -3,23 +3,32 @@ import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 /////////////////// LOGIN PROMPT ////////////// NAVIGATE TO HOME IF LOGGED ////////// PROTECTED ROUTE PREVENTS IF NOT //////////////
-export function LoginPrompt({onClose} :{onClose : ()=>void}){
+export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAnimation : ()=>void}){
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [mail , setMail] = useState<string>(''); 
     const [password, setPassword] = useState<string>('');
     const [error,setError] = useState<string|null>(null);
+    const [inputAnimtation , setInputAnimation] = useState<string>('');
     useEffect(()=>{
         if(userContext?.logged){
             onClose();
-            navigate('/');
+            setAnimation();
+            setTimeout(()=>{
+                navigate('/');
+            },500)
         }
     },[userContext?.logged])
     async function handleLogin(){
-        setError(null);
         try{
             await userContext?.login(mail,password);
-            if(!userContext?.logged){setError('wrong Email or Password')}
+            if(!userContext?.logged){
+                setError('wrong Email or Password');
+                setInputAnimation('shake');
+                setTimeout(()=>{
+                    setInputAnimation('')
+                },500)  
+            }
         }catch(error){
             setError('wrong Email or Password')
         }
@@ -33,7 +42,7 @@ export function LoginPrompt({onClose} :{onClose : ()=>void}){
                 <input className="ModernInput"
                  onChange={(input)=>setMail(input.target.value)}
                  placeholder="Enter Your mail"/>
-                <input className="ModernInput" type="password"
+                <input className={`ModernInput ${inputAnimtation}`} type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>
                 {error && 

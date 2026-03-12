@@ -21,7 +21,7 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
 
     return (
     <div>
-        <div className="icon" 
+        <div className="icon fadeIn" 
             id={item.id} 
             style={{left : item.x, top :item.y,
             background : `${item.creatorColor}`

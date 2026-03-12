@@ -6,8 +6,9 @@ import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
 export function LoginPage(): JSX.Element {
     const [showLogin, setShowLogin] = useState<boolean>(false);
     const [showRegister, setShowRegister] = useState<boolean>(false);
+    const [animation , setAnimation] = useState<string>('');
     return (
-        <div className="login-page">
+        <div className={`login-page ${animation}`}>
 
             {/* CORE APP PRESENTATION */}
             <div className="presentation-container">
@@ -49,10 +50,13 @@ export function LoginPage(): JSX.Element {
                 <button onClick={()=>setShowLogin(true)}>Welcome Back ! Let's Login</button>
                 <button onClick={()=>setShowRegister(true)}>New to SharedDesk ? Create an account !</button>
                 {showLogin && 
-                <LoginPrompt onClose = {()=> setShowLogin(false)}/>
+                <LoginPrompt 
+                onClose = {()=> setShowLogin(false)}
+                setAnimation = {()=>setAnimation('fadeOut')} />
                 }
                 {showRegister &&
-                <RegisterPrompt onClose = {()=> setShowRegister(false)}/>
+                <RegisterPrompt onClose = {()=> setShowRegister(false)}
+                setAnimation = {()=>setAnimation('fadeOut')} />
                 }
             </div>
 

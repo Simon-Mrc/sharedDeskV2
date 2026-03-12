@@ -9,7 +9,7 @@ export function PlaceFile ({item} : {item : Item}) : JSX.Element{
     const [coord , setCoord] = useState<{x : number,y : number}>({x:0,y:0})
     return (
         <div>
-        <div className="icon" onContextMenu={(e)=>{
+        <div className="icon fadeIn" onContextMenu={(e)=>{
             e.preventDefault();
             e.stopPropagation();
             const rect = e.currentTarget.getBoundingClientRect();

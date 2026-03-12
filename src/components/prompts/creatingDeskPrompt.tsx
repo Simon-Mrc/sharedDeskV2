@@ -6,7 +6,8 @@ import { DeskContext } from "../../context/DeskContext";
 export function CreatingDeskPrompt({onClose} :{onClose : ()=>void}):JSX.Element{
     const deskContext = useContext(DeskContext);
     const [input,setInput] = useState<string>('');
-    const [error, setError] = useState<string>('')
+    const [error, setError] = useState<string>('');
+    const [inputAnimation, setInputAnimation] = useState<string>('');
 
     async function createDeskIn(){
         const newDesk = await createDesk(input);
@@ -19,6 +20,10 @@ export function CreatingDeskPrompt({onClose} :{onClose : ()=>void}):JSX.Element{
         }
         else{
             setError('Choose another name ! ')
+            setInputAnimation('shake');
+            setTimeout(()=>{
+                setInputAnimation('')
+            },500)  
         }
     }
     return(
@@ -27,12 +32,12 @@ export function CreatingDeskPrompt({onClose} :{onClose : ()=>void}):JSX.Element{
                 <button className="popup-close" onClick={onClose}>✕</button>
                 <h2 className="popup-title">Create you Shared (or not) Desk !</h2>
                 <p className="popup-subtitle">Invite friends family coworkers or keep it for you only</p>
-                <input className="ModernInput"
+                <input className={`ModernInput ${inputAnimation}`}
                  onChange={(input)=>setInput(input.target.value)}
                  placeholder="Enter a name for new desk"/>
                  {error && 
                  <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                 <span  className="error">{error}</span>
+                 <span  className="error fadeIn">{error}</span>
                  </div>
                 }
                  <button onClick={createDeskIn}> Create a new desk</button>
