@@ -17,5 +17,18 @@ export async function getAllDesk(){
     }catch(error){
         console.log('User has no desks to access')
     }
+}
 
+///////////////////////// ADD FRIEND TO DESK IF ACCESSTYPE OK /////////////////////
+export async function inviteToDesk(friendId : string ,deskId:string) : Promise<{message:string}>{
+    try{
+        const result = await fetch(`${BASE_URL}/deskAccess/${deskId}`,{
+            method : 'POST',
+            headers : authHeaders(),
+            body : JSON.stringify(friendId)
+        })
+        return await result.json()
+    }catch(error){
+        return {message : 'failed to access db'}
+    }
 }

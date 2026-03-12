@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 /////////////////// LOGIN PROMPT ////////////// NAVIGATE TO HOME IF LOGGED ////////// PROTECTED ROUTE PREVENTS IF NOT //////////////
 export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAnimation : ()=>void}){
+    
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [mail , setMail] = useState<string>(''); 
@@ -33,10 +34,25 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
             setError('wrong Email or Password')
         }
     }
+   
+   
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimationD] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimationD('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     return(
-        <div className="overlay">
+        <div className={`overlay ${animation}`}>
             <div className="PopupWithBlurr">
-                <button className="popup-close" onClick={onClose}>✕</button>
+                <button className="popup-close" onClick={endwithease}>✕</button>
                 <h2 className="popup-title">Welcome back</h2>
                 <p className="popup-subtitle">Log into your account</p>
                 <input className="ModernInput"

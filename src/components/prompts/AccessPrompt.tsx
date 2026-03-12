@@ -4,18 +4,19 @@ import type { Item } from "../../../shared/types";
 /////////////////////////// PROMPT FOR FOLDER AND FILE CHECK IF SECURITY ///////////////////////// NOT COMPLICATED NOTHING TO COMMENT ////////////////////////////
 export function AccessPrompt({onClose , setHasAccess ,switchSection,updateDepth,setOptionMenu, item, check} : 
     {onClose : ()=>void , setHasAccess : ()=>void, switchSection : ()=>void ,updateDepth : ()=>void , setOptionMenu :() => void  , item : Item , check : number}): JSX.Element {
-    const [password, setPassword] = useState<string>('');
-    const [error ,setError] = useState<string>('');
-    const [inputAnimation, setInputAnimation] = useState<string>('');
-    function accessHandler(){
-        if(password === item.accessPassword){
-            if(check ===1){
-                switchSection();
-                updateDepth();
-            }else{
+        
+        const [password, setPassword] = useState<string>('');
+        const [error ,setError] = useState<string>('');
+        const [inputAnimation, setInputAnimation] = useState<string>('');
+        function accessHandler(){
+            if(password === item.accessPassword){
+                if(check ===1){
+                    switchSection();
+                    updateDepth();
+                }else{
                 setOptionMenu();
             }
-            onClose();
+            endwithease();
         }else{
             setError('Wrong password ! try again');
             setInputAnimation('shake');
@@ -24,10 +25,25 @@ export function AccessPrompt({onClose , setHasAccess ,switchSection,updateDepth,
             },500)
         }
     }
+    
+    
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     return(
-        <div className="overlay">
-            <div className="PopupWithBlurr">
-                <button className="popup-close" onClick={onClose}>✕</button>
+        <div className={`overlay ${animation}`}>
+            <div className={`PopupWithBlurr`}>
+                <button className="popup-close" onClick={endwithease}>✕</button>
                 <h2 className="popup-title">Oops it s protected</h2>
                 <p className="popup-subtitle">Try to hack it ? </p>
                 <input className={`ModernInput ${inputAnimation}`}  type="password"

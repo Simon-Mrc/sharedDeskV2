@@ -18,8 +18,8 @@ const inviteToDeskByUserId = (req : Request<{deskId : string},{},{userId : strin
         const inDesk = db.prepare(`
             SELECT * FROM deskAccess
             WHERE deskId = ? AND  userId = ?
-            `).get(req.params.deskId,currentUserId);
-            if(inDesk){
+            `).get(req.params.deskId,currentUserId) as DeskAccess;
+            if(inDesk.accessType != 'read'){
                 db.prepare(`
                     INSERT INTO deskAccess
                     (deskId,userId,accessType)
@@ -28,9 +28,9 @@ const inviteToDeskByUserId = (req : Request<{deskId : string},{},{userId : strin
                     `).run(req.params.deskId,req.body.userId,'read');
                 return res.json({message : 'invite sent !'})
             }
-           return  res.json({message:'You are no part of this desk'})
+           return  res.json({message:'You have no right for this '})
     }catch(error){
-    res.status(404).json({error:'Desk not found or user already in desk'});
+    res.status(404).json({message:'Desk not found or user already in desk'});
     }
 }
 

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DeskContext } from "../../context/DeskContext";
 import type { DeskContextType} from "../../../shared/types";
 import type { JSX } from "react";
@@ -12,6 +12,19 @@ export function NotAshamedTree({ onClose, switchSection, updateDepth}: {
     switchSection: (itemId: string | null) => void; 
     updateDepth : (depth : number) =>void 
 }) {
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     const deskContext = useContext(DeskContext);
 
     function buildTree(
@@ -54,8 +67,8 @@ export function NotAshamedTree({ onClose, switchSection, updateDepth}: {
     const items = deskContext?.items;
 
     return (
-        <div className="notAshamedtreeContainer">
-            <button onClick={() => onClose()}>❌ Close</button>
+        <div className={`notAshamedtreeContainer ${animation}`}>
+            <button onClick={() => endwithease()}>❌ Close</button>
             <pre>
                 <span style={{ display: 'block' }} ><a onClick={()=>{switchSection(null);updateDepth(0)}} style={{ cursor: 'pointer', textDecoration: 'none' }}>{'🖥️'} {deskContext?.currentDesk?.name}</a></span>
                 {items && buildTree(items, null)}

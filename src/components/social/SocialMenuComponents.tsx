@@ -12,9 +12,24 @@ export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , 
     const [inviteMenu , setInviteMenu] = useState<boolean>(false);
     const [currentFriend , setCurrentFriend] = useState<Omit<User,'password'>|null>(null);
     const userContext = useContext(UserContext);
+
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     
     return(
-        <div className="overlay" onClick={()=>onClose()}>
+        <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
             <div className="PopupWithBlurrOption" onClick={(e)=>e.stopPropagation()}>
                 {arrayOfFriends?.map((user)=>!userContext?.user?.friendList.includes(user.id) && (
                     <div key= {user.id}>
@@ -34,7 +49,7 @@ export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , 
                 }
                 <button className="popup-closeOption" 
                 style={{gridColumn: "1 / -1", textAlign :"center" }}
-                onClick={onClose}>✕</button>
+                onClick={endwithease}>✕</button>
             </div>
         </div>
     )
@@ -64,8 +79,23 @@ export function InviteMenu({onClose,currentFriend} : {onClose : ()=>void, curren
             }
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animationd , setAnimationd] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimationd('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     return(
-        <div className="overlay" onClick={()=>onClose()}>
+        <div className={`overlay ${animationd}`} onClick={()=>endwithease()}>
             <div className="PopupWithBlurrOption" onClick={(e)=>{
                 e.stopPropagation()
             }}>
@@ -79,7 +109,7 @@ export function InviteMenu({onClose,currentFriend} : {onClose : ()=>void, curren
                 }
                 <button className="popup-closeOption" 
                 style={{gridColumn: "1 / -1", textAlign :"center" }}
-                onClick={onClose}>✕</button>
+                onClick={endwithease}>✕</button>
             </div>
         </div>
     )
@@ -114,8 +144,22 @@ export function Invit({onClose} : {onClose : ()=>void}) : JSX.Element{
     const [acceptOrNot , setAcceptOrNot] = useState<boolean>(false);
     const [error,setError] = useState<string>('');
 
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     return(
-        <div className="overlay" onClick={()=>onClose()}>
+        <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
             <div className="PopupWithBlurrOption" onClick={(e)=>{
                 e.stopPropagation()
             }}>
@@ -141,7 +185,7 @@ export function Invit({onClose} : {onClose : ()=>void}) : JSX.Element{
                 }
                 <button className="popup-closeOption" 
                 style={{gridColumn: "1 / -1", textAlign :"center" }}
-                onClick={onClose}>✕</button>
+                onClick={endwithease}>✕</button>
             </div>
         </div>
 
@@ -184,21 +228,36 @@ export function AcceptOrNot ({onClose,selectedUser} : {onClose : ()=>void , sele
                 }    
             }
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     return(
-    <div className="overlay" onClick={()=>onClose()}>
+    <div className={`overlay`} onClick={()=>endwithease()}>
         <div className="PopupWithBlurrOption" onClick={(e)=>{
             e.stopPropagation()
         }}>
             <button style={{border: `3px solid #02a32b`}}
                     onClick={async()=>{
                         await acceptHandler(true);
-                        onClose()
+                        endwithease()
                     }
                     }>{`Accept ${selectedUser?.userName} as a friend`}</button>
             <button style={{border: `3px solid #a33002`}}
                     onClick={async ()=>{
                         await acceptHandler(false);
-                        onClose();
+                        endwithease();
                     }
                     }>{`Refuse ${selectedUser?.userName} as a friend`}</button>
             
@@ -209,7 +268,7 @@ export function AcceptOrNot ({onClose,selectedUser} : {onClose : ()=>void , sele
             }
             <button className="popup-closeOption" 
             style={{gridColumn: "1 / -1", textAlign :"center" }}
-            onClick={onClose}>✕</button>
+            onClick={endwithease}>✕</button>
         </div>
     </div>
     )
@@ -245,9 +304,23 @@ export function FriendList({onClose} : {onClose : ()=>void}) : JSX.Element{
         friendsHandler();
     },[userContext?.user?.friendList.length])
 
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
 /////////////////////////////////JSX PART //////////////////////////////
     return(
-    <div className="overlay" onClick={()=>onClose()}>
+    <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
         <div className="PopupWithBlurrOption" onClick={(e)=>{
             e.stopPropagation()
         }}>
@@ -270,7 +343,7 @@ export function FriendList({onClose} : {onClose : ()=>void}) : JSX.Element{
             }
             <button className="popup-closeOption" 
             style={{gridColumn: "1 / -1", textAlign :"center" }}
-            onClick={onClose}>✕</button>
+            onClick={endwithease}>✕</button>
         </div>
     </div>
     )
@@ -292,14 +365,29 @@ export function FriendMenu({onClose, selectedFriend} : {onClose : ()=>void, sele
                 /////////////////// UPDATE IN DB /////////////////
                 await updateUserById(updatedFriend);
                 await updateUserById(updatedUser);
-                onClose();
+                endwithease();
             }else{
                 setError('He deleted you before you did ;) !')
             }
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     return(
-    <div className="overlay" onClick={()=>onClose()}>
+    <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
         <div className="PopupWithBlurrOption" onClick={(e)=>{
             e.stopPropagation()
         }}>
@@ -313,7 +401,7 @@ export function FriendMenu({onClose, selectedFriend} : {onClose : ()=>void, sele
             }
             <button className="popup-closeOption" 
             style={{gridColumn: "1 / -1", textAlign :"center" }}
-            onClick={onClose}>✕</button>
+            onClick={endwithease}>✕</button>
         </div>
     </div>
     )

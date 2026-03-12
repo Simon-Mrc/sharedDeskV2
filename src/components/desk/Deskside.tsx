@@ -26,15 +26,15 @@ export function DeskSide():JSX.Element{
                         <button onClick={()=>{
                             setSelectedDesk(desk)
                             setDeskMenu(true)}}>⚙️</button>
-                        {deskMenu &&
-                        <DeskMenu 
-                        onClose = {()=>setDeskMenu(false)}
-                        selectedDesk = {selectedDesk}
-                        />}
                     </div>
                 ))}
 
             </div>
+                {deskMenu &&
+                <DeskMenu 
+                onClose = {()=>setDeskMenu(false)}
+                selectedDesk = {selectedDesk}
+                />}
         </div>    
     )
 }

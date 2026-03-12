@@ -6,6 +6,7 @@ import { SectionContext } from "../../context/SectionContext";
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
 export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{
+    
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
     const sectionContext= useContext(SectionContext);
@@ -13,8 +14,8 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
     const [name , setName] = useState<string>('');
     const [error,setError] = useState<string>('');
     async function itemHandler(){
-/////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
-///////////////////////////////LATER CONCERN /////////////////////////////
+        /////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
+        ///////////////////////////////LATER CONCERN /////////////////////////////
         if(deskContext?.currentDesk?.id && userContext?.user?.id){   
             const newItem = await deskContext.createItemDesk({
                 deskId : deskContext?.currentDesk?.id,
@@ -27,16 +28,31 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 creatorColor : userContext?.user?.userColor,
                 parentId : sectionContext?.currentSection ?? null  
             })
-            onClose();       
+            endwithease();       
         }
         else{
             setError('You need to have permission to create an item !')
         }
     }
+   
+   
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className="overlay" onClick={()=>onClose()}>
+    <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
         <div className="PopupWithBlurr" onClick={(e)=>e.stopPropagation()}>
-            <button className="popup-close" onClick={onClose}>✕</button>
+            <button className="popup-close" onClick={endwithease}>✕</button>
             <h2 className="popup-title">New note , file , or folder ?</h2>
             <p className="popup-subtitle">Choose wisely</p>
             <button onClick={()=> setType('file')}>a file 📑!</button>

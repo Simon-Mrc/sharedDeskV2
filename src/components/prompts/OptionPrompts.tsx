@@ -10,13 +10,14 @@ import { UserContext } from "../../context/UserContext";
 
 //////////////////////////////////// NAME PROMPT ////////////////////////////////////
 export function NamePrompt({onClose, item} : {onClose :()=>void, item: Item}) : JSX.Element{
+    
     const [name , setName] = useState<string>(item.name);
     const deskContext = useContext(DeskContext);
     const arrayOfItem = deskContext?.items;
     async function handleUpdate(){
         const updatedItem = {...item, name : name}
         try{
-     //////////////////// UPDATE IN DB ///////////////////////////
+    //////////////////// UPDATE IN DB ///////////////////////////
             updateItem(updatedItem);
     ///////////TAKE ALL ITEM ARRAY AND REPLACE ONLY THE ONE MODIFIED IN DESK CONTEXT ///////////////////
             const newArray = arrayOfItem?.map((i)=>i.id === updatedItem.id ? updatedItem : i )
@@ -24,12 +25,27 @@ export function NamePrompt({onClose, item} : {onClose :()=>void, item: Item}) : 
         }catch(error){
             console.log('fail to access db')
         }
-        onClose()
+        endwithease()
     }
+    
+    
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className="overlay">
+    <div className={`overlay ${animation}`}>
         <div className="PopupWithBlurr">
-            <button onClick={onClose}>✕</button>
+            <button onClick={endwithease}>✕</button>
             <h2 className="popup-title">About to change item name !</h2>
             <input className="ModernInput"
              onChange={(input)=>setName(input.target.value)}
@@ -43,26 +59,42 @@ export function NamePrompt({onClose, item} : {onClose :()=>void, item: Item}) : 
 
 //////////////////////////////////// PASSWORD PROMPT ////////////////////////////////////
 export function PasswordPrompt({onClose, item} : {onClose :()=>void, item: Item}) : JSX.Element{
+    
     const [password , setPassword] = useState<string|null>(null);
     const deskContext = useContext(DeskContext);
     const arrayOfItem = deskContext?.items;
     async function handleUpdate(){
         const updatedItem = {...item, accessPassword : password}
         try{
-        ////////////////////UPDATE IN DB /////////////////
+            ////////////////////UPDATE IN DB /////////////////
             updateItem(updatedItem);
-        ///////// TAKE ALL ITEM ARRAY AND REPLACE THE RIGHT ONE FOR DESKCONTEXT //////////////
+            ///////// TAKE ALL ITEM ARRAY AND REPLACE THE RIGHT ONE FOR DESKCONTEXT //////////////
             const newArray = arrayOfItem?.map((i)=>i.id === updatedItem.id ? updatedItem : i )
             deskContext?.setAllItems(newArray ?? null);
         }catch(error){
             console.log('fail to access db')
         }
-        onClose()
+        endwithease()
     }
+    
+    
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className="overlay">
+    <div className={`overlay ${animation}`}>
         <div className="PopupWithBlurr">
-            <button onClick={onClose}>✕</button>
+            <button onClick={endwithease}>✕</button>
             <h2 className="popup-title">About to change item password !</h2>
             <input className="ModernInput" type="password"
              onChange={(input)=>setPassword(input.target.value)}
@@ -76,27 +108,43 @@ export function PasswordPrompt({onClose, item} : {onClose :()=>void, item: Item}
 
 //////////////////////////////////// DELETE PROMPT ////////////////////////////////////
 export function DeletePrompt({onClose , item} : {onClose : ()=>void , item : Item}) : JSX.Element{
+    
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
     const [input,setInput] = useState<string>('');
     const [error , setError] = useState<string>('');
     async function deleteHandler(){
         if(input === item.name && userContext?.user?.id === item.createdBy){
-        /////// DELETE IN DB //////////
+            /////// DELETE IN DB //////////
             await deleteItem(item.id);
-    ///// HERE WE DON T UPDATE FROM ARRAY BECAUSE IT WOULD HAVE NEEDED RECURSIVE FUNCTION //////
-    //// DELETE IS RECURSIVE FOR FILES AND FOLDER AND HANDLE BY FOREIGN KEY IN DB //////
-    //// SO REFRESH ITEMS JUST CALL THE NEW ARRAY OF ITEM TO UPDATE DESKCONTEXT /////////
+            ///// HERE WE DON T UPDATE FROM ARRAY BECAUSE IT WOULD HAVE NEEDED RECURSIVE FUNCTION //////
+            //// DELETE IS RECURSIVE FOR FILES AND FOLDER AND HANDLE BY FOREIGN KEY IN DB //////
+            //// SO REFRESH ITEMS JUST CALL THE NEW ARRAY OF ITEM TO UPDATE DESKCONTEXT /////////
             await deskContext?.refreshItems();
-            onClose()
+            endwithease()
         }else{
             setError('Look better and don t typo ! (you moron)')
         }
     }
+   
+   
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className="overlay">
+    <div className={`overlay ${animation}`}>
         <div className="PopupWithBlurr">
-            <button onClick={onClose}>✕</button>
+            <button onClick={endwithease}>✕</button>
             <h2 className="popup-title">{`enter ${item.name} to confirm the delete`}</h2>
             <input className="ModernInput" 
             onChange={(input)=>setInput(input.target.value)}
@@ -107,7 +155,7 @@ export function DeletePrompt({onClose , item} : {onClose : ()=>void , item : Ite
                  </div>
                 }
             <button onClick={()=>deleteHandler()}> Delete Item</button>
-            <button onClick={()=>onClose()}> Cancel Delete</button>
+            <button onClick={()=>endwithease()}> Cancel Delete</button>
         </div>
     </div>
     )

@@ -1,12 +1,22 @@
-import { useState, type JSX } from "react";
+import { useContext, useEffect, useState, type JSX } from "react";
 import { LoginPrompt } from "../components/prompts/LoginPrompt";
 import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
+import { UserContext } from "../context/UserContext";
 
 ///////////// LOGIN PAGE YOU DON T SAY ///////////////////
 export function LoginPage(): JSX.Element {
     const [showLogin, setShowLogin] = useState<boolean>(false);
     const [showRegister, setShowRegister] = useState<boolean>(false);
-    const [animation , setAnimation] = useState<string>('');
+        const [animation , setAnimation] = useState<string>('hidden');
+        const userContext = useContext(UserContext);
+        useEffect(()=>{
+            if(userContext?.logged){
+                setAnimation('fadeOut')
+            }else{
+                setAnimation('fadeIn')
+            }
+        },[userContext?.logged])
+
     return (
         <div className={`login-page ${animation}`}>
 

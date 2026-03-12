@@ -87,6 +87,8 @@
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     box-sizing: border-box;
+    align-items: center;
+    width: 100%;
 }
 
 .ModernInput::placeholder {

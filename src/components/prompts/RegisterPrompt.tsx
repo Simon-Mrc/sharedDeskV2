@@ -38,10 +38,25 @@ useEffect(()=>{
             setError('Server issue plz try again later')
         }
     }
+    
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimationd] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimationd('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     return(
-        <div className="overlay">
+        <div className={`overlay ${animation}`} onClick={endwithease}>
             <div className="PopupWithBlurr">
-                <button className="popup-close" onClick={onClose}>✕</button>
+                <button className="popup-close" onClick={endwithease}>✕</button>
                 <h2 className="popup-title">Welcome New Comer !</h2>
                 <p className="popup-subtitle">Create Your New account</p>
                 <input className="ModernInput"

@@ -19,8 +19,22 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
         console.log(arrayOfFriend);
     }
 
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimation] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimation('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+  
     return(
-            <div className="overlay" onClick={()=>onClose()}>
+            <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
                 <div className={`PopupWithBlurrOption`} onClick={(e)=>e.stopPropagation()}>
                     <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
                     <input className="ModernInput"
@@ -50,7 +64,7 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
                      />}
                     <button className="popup-closeOption" 
                     style={{gridColumn: "1 / -1", textAlign :"center" }}
-                    onClick={onClose}>✕</button>
+                    onClick={endwithease}>✕</button>
                 </div>
             </div>
         )
