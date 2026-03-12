@@ -101,3 +101,19 @@ export async function updateUserById(user : Omit<User,'password'>){
         return null;
     }
 }
+
+/////////////////////////// GET USER BY ID ////////////////////////
+export async function getUserById (id : string) : Promise<Omit<User,'password'> |null>{
+    try{
+        const result = await fetch(`${BASE_URL}/users/${id}`,{
+            method : 'GET',
+            headers : authHeaders()
+        })
+        const user = await result.json();
+        const safeUser = parseHelper(user);
+        return safeUser;
+    }catch(error){
+        console.log('fail to access db');
+        return null;
+    }
+}

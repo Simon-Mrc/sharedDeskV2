@@ -9,6 +9,7 @@ export const UserContext = createContext<UserContextType|null>(null)
 export function UserProvider({children} : {children : ReactNode}){
     const [user,setUser] = useState<Omit<User,'password'>|null>(null);
     const [logged,setLogged] = useState<boolean>(false);
+///////////////////////////// LOGIN ////////////////////////////
     async function login(mail : User['mail'],password :string){
         try{
             const {user,token} = await loginUser({mail,password});
@@ -22,13 +23,20 @@ export function UserProvider({children} : {children : ReactNode}){
             setLogged(false);
         }
     }
+///////////////////////////// LOGOUT /////////////////////////////
     function logout(){
         setUser(null);
         setLogged(false);
         localStorage.removeItem('token');
     }
+////////////////////////////// SETNEWUSER /////////////////////////
+    function setNewUser (user : Omit<User,'password'>){
+        setUser(user);
+    }
+
+////////////////////////////// PROVIDES ////////////////////////////
     return(
-        <UserContext.Provider value = {{user,logged,login,logout}}>
+        <UserContext.Provider value = {{user,logged,login,logout,setNewUser}}>
             {children}
         </UserContext.Provider>
     )

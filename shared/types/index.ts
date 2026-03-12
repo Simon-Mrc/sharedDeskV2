@@ -15,6 +15,7 @@ export interface UserContextType {
     logged : boolean;
     login : (mail : User['mail'] , password : string)=> void;
     logout : ()=>void;
+    setNewUser : (user  : Omit<User,'password'>) => void;
 }
 
 export interface Desk {

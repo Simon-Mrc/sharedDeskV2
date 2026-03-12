@@ -1,7 +1,7 @@
 import { useState, type JSX } from "react";
 import type { User } from "../../../shared/types";
 import { getUserBySearch } from "../../api/user";
-import { SearchFriend } from "./SocialMenuComponents";
+import { SearchFriend, Invit } from "./SocialMenuComponents";
 
 /////////////////////////////// SOCIAL MENU PURE JSX FUNCTION ////////////////////////////////
 //////////// ROOT FOR ALL SOCIAL FEATURES ///////// HANDLES THE STATES OF PROMPTS////////////////
@@ -42,10 +42,10 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
                     onClose = {()=> setFriendList(false)} 
                     />} */}
                     <button onClick={()=> setInvit(true)}>Show Invits</button>
-                    {/* {invit &&
+                    {invit &&
                     <Invit 
                     onClose = {()=> setInvit(false)}
-                     />} */}
+                     />}
                     <button className="popup-closeOption" 
                     style={{gridColumn: "1 / -1", textAlign :"center" }}
                     onClick={onClose}>✕</button>
