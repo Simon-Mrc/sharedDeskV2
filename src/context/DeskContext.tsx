@@ -16,7 +16,6 @@ export function DeskProvider({children} : {children : ReactNode}){
         const userContext = useContext(UserContext);
 ///////////////////////// REFRESH ALL DESK USER HAS ACCESS TO //////////////////////
         async function refreshDesks(){
-            console.log('test alldesk handler');
             setDesks(await getAllDesk());
         }
         async function allItemHandler(deskId: string){
@@ -29,6 +28,8 @@ export function DeskProvider({children} : {children : ReactNode}){
         },[currentDesk]);
 //////////////////////// REFRESH DESKS ON USER CHANGES ///////////////////
         useEffect(()=>{
+            setCurrentDesk(null);
+            setItems(null);
             if(userContext?.user){refreshDesks();}
         },[userContext?.user])
 
@@ -54,7 +55,7 @@ export function DeskProvider({children} : {children : ReactNode}){
     }
 
 ///////////////////////// REFRESH ALL ITEMS //////////////////////
-    async function refreshItems(){
+async function refreshItems(){
         if(currentDesk){
             setItems(await getItemByDeskId(currentDesk.id)as Item[]);
         }

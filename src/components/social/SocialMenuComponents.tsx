@@ -6,6 +6,8 @@ import { getUserById, updateUserById } from "../../api/user";
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SEARCH FRIEND AND SEND INVITE PART ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////// SEARCH FRIEND PART ///////////////////////////////////
 export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , arrayOfFriends : Omit<User,'password'>[]|null}): JSX.Element{
     const [inviteMenu , setInviteMenu] = useState<boolean>(false);
     const [currentFriend , setCurrentFriend] = useState<Omit<User,'password'>|null>(null);
@@ -37,6 +39,7 @@ export function SearchFriend({onClose , arrayOfFriends} : {onClose : ()=>void , 
     )
 }
 
+///////////////////////////////// SEND INVITE PART ///////////////////////////////////
 export function InviteMenu({onClose,currentFriend} : {onClose : ()=>void, currentFriend : Omit<User,'password'>|null}) : JSX.Element{
     const userContext = useContext(UserContext);
     const [error , setError] = useState<string>('');
@@ -81,6 +84,8 @@ export function InviteMenu({onClose,currentFriend} : {onClose : ()=>void, curren
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SHOW NOTIFS AND ACCEPT FRIEND PART  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////// SHOW NOTIF PART /////////////////////////////////////
 export function Invit({onClose} : {onClose : ()=>void}) : JSX.Element{
     const userContext = useContext(UserContext);
     const [arrayOfFriend , setArrayOfFriend] = useState<(Omit<User,'password'>|null)[]>([])
@@ -138,14 +143,13 @@ export function Invit({onClose} : {onClose : ()=>void}) : JSX.Element{
 
     )
 }
-
+ /////////////////////////////// ACCEPT OR NOT PART /////////////////////////////////////
 export function AcceptOrNot ({onClose,selectedUser} : {onClose : ()=>void , selectedUser : Omit<User,'password'>|null}) : JSX.Element{
-    const[response , setResponse] = useState<boolean>(false);
     const userContext = useContext(UserContext);
     const currentUser = userContext?.user;
     const [error,setError] = useState<string>('');
 
-    async function acceptHandler(accepted : boolean){
+    async function acceptHandler(accepted : boolean){ // boolean as a param because of promise fetch 
 
             if(selectedUser && currentUser){
                 if(currentUser.friendList.includes(selectedUser.id)){
@@ -209,3 +213,104 @@ export function AcceptOrNot ({onClose,selectedUser} : {onClose : ()=>void , sele
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// SHOW FRIEND LIST AND OPEN FRIEND MENU PART ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////// SHOW ALL FRIENDS PART ////////////////////////////
+export function FriendList({onClose} : {onClose : ()=>void}) : JSX.Element{
+    const userContext = useContext(UserContext);
+    const [error, setError] = useState<string>("");
+    const [arrayOfFriend , setArrayOffFriends] = useState<(Omit<User , 'password'>|null)[]>([]);
+    const [selectedFriend , setSelectedFriend] = useState<Omit<User,'password'>|null>(null);
+    const [friendMenu , setFriendMenu] = useState<boolean>(false);
+
+  ////// FRIEND LIST HANDLER TO RETURN ALL USER OBJECT FROM FRIEND LIST /////////
+    async function friendsHandler(){
+        if(userContext?.user){
+            if(!userContext.user.friendList.length){
+                setError('You have no friend and probably never will');
+                setArrayOffFriends([]);
+                return;
+            }else{
+                const newArray = await Promise.all(userContext.user.friendList.map((friend)=>getUserById(friend)))
+                setArrayOffFriends(newArray);
+                return;
+            }
+        }
+    }
+///////////// TRIGGER FRIENDSHANDLER EVERYTIME FRIENDLIST CHANGES ///////////
+    useEffect(()=>{
+        friendsHandler();
+    },[userContext?.user?.friendList.length])
+
+/////////////////////////////////JSX PART //////////////////////////////
+    return(
+    <div className="overlay" onClick={()=>onClose()}>
+        <div className="PopupWithBlurrOption" onClick={(e)=>{
+            e.stopPropagation()
+        }}>
+            {arrayOfFriend.map((user)=>(
+                <button style={{border: `3px solid ${user?.userColor}`}}
+                onClick={()=>{
+                    setSelectedFriend(user);
+                    setFriendMenu(true);
+                }}>{user?.userName}</button>
+            ))}
+            {friendMenu&&
+            <FriendMenu 
+                onClose = {()=> setFriendMenu(false)}
+                selectedFriend = {selectedFriend} />
+            }
+            {error && 
+             <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
+             <span  className="error">{error}</span>
+             </div>
+            }
+            <button className="popup-closeOption" 
+            style={{gridColumn: "1 / -1", textAlign :"center" }}
+            onClick={onClose}>✕</button>
+        </div>
+    </div>
+    )
+}
+
+/////////////////////////////////////// SHOW FRIEND MENU PART //////////////////////////
+export function FriendMenu({onClose, selectedFriend} : {onClose : ()=>void, selectedFriend: Omit<User,'password'>|null}) : JSX.Element{
+    const userContext = useContext(UserContext);
+    const [error, setError] = useState<string>('');
+    async function deleteHandler(){
+        if(selectedFriend){
+            if(userContext?.user?.friendList.includes(selectedFriend?.id)){
+                //////////// MODIFY FRIENDLISTS //////////////////
+                const newUserArray = userContext.user.friendList.filter((e)=>{if(e!==selectedFriend.id){return e}});
+                const updatedUser : Omit<User,'password'> = {...userContext.user, friendList : newUserArray}
+                userContext.setNewUser(updatedUser);
+                const newFriendArray = selectedFriend.friendList.filter((e)=>{if(e!==userContext.user?.id){return e}});
+                const updatedFriend : Omit<User,'password'> = {...selectedFriend , friendList : newFriendArray}
+                /////////////////// UPDATE IN DB /////////////////
+                await updateUserById(updatedFriend);
+                await updateUserById(updatedUser);
+                onClose();
+            }else{
+                setError('He deleted you before you did ;) !')
+            }
+        }
+    }
+    return(
+    <div className="overlay" onClick={()=>onClose()}>
+        <div className="PopupWithBlurrOption" onClick={(e)=>{
+            e.stopPropagation()
+        }}>
+            <button style={{border: `3px solid ${selectedFriend?.userColor},gridColumn: "1 / -1", textAlign :"center"`}}
+            onClick={()=>deleteHandler()}
+            >DELETE {selectedFriend?.userName} !!</button>
+            {error && 
+             <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
+             <span  className="error">{error}</span>
+             </div>
+            }
+            <button className="popup-closeOption" 
+            style={{gridColumn: "1 / -1", textAlign :"center" }}
+            onClick={onClose}>✕</button>
+        </div>
+    </div>
+    )
+}
