@@ -39,13 +39,14 @@ export function NotAshamedTree({ onClose, switchSection, updateDepth}: {
         children.forEach((item, index) => {
             const isLast = index === children.length - 1;
             const connector = isLast ? '└── ' : '├── ';
-            const icon = item.type === 'folder' ? (item.accessPassword ?'📁🔒' :'📁' ) : (item.accessPassword ?'📄🔒':'📄');
+            const icon = item.type === 'folder' ? (item.accessPassword ?(deskContext?.isNew(item.id) ? '📁🔒❗' : '📁🔒') : (deskContext?.isNew(item.id) ? '📁❗' : '📁'))
+            : (item.accessPassword ?(deskContext?.isNew(item.id) ? '📄🔒❗' : '📄🔒') : (deskContext?.isNew(item.id) ? '📄❗' : '📄'));
 
             result.push(
                 <span key={item.id} style={{ display: 'block' }}>
                     {prefix + connector}
                     <a
-                        onClick={() => {switchSection((item.type ==='file')? item.parentId : item.id); updateDepth((item.type ==='file')? depth : (depth))}} // 👈 calls your function on click
+                        onClick={() => {deskContext?.markAsViewed(item.id);switchSection((item.type ==='file')? item.parentId : item.id); updateDepth((item.type ==='file')? depth : (depth))}} 
                         style={{ cursor: 'pointer', textDecoration: 'none' }}
                         title={`Open ${item.name}`}
                     >

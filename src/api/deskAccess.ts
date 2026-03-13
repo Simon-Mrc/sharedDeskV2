@@ -22,10 +22,10 @@ export async function getAllDesk(){
 ///////////////////////// ADD FRIEND TO DESK IF ACCESSTYPE OK /////////////////////
 export async function inviteToDesk(friendId : string ,deskId:string) : Promise<{message:string}>{
     try{
-        const result = await fetch(`${BASE_URL}/deskAccess/${deskId}`,{
+        const result = await fetch(`${BASE_URL}/deskAccess/${encodeURIComponent(deskId)}`,{
             method : 'POST',
             headers : authHeaders(),
-            body : JSON.stringify(friendId)
+            body : JSON.stringify({userId :friendId})
         })
         return await result.json()
     }catch(error){

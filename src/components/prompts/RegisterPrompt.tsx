@@ -55,7 +55,7 @@ useEffect(()=>{
   
     return(
         <div className={`overlay ${animation}`} onClick={endwithease}>
-            <div className="PopupWithBlurr">
+            <div className="PopupWithBlurr" onClick={(e)=>{e.stopPropagation()}}>
                 <button className="popup-close" onClick={endwithease}>✕</button>
                 <h2 className="popup-title">Welcome New Comer !</h2>
                 <p className="popup-subtitle">Create Your New account</p>

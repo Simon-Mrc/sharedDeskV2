@@ -38,11 +38,14 @@ export interface DeskContextType {
     desks : Desk[]|null;
     items : Item[]|null;
     loaded : boolean;
+    itemUpdates : ItemUpdateType[]|null;
     switchDesk : (deskId : Desk['id'])=>void;
     refreshDesks : ()=>void;
     createItemDesk : (item : Omit<Item,'id'>) => void;
     setAllItems : (items : DeskContextType['items']) => void;
     refreshItems : () => void;
+    isNew : (itemId : string)=>boolean;
+    markAsViewed : (itemId : string)=>void;
 }
 
 export interface Item {
@@ -65,6 +68,13 @@ export interface SectionContextType { //to tell react what dom to display
     updateDepth : (number : number)=>void;
     sectionExist : boolean;
     switchSection : (sectionId : string|null)=>void;
+}
+
+export interface ItemUpdateType {
+    itemId : string;
+    userId : string;
+    lastModified : number;
+    lastViewed : number;
 }
 
 export interface CreateUserPayload {

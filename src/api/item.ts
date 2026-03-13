@@ -1,5 +1,5 @@
 const BASE_URL = 'http://localhost:3000'
-import type { Item } from "../../shared/types"
+import type { Item, ItemUpdateType } from "../../shared/types"
 import { authHeaders } from "./user"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,5 +72,32 @@ export async function deleteItem(itemId : string){
         console.log('item Deleted')
     }catch(error){
         console.log('Fail to access db')
+    }
+}
+//////////////////////////////////////// UPDATE LAST VIEWED /////////////////////////////////////////
+export async function updateViewed(itemId : string){
+    try{
+        const result = await fetch(`${BASE_URL}/itemUpdates/${itemId}`,{
+            method : 'PUT',
+            headers : authHeaders()
+        })
+        console.log('uptodate');
+    }catch(error){
+        console.log('fails to access db ')
+    }
+}
+
+///////////////////////////// GET ALL ITEM FROM ITEMUPDATES FOR USER /////////////////////////
+export async function getAllItemFromUpdate(): Promise<ItemUpdateType[]|null>{
+    try{
+        const arrayOfItem = await fetch(`${BASE_URL}/itemUpdates/allItems`,{
+            method : 'GET',
+            headers : authHeaders()
+        })
+        const result = await arrayOfItem.json();
+        console.log(result);
+        return result;
+    }catch(error){
+        return null;
     }
 }

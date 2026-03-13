@@ -3,6 +3,7 @@ import type { Item } from "../../../shared/types";
 import { SectionContext } from "../../context/SectionContext";
 import { OptionMenu } from "./OptionMenu";
 import { AccessPrompt } from "./../prompts/AccessPrompt";
+import { DeskContext } from "../../context/DeskContext";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -18,6 +19,7 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
     const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
     const [hasAccess , setHasAccess] = useState<boolean>(false);
     const [check , setCheck] = useState<number>(0);
+    const deskContext = useContext(DeskContext)
 
     return (
     <div>
@@ -37,6 +39,7 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
                     switchSection?.(item.id);updateDepth?.(depth+1)
                 }
             }}
+        onClick={()=>deskContext?.markAsViewed(item.id)}
         
         onContextMenu={(e)=>
             {
@@ -54,7 +57,7 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
         }}>
 
             <img  src="/icons/folder.jpg" alt="folder"></img>
-            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}</span>
+            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '❗'}</span>
         </div>
         {accessPrompt&&
             <AccessPrompt 
