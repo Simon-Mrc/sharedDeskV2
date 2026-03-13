@@ -3,6 +3,7 @@ import { DeskContext } from "../../context/DeskContext";
 import { UserContext } from "../../context/UserContext";
 import type { Item } from "../../../shared/types";
 import { SectionContext } from "../../context/SectionContext";
+import { updateViewed } from "../../api/item";
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
 export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{
@@ -27,7 +28,8 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 createdBy : userContext?.user?.id,
                 creatorColor : userContext?.user?.userColor,
                 parentId : sectionContext?.currentSection ?? null  
-            })
+            });
+            newItem && updateViewed(newItem.id);
             endwithease();       
         }
         else{

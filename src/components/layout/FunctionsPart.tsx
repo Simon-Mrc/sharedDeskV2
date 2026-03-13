@@ -17,13 +17,13 @@ export function FunctionsPart():JSX.Element{
     return(
         <div>
             <div className="functionsPart">
-            <button id="createUserBtn">👤 Create User</button>
+            <button id="createUserBtn">📫 Conversations</button>
             <button onClick={()=>setCreatingPrompt(true)}>➕ New Desk</button>
             {creatingPrompt && <CreatingDeskPrompt onClose={()=>setCreatingPrompt(false)}/>}
             
             <button id="saveCurrent">💾 Save Desk</button>
             <button id="getLinkBtn">🔗GET LINK</button>
-            <button id="socialBtn" onClick={()=>setSocialMenu(true)}>👥 Friends{userContext?.user?.notif.length!=0 && '🔴'}</button>
+            <button id="socialBtn" onClick={()=>setSocialMenu(true)}>👥 Friends{userContext?.user?.notif.length!=0 && '🔔'}</button>
             {socialMenu &&
             <SocialMenu onClose = {()=> setSocialMenu(false)} />}
             <button id="shamingTree" className="icon-btn" title="Show Tree" onClick={()=>setNotAshamedTree(true)}>🌳</button>

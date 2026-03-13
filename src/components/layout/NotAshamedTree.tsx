@@ -39,8 +39,8 @@ export function NotAshamedTree({ onClose, switchSection, updateDepth}: {
         children.forEach((item, index) => {
             const isLast = index === children.length - 1;
             const connector = isLast ? '└── ' : '├── ';
-            const icon = item.type === 'folder' ? (item.accessPassword ?(deskContext?.isNew(item.id) ? '📁🔒❗' : '📁🔒') : (deskContext?.isNew(item.id) ? '📁❗' : '📁'))
-            : (item.accessPassword ?(deskContext?.isNew(item.id) ? '📄🔒❗' : '📄🔒') : (deskContext?.isNew(item.id) ? '📄❗' : '📄'));
+            const icon = item.type === 'folder' ? (item.accessPassword ?(deskContext?.isNew(item.id) ? '📁🔒✨' : '📁🔒') : (deskContext?.isNew(item.id) ? '📁✨' : '📁'))
+            : (item.accessPassword ?(deskContext?.isNew(item.id) ? '📄🔒✨' : '📄🔒') : (deskContext?.isNew(item.id) ? '📄✨' : '📄'));
 
             result.push(
                 <span key={item.id} style={{ display: 'block' }}>

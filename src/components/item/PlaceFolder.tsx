@@ -57,7 +57,7 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
         }}>
 
             <img  src="/icons/folder.jpg" alt="folder"></img>
-            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '❗'}</span>
+            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&
             <AccessPrompt 

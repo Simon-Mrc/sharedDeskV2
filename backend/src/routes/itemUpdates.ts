@@ -10,4 +10,6 @@ router.put(`/:itemId`,authenticateToken, itemUpdatesController.updateViewed);
 
 router.get('/allItems', authenticateToken ,itemUpdatesController.getAllItemByUserId);
 
+router.get('/desksId/allItems', authenticateToken, itemUpdatesController.getAllUpdatesAndDesk)
+
 export default router

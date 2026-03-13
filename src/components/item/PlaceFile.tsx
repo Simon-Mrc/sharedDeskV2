@@ -22,7 +22,7 @@ export function PlaceFile ({item} : {item : Item}) : JSX.Element{
         }} 
         onClick={()=>deskContext?.markAsViewed(item.id)}>
             <img src="/icons/file.png" alt="file"></img>
-            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '❗'}</span>
+            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {optionMenu &&
         <OptionMenu 

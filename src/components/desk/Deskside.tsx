@@ -22,7 +22,7 @@ export function DeskSide():JSX.Element{
             <div className="deskList">
                 {desks?.map((desk,index)=>(
                     <div key = {desk.id} className="deskListInside">
-                        <button  onClick={()=>deskContext?.switchDesk(desk.id)}>{desk.name}</button>
+                        <button  onClick={()=>deskContext?.switchDesk(desk.id)}>{desk.name}{deskContext?.containsNew(desk.id)&& '✨'}</button>
                         <button onClick={()=>{
                             setSelectedDesk(desk)
                             setDeskMenu(true)}}>⚙️</button>

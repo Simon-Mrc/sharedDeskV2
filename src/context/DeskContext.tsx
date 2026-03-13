@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { type ItemUpdateType, type Desk, type DeskContextType, type Item } from "../../shared/types";
 import { UserContext } from "./UserContext";
 import { getAllDesk } from "../api/deskAccess";
-import { createItem, getAllItemFromUpdate, getItemByDeskId, updateViewed } from "../api/item";
+import { createItem, getAllItemFromUpdate, getAllUpdatesAndDesk, getItemByDeskId, updateViewed } from "../api/item";
 import { getDeskById } from "../api/desk";
 
 export const DeskContext = createContext<DeskContextType|null>(null)
@@ -38,7 +38,7 @@ export function DeskProvider({children} : {children : ReactNode}){
             setCurrentDesk(await getDeskById(deskId))
         }
 ///////////////////////// CREATE ITEM FUNCTION (DOM AND DB) //////////////////////
-        async function createItemDesk (item : Omit<Item,'id'>){
+        async function createItemDesk (item : Omit<Item,'id'>) : Promise <Item |null> {
             const newItem = await createItem(item);
             if(newItem !=undefined && newItem!= null){
                 if(items){
@@ -48,6 +48,7 @@ export function DeskProvider({children} : {children : ReactNode}){
                     setItems([newItem]);
                 }
             }
+            return newItem? newItem : null;
         }
 
 ///////////////////////////// UPDATE ITEM LIST //////////////////////
@@ -63,7 +64,7 @@ async function refreshItems(){
 }
 ///////////////////////// REFRESH ALL ITEM FOR NOTIFS /////////////////
 async function getAllUpdates(){
-    setItemUpdates(await getAllItemFromUpdate());
+    setItemUpdates(await getAllUpdatesAndDesk());
 }
 useEffect(()=>{
     if(userContext?.user){getAllUpdates();}
@@ -86,12 +87,21 @@ async function markAsViewed(itemId: string){
         ) ?? null)
     }
 }
+/////////////////////////////////// CONTAINS NEW HELPER FUNCTION FOR DESK NOTIF /////////////////
+function containsNew(deskId : string) : boolean{
+    const itemExists = itemUpdates?.find((object)=>(object.deskId === deskId && isNew(object.itemId)));
+    return itemExists ?  true : false ;
+    
+///////// 2 OTHER WORKING OPTIONS TO KEEP IN MIND ////// WILL TRY TO USE ALL FROM TIME TO TIME ///////////
+    return !!itemExists; // !! converts to boolean
+    return Boolean(itemExists); // explicit but verbose
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// PROVIDES !! ////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
         return(
-            <DeskContext.Provider value={{currentDesk,desks,items,loaded,itemUpdates,switchDesk,refreshDesks,createItemDesk,setAllItems,refreshItems,isNew,markAsViewed}}>
+            <DeskContext.Provider value={{currentDesk,desks,items,loaded,itemUpdates,switchDesk,refreshDesks,createItemDesk,setAllItems,refreshItems,isNew,markAsViewed,containsNew}}>
                 {children}
             </DeskContext.Provider>
         )

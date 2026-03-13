@@ -57,7 +57,7 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
                     <FriendList 
                     onClose = {()=> setFriendList(false)} 
                     />}
-                    <button onClick={()=> setInvit(true)}>Show Invits{userContext?.user?.notif.length!=0 && ('🔴')}</button>
+                    <button onClick={()=> setInvit(true)}>Show Invits{userContext?.user?.notif.length!=0 && ('🔔')}</button>
                     {invit &&
                     <Invit 
                     onClose = {()=> setInvit(false)}

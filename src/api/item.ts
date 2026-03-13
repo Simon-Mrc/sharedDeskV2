@@ -88,7 +88,7 @@ export async function updateViewed(itemId : string){
 }
 
 ///////////////////////////// GET ALL ITEM FROM ITEMUPDATES FOR USER /////////////////////////
-export async function getAllItemFromUpdate(): Promise<ItemUpdateType[]|null>{
+export async function getAllItemFromUpdate(): Promise<Omit<ItemUpdateType[],'deskId'>|null>{
     try{
         const arrayOfItem = await fetch(`${BASE_URL}/itemUpdates/allItems`,{
             method : 'GET',
@@ -99,5 +99,20 @@ export async function getAllItemFromUpdate(): Promise<ItemUpdateType[]|null>{
         return result;
     }catch(error){
         return null;
+    }
+}
+
+///////////////////////////// GET ALL ITEM FROM ITEMUPDATES FOR USER  BUT JOINING DESKID /////////////////////////
+export async function getAllUpdatesAndDesk() : Promise<ItemUpdateType[]|null>{
+    try{
+        const arrayOfItem = await fetch(`${BASE_URL}/itemUpdates/desksId/allItems`,{
+            method : 'GET',
+            headers : authHeaders()
+        })
+        const result = await arrayOfItem.json();
+        console.log(result);
+        return result;
+    }catch(error){
+        return null
     }
 }

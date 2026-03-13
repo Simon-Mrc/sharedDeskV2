@@ -41,11 +41,12 @@ export interface DeskContextType {
     itemUpdates : ItemUpdateType[]|null;
     switchDesk : (deskId : Desk['id'])=>void;
     refreshDesks : ()=>void;
-    createItemDesk : (item : Omit<Item,'id'>) => void;
+    createItemDesk : (item : Omit<Item,'id'>) => Promise< Item|null>;
     setAllItems : (items : DeskContextType['items']) => void;
     refreshItems : () => void;
     isNew : (itemId : string)=>boolean;
     markAsViewed : (itemId : string)=>void;
+    containsNew : (deskId : string) => boolean;
 }
 
 export interface Item {
@@ -75,6 +76,7 @@ export interface ItemUpdateType {
     userId : string;
     lastModified : number;
     lastViewed : number;
+    deskId : string;
 }
 
 export interface CreateUserPayload {
