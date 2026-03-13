@@ -62,6 +62,11 @@ export interface Item {
     parentId : null | Item['id'];
 }
 
+export interface Note {
+    item : Item;
+    content : string;
+}
+
 export interface SectionContextType { //to tell react what dom to display 
     currentSection : null | Item['id'];
     depth : number;

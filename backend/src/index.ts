@@ -8,7 +8,8 @@ import userRouter from './routes/users';
 import desksRouter from './routes/desks';
 import deskAccessRouter from './routes/deskAccess';
 import itemsRouter from './routes/items';
-import itemUpdatesRouter from './routes/itemUpdates'
+import itemUpdatesRouter from './routes/itemUpdates';
+import notesRouter from './routes/notes'
 
 ///////////////////////////////////////////////////////////////////////
 //////////  SET APP FUNCTION FROM INSTALLED MODULES  FIRST  ////////////
@@ -27,6 +28,7 @@ app.use('/desks', desksRouter);
 app.use('/deskAccess', deskAccessRouter);
 app.use('/items', itemsRouter);
 app.use('/itemUpdates', itemUpdatesRouter);
+app.use('/notes', notesRouter);
 
 ///////////////////////////////////////////////////////////////////////
 //////////////////////////  START SERVER //////////////////////////////
