@@ -89,8 +89,8 @@ export function PlaceNote ({item} : {item : Item}) : JSX.Element{
 export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coord : {x:number,y:number} , item : Item}) : JSX.Element{
     const [error,setError] = useState<string|null>(null);
     const userContext = useContext(UserContext);
-    const [oldContent , setOldContent] = useState<{userName : string , userColor : string , userContent : string }[] |null>(null)
-    const [newcontent , setNewContent] = useState<{userName : string , userColor : string , userContent : string } |null>(null)
+    const [oldContent , setOldContent] = useState<{userName : string , userColor : string , userContent : string ,date : string}[] |null>(null)
+    const [newcontent , setNewContent] = useState<{userName : string , userColor : string , userContent : string, date : string } |null>(null)
     async function contentInit(){
         const note = await getNoteById(item.id);
         note ? setOldContent(JSON.parse(note.content)) : setError('Note must have been deleted')
@@ -133,7 +133,8 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
             },1)
         }
 
-    const user = userContext?.user; // TS WON T TRUST ME IN CALLBACK INPUT
+    const user = userContext?.user; // TS WON T TRUST ME IN CALLBACK <INPUT></INPUT>
+    const dateNow = new Date().toLocaleString()
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
@@ -145,13 +146,15 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
                 <button className="CloseNoteBtn" onClick={endwithease}>✕</button>
                 <h2 className="TitleForNote">{item.name}</h2>
                 {oldContent?.map((object)=>(
-                <div className=""     
-                style={{color : object.userColor}} > {`${object.userContent} by : ${object.userName}` } </div>         
+                <div className="OldPart" style={{color : object.userColor}}>     
+                <div style={{color : object.userColor}} > {`${object.userContent}` } </div>
+                <div style={{color : object.userColor}} > {`by : ${object.userName} at : ${object.date}` } </div>
+                </div>         
                 ))}
                 {user &&
                 <textarea className="NoteContent"
                 value={newcontent?.userContent ?? '' }
-                 onChange={(input)=>setNewContent({userName : user.userName ,userColor :user.userColor ,  userContent : input.target.value})}
+                 onChange={(input)=>setNewContent({userName : user.userName ,userColor :user.userColor ,  userContent : input.target.value, date : dateNow})}
                  placeholder="Your imagination is the limite lol"/>
                 }
                 {error && 
