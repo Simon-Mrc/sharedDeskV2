@@ -27,18 +27,17 @@
 }
 
 .foldin .NoteContainer {
-    animation : foldin 0.3s ease forwards;
+    animation : foldin 0.5s ease forwards;
 }
 
 .foldout .NoteContainer {
-    animation : foldout 0.3s ease forwards;
+    animation : foldout 0.5s ease forwards;
 }
 
 /* ============================================================
    NOTE CONTAINER : the sticky note itself
    ============================================================ */
 .NoteContainer {
-    position : absolute;
     width : 380px;
     height : 480px;
     background-color : #fef08a; /* classic yellow */

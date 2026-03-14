@@ -1,93 +1,9 @@
-import { useContext, useEffect, useState, type JSX } from "react";
-import type { Item } from "../../../shared/types";
-import { OptionMenu } from "./OptionMenu";
-import { AccessPromptNote } from "./../prompts/AccessPrompt";
-import { DeskContext } from "../../context/DeskContext";
-import { getNoteById, updateNoteContent } from "../../api/note";
-import { UserContext } from "../../context/UserContext";
-
-
-////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
-////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
-
-export function PlaceNote ({item} : {item : Item}) : JSX.Element{
-    const [optionMenu , setOptionMenu] = useState<boolean>(false);
-    const [coord , setCoord] = useState<{x : number,y : number}>({x:0,y:0});
-    const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
-    const [hasAccess , setHasAccess] = useState<boolean>(false);
-    const [noteContent , setNoteContent] = useState<boolean>(false);
-    const [check , setCheck] = useState<number>(0);
-    const deskContext = useContext(DeskContext)
-
-    return (
-    <div>
-        <div className="icon fadeIn" 
-            id={item.id} 
-            style={{left : item.x, top :item.y,
-            background : `${item.creatorColor}`
-            }}
-        onDoubleClick={()=>
-            {
-                setCheck(1)
-                if(item.accessPassword && !hasAccess){
-                    setHasAccess(false);
-                    setAccessPrompt(true);
-                }
-                else{
-                    setNoteContent(true)
-                }
-            }}
-        onClick={()=>deskContext?.markAsViewed(item.id)}
-        onContextMenu={(e)=>
-            {
-                e.preventDefault();
-                e.stopPropagation();                
-                const rect = e.currentTarget.getBoundingClientRect();
-                setCoord({x : e.clientX-rect.left ,y:e.clientY-rect.top})
-                if(item.accessPassword && !hasAccess){
-                    setHasAccess(false);
-                    setAccessPrompt(true);
-                }
-                else{
-                    setOptionMenu(true)
-                }
-        }}>
-
-            <img  src="/icons/note.png" alt="note"></img>
-            <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
-        </div>
-        {accessPrompt&&
-            <AccessPromptNote 
-            onClose = {()=> setAccessPrompt(false)}
-            setHasAccess = {()=>setHasAccess}
-            setOptionMenu = {()=> setOptionMenu(true)}
-            item = {item}
-            check = {check}
-        />
-        }
-        {optionMenu &&
-            <OptionMenu 
-            onClose = {()=> setOptionMenu(false)}
-            coord = {coord}
-            item = {item}
-            />
-        }
-        {noteContent &&
-            <NoteContent
-            onClose = {()=> setNoteContent(false)}
-            coord = {coord}
-            item = {item}
-            />
-        }
-        </div>
-    )
-}
-
 ////////////////// NOTE CONTENT DOM FUNCTION ////////////////// FETCH AND UPDATE CONTENT FROM/TO DB //////////////////
 
 ////////////////// //////////////////
 export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coord : {x:number,y:number} , item : Item}) : JSX.Element{
     const [error,setError] = useState<string|null>(null);
+    const [arrayOfContent , setArrayOfContent] = useState<{userContent : string, userColor : string}[]|null>(null)
     const userContext = useContext(UserContext);
     const [oldContent , setOldContent] = useState<{userName : string , userColor : string , userContent : string }[] |null>(null)
     const [newcontent , setNewContent] = useState<{userName : string , userColor : string , userContent : string } |null>(null)
@@ -132,8 +48,6 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
                         onClose()}),500)
             },1)
         }
-
-    const user = userContext?.user; // TS WON T TRUST ME IN CALLBACK INPUT
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
@@ -148,12 +62,11 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
                 <div className=""     
                 style={{color : object.userColor}} > {`${object.userContent} by : ${object.userName}` } </div>         
                 ))}
-                {user &&
                 <textarea className="NoteContent"
                 value={newcontent?.userContent ?? '' }
-                 onChange={(input)=>setNewContent({userName : user.userName ,userColor :user.userColor ,  userContent : input.target.value})}
+                 onChange={(input)=>setNewContent({userName : userContext.user.userName ,userColor :userContext.user.userColor ,  userContent : input.target.value})}
                  placeholder="Your imagination is the limite lol"/>
-                }
+                
                 {error && 
                  <div className="PopupNote">
                  <span  className="NoteError">{error}</span>
