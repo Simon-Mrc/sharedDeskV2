@@ -14,7 +14,9 @@ export function RegisterPrompt({onClose, setAnimation} : {onClose : ()=>void, se
     const [userName,setUserName] = useState<string>('');
     const [mail,setMail] = useState<string>('');
     const [password,setPassword] = useState<string>('');
+    const [passwordConfirm,setPasswordConfirm] = useState<string>('');
     const [error,setError] = useState('');
+    const [inputAnimation , setInputAnimation] = useState<string>('');
 /////// AS SOON AS CREATED ===> NAVIGATE TO HOME PAGE /////////////
 useEffect(()=>{
     if(userContext?.logged){
@@ -27,15 +29,23 @@ useEffect(()=>{
     },[userContext?.logged])
     
     async function handleRegister (){
-        try{
-            const newUser : Omit<User,'password'> |null = await registerUser({name,userName,mail,password});
-            if(newUser?.id){
-                await userContext?.login(mail,password);
-            }else{
-                setError('Email or UserName already taken');
+        if (password === passwordConfirm){
+            try{
+                const newUser : Omit<User,'password'> |null = await registerUser({name,userName,mail,password});
+                if(newUser?.id){
+                    await userContext?.login(mail,password);
+                }else{
+                    setError('Email or UserName already taken');
+                }
+            }catch{
+                setError('Server issue plz try again later')
             }
-        }catch{
-            setError('Server issue plz try again later')
+        }else{
+            setError('The passwords are not the same');
+            setInputAnimation('shake');
+                setTimeout(()=>{
+                    setInputAnimation('');
+                },500)  
         }
     }
     
@@ -59,18 +69,25 @@ useEffect(()=>{
                 <button className="popup-close" onClick={endwithease}>✕</button>
                 <h2 className="popup-title">Welcome New Comer !</h2>
                 <p className="popup-subtitle">Create Your New account</p>
+                <span>Name</span>
                 <input className="ModernInput"
                  onChange={(input)=>setName(input.target.value)}
                  placeholder="Enter Your Name"/>
+                 <span>Username</span>
                  <input className="ModernInput"
                  onChange={(input)=>setUserName(input.target.value)}
-                 placeholder="Enter Your UserName"/>                
-                <input className="ModernInput"
+                 placeholder="Enter Your UserName"/> 
+                 <span>Mail</span>               
+                <input className="ModernInput" type="mail"
                  onChange={(input)=>setMail(input.target.value)}
                  placeholder="Enter Your mail"/>
-                <input className="ModernInput" type="password"
+                 <span>Password</span>
+                <input className={`ModernInput ${inputAnimation}`} type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>
+                 <input className={`ModernInput ${inputAnimation}`} type="password"
+                onChange={(input)=>setPasswordConfirm(input.target.value)}
+                placeholder="Confirm Your Password"/>
                 {error && 
                  <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
                  <span  className="error">{error}</span>

@@ -4,6 +4,7 @@ import { UserContext } from "./UserContext";
 import { getAllDesk } from "../api/deskAccess";
 import { createItem, getAllItemFromUpdate, getAllUpdatesAndDesk, getItemByDeskId, updateViewed } from "../api/item";
 import { getDeskById } from "../api/desk";
+import { createNote } from "../api/note";
 
 export const DeskContext = createContext<DeskContextType|null>(null)
 
@@ -39,13 +40,27 @@ export function DeskProvider({children} : {children : ReactNode}){
         }
 ///////////////////////// CREATE ITEM FUNCTION (DOM AND DB) //////////////////////
         async function createItemDesk (item : Omit<Item,'id'>) : Promise <Item |null> {
-            const newItem = await createItem(item);
-            if(newItem !=undefined && newItem!= null){
-                if(items){
-                    const newArray = [...items,newItem];
-                    setItems(newArray);
-                }else{
-                    setItems([newItem]);
+            let newItem;
+            if(item.type === 'note'){
+                newItem = await createNote(item,'');
+                newItem = newItem?.item
+                if(newItem !=undefined && newItem!= null){
+                    if(items){
+                        const newArray = [...items,newItem];
+                        setItems(newArray);
+                    }else{
+                        setItems([newItem]);
+                    }
+                }
+            }else{
+                newItem = await createItem(item);
+                if(newItem !=undefined && newItem!= null){
+                    if(items){
+                        const newArray = [...items,newItem];
+                        setItems(newArray);
+                    }else{
+                        setItems([newItem]);
+                    }
                 }
             }
             return newItem? newItem : null;

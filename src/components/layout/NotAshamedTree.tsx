@@ -39,8 +39,9 @@ export function NotAshamedTree({ onClose, switchSection, updateDepth}: {
         children.forEach((item, index) => {
             const isLast = index === children.length - 1;
             const connector = isLast ? '└── ' : '├── ';
-            const icon = item.type === 'folder' ? (item.accessPassword ?(deskContext?.isNew(item.id) ? '📁🔒✨' : '📁🔒') : (deskContext?.isNew(item.id) ? '📁✨' : '📁'))
+            let icon = item.type === 'folder' ? (item.accessPassword ?(deskContext?.isNew(item.id) ? '📁🔒✨' : '📁🔒') : (deskContext?.isNew(item.id) ? '📁✨' : '📁'))
             : (item.accessPassword ?(deskContext?.isNew(item.id) ? '📄🔒✨' : '📄🔒') : (deskContext?.isNew(item.id) ? '📄✨' : '📄'));
+            // icon = item.type === 'note' && (item.accessPassword ?(deskContext?.isNew(item.id) ? '📁🔒✨' : '📁🔒'):(deskContext?.isNew(item.id) ? '📁🔒✨' : '📁🔒'));
 
             result.push(
                 <span key={item.id} style={{ display: 'block' }}>
@@ -69,7 +70,7 @@ export function NotAshamedTree({ onClose, switchSection, updateDepth}: {
 
     return (
         <div className={`notAshamedtreeContainer ${animation}`}>
-            <button onClick={() => endwithease()}>❌ Close</button>
+            <button onClick={() => onClose()}>❌ Close</button>
             <pre>
                 <span style={{ display: 'block' }} ><a onClick={()=>{switchSection(null);updateDepth(0)}} style={{ cursor: 'pointer', textDecoration: 'none' }}>{'🖥️'} {deskContext?.currentDesk?.name}</a></span>
                 {items && buildTree(items, null)}

@@ -4,6 +4,7 @@ import { DeskContext } from "../../context/DeskContext";
 import { PlaceFile } from "../item/PlaceFile";
 import { PlaceFolder } from "../item/PlaceFolder";
 import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
+import { PlaceNote } from "../item/PlaceNote";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// DESK DISPLAY JSX /////////////////////////
@@ -62,8 +63,8 @@ export function DeskDisplay():JSX.Element{
                     }
             {arrayOfItem.map((item)=>(
                 item.type === 'folder'
-                ? <PlaceFolder key = {item.id} item = {item}/>
-                : <PlaceFile key = {item.id} item = {item}/>
+                ? (<PlaceFolder key = {item.id} item = {item}/>)
+                : (item.type === 'file' ? <PlaceFile key = {item.id} item = {item}/> : <PlaceNote key = {item.id} item = {item}/> )
             )
             )}
             </div>

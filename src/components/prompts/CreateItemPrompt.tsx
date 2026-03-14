@@ -59,6 +59,7 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
             <p className="popup-subtitle">Choose wisely</p>
             <button onClick={()=> setType('file')}>a file 📑!</button>
             <button onClick={()=> setType('folder')}>a folder 📁 !</button>
+            <button onClick={()=> setType('note')}>a note 📝!</button>
             <input className="ModernInput"
             onChange={(input)=>setName(input.target.value)}
             placeholder={`Enter your ${type} name`} />

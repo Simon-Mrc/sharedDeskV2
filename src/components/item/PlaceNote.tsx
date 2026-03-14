@@ -1,19 +1,14 @@
 import { useContext, useState, type JSX } from "react";
 import type { Item } from "../../../shared/types";
-import { SectionContext } from "../../context/SectionContext";
 import { OptionMenu } from "./OptionMenu";
-import { AccessPromptFolder } from "./../prompts/AccessPrompt";
+import { AccessPromptNote } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
 /////// WAY MORE COMPLICATED THAN FILE PART DUE TO POSSIBILITY TO NAVIGATE THROUGH SECTION /////////
 /////// VIA FOLDER ///// ALSO ADDED SECURITY RIGHT AWAY TO PREVENT NAVIGATION IF PASSWORD ///////////
-export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
-    const sectionContext = useContext(SectionContext);
-    const switchSection = sectionContext?.switchSection;
-    const depth  = sectionContext?.depth as number;
-    const updateDepth = sectionContext?.updateDepth;
+export function PlaceNote ({item} : {item : Item}) : JSX.Element{
     const [optionMenu , setOptionMenu] = useState<boolean>(false);
     const [coord , setCoord] = useState<{x : number,y : number}>({x:0,y:0});
     const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
@@ -36,11 +31,12 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
                     setAccessPrompt(true);
                 }
                 else{
-                    switchSection?.(item.id);updateDepth?.(depth+1)
+                    
+        ///////////////////////////////////////////////////////
                 }
             }}
         onClick={()=>deskContext?.markAsViewed(item.id)}
-        
+        ///////////////////////////////////////////////////////
         onContextMenu={(e)=>
             {
                 e.preventDefault();
@@ -56,15 +52,13 @@ export function PlaceFolder ({item} : {item : Item}) : JSX.Element{
                 }
         }}>
 
-            <img  src="/icons/folder.jpg" alt="folder"></img>
+            <img  src="/icons/note.png" alt="note"></img>
             <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&
-            <AccessPromptFolder 
+            <AccessPromptNote 
             onClose = {()=> setAccessPrompt(false)}
             setHasAccess = {()=>setHasAccess}
-            switchSection = {()=> switchSection?.(item.id ?? null)}
-            updateDepth = {()=> updateDepth?.(depth+1)}
             setOptionMenu = {()=> setOptionMenu(true)}
             item = {item}
             check = {check}

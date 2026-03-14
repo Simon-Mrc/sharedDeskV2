@@ -55,9 +55,11 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
                 <button className="popup-close" onClick={endwithease}>✕</button>
                 <h2 className="popup-title">Welcome back</h2>
                 <p className="popup-subtitle">Log into your account</p>
+                <span>Mail</span>
                 <input className="ModernInput"
                  onChange={(input)=>setMail(input.target.value)}
                  placeholder="Enter Your mail"/>
+                 <span>Password</span>
                 <input className={`ModernInput ${inputAnimation}`} type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>

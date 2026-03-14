@@ -26,7 +26,7 @@ export function FunctionsPart():JSX.Element{
             <button id="socialBtn" onClick={()=>setSocialMenu(true)}>👥 Friends{userContext?.user?.notif.length!=0 && '🔔'}</button>
             {socialMenu &&
             <SocialMenu onClose = {()=> setSocialMenu(false)} />}
-            <button id="shamingTree" className="icon-btn" title="Show Tree" onClick={()=>setNotAshamedTree(true)}>🌳</button>
+            <button id="shamingTree" className="icon-btn" title="Show Tree" onClick={()=>setNotAshamedTree(!notAshamedTree)}>🌳</button>
             {notAshamedTree &&
             <NotAshamedTree 
             onClose = {()=> setNotAshamedTree(false)}
