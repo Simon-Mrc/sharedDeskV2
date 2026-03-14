@@ -6,11 +6,11 @@ import { UserSchema, LoginSchema, UpdateUserSchema } from '../validation/schemas
 
 const router = Router();
 
-router.get('/:id',authenticateToken, notesController.getNotesById);
+router.get('/:itemId',authenticateToken, notesController.getNotesById);
 
 router.post('/', authenticateToken, notesController.createNote);
 
-router.put('/:id',authenticateToken, notesController.updateNote);
+router.put('/:itemId',authenticateToken, notesController.updateNote);
 
 
 

@@ -54,13 +54,13 @@ const createNote =async (req : Request<{},{},{itemB :Omit<Item,'id'>, content : 
 }
 
 ///////////////////////// GET NOTE BY ID WITH JOIN ON ITEMS ///////////////////
-const getNotesById = async (req : Request<{id : string}>, res: Response<Note|null>)=>{
+const getNotesById = async (req : Request<{itemId : string}>, res: Response<Note|null>)=>{
     try{
         const result = db.prepare(`
             SELECT items.* ,notes.content FROM items
             JOIN notes ON items.id = notes.itemId
             WHERE items.id = ?
-            `).get(req.params.id) as Item & {content : string };
+            `).get(req.params.itemId) as Item & {content : string };
         if(!result) return res.status(404).json(null);
         const {content,...item} = result;
         const note = {item , content} 

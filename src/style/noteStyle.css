@@ -1,0 +1,135 @@
+
+
+/* ============================================================
+   FOLD IN / FOLD OUT ANIMATIONS
+   origin = bottom left to simulate unfolding from the icon
+   ============================================================ */
+@keyframes foldin {
+    from {
+        opacity : 0;
+        transform : scale(0.3) translateY(40px);
+    }
+    to {
+        opacity : 1;
+        transform : scale(1) translateY(0);
+    }
+}
+
+@keyframes foldout {
+    from {
+        opacity : 1;
+        transform : scale(1) translateY(0);
+    }
+    to {
+        opacity : 0;
+        transform : scale(0.3) translateY(40px);
+    }
+}
+
+.foldin .NoteContainer {
+    animation : foldin 0.3s ease forwards;
+}
+
+.foldout .NoteContainer {
+    animation : foldout 0.3s ease forwards;
+}
+
+/* ============================================================
+   NOTE CONTAINER : the sticky note itself
+   ============================================================ */
+.NoteContainer {
+    position : absolute;
+    width : 380px;
+    height : 480px;
+    background-color : #fef08a; /* classic yellow */
+    border-radius : 4px 4px 4px 32px; /* folded corner bottom left */
+    box-shadow :
+        4px 4px 8px rgba(0,0,0,0.25),
+        inset 0 -2px 4px rgba(0,0,0,0.08);
+    display : flex;
+    flex-direction : column;
+    padding : 12px;
+    gap : 8px;
+    pointer-events : all;
+    /* prevent going outside viewport */
+    max-width : calc(100vw - 32px);
+    max-height : calc(100vh - 32px);
+    box-sizing : border-box;
+}
+
+/* ============================================================
+   TOP BAR : title + close button
+   ============================================================ */
+.TitleForNote {
+    font-size : 14px;
+    font-weight : bold;
+    color : #78350f;
+    margin : 0;
+    text-align : center;
+    font-family : 'Patrick Hand', cursive, sans-serif;
+    border-bottom : 2px solid #fbbf24;
+    padding-bottom : 6px;
+}
+
+.CloseNoteBtn {
+    position : absolute;
+    top : 8px;
+    right : 10px;
+    background : transparent;
+    border : none;
+    font-size : 16px;
+    cursor : pointer;
+    color : #92400e;
+    line-height : 1;
+}
+
+.CloseNoteBtn:hover {
+    color : #dc2626;
+}
+
+/* ============================================================
+   TEXTAREA : lined paper effect using gradient
+   ============================================================ */
+.NoteContent {
+    flex : 1;
+    width : 100%;
+    resize : none;
+    border : none;
+    outline : none;
+    background-color : transparent;
+    font-size : 15px;
+    font-family : 'Patrick Hand', cursive, sans-serif;
+    color : #1c1917;
+    line-height : 28px; /* must match gradient line spacing! */
+    box-sizing : border-box;
+    padding : 0 4px;
+
+    /* lined paper trick : repeating horizontal lines */
+    background-image : repeating-linear-gradient(
+        transparent,
+        transparent 27px,
+        #fbbf24 27px,
+        #fbbf24 28px  /* 1px line every 28px */
+    );
+    background-attachment : local; /* lines scroll with text! */
+}
+
+/* ============================================================
+   ERROR POPUP
+   ============================================================ */
+.PopupNote {
+    position : absolute;
+    bottom : 12px;
+    left : 50%;
+    transform : translateX(-50%);
+    background : #fecaca;
+    border : 1px solid #f87171;
+    border-radius : 6px;
+    padding : 6px 14px;
+}
+
+.NoteError {
+    font-size : 12px;
+    color : #b91c1c;
+    white-space : nowrap;
+}

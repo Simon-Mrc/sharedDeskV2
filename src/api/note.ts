@@ -38,7 +38,7 @@ export async function createNote(item: Omit<Item, 'id'>, content: string): Promi
     }
 }
 
-////////////////////////////////////////UPDATE NOTE CONTENT /////////////////////////////////////////
+////////////////////////////////////////UPDATE NOTE CONTENT AND IN UPDATE TABLE /////////////////////////////////////////
 export async function updateNoteContent(itemId: string, content: string): Promise<{ content: string } | null > {
     try {
         const result = await fetch(`${BASE_URL}/notes/${itemId}`, {
