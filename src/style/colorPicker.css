@@ -1,0 +1,48 @@
+/* ============================================================
+   COLOR PICKER
+   ============================================================ */
+.ColorPicker {
+    appearance : none;
+    -webkit-appearance : none;
+    width : 48px;
+    flex : 1;
+    height : 36px;
+    border : 2px solid #e2e8f0;
+    border-radius : 8px 0 0 8px; /* connects with the button */
+    padding : 2px;
+    cursor : pointer;
+    background : none;
+    transition : border-color 0.2s ease;
+}
+
+.ColorPicker:hover {
+    border-color : #94a3b8;
+}
+
+.ColorPicker::-webkit-color-swatch-wrapper {
+    padding : 0;
+}
+
+.ColorPicker::-webkit-color-swatch {
+    border : none;
+    border-radius : 4px;
+}
+
+/* ============================================================
+   CONNECTS NICELY WITH THE 🎨 BUTTON
+   ============================================================ */
+.ColorPicker + button {
+    height : 36px;
+    border : 2px solid #e2e8f0;
+    border-left : none; /* ← seamless join with picker */
+    border-radius : 0 8px 8px 0;
+    padding : 0 12px;
+    cursor : pointer;
+    background : #f8fafc;
+    font-size : 16px;
+    transition : background 0.2s ease;
+}
+
+.ColorPicker + button:hover {
+    background : #e2e8f0;
+}

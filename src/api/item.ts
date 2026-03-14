@@ -95,7 +95,6 @@ export async function getAllItemFromUpdate(): Promise<Omit<ItemUpdateType[],'des
             headers : authHeaders()
         })
         const result = await arrayOfItem.json();
-        console.log(result);
         return result;
     }catch(error){
         return null;
@@ -110,7 +109,6 @@ export async function getAllUpdatesAndDesk() : Promise<ItemUpdateType[]|null>{
             headers : authHeaders()
         })
         const result = await arrayOfItem.json();
-        console.log(result);
         return result;
     }catch(error){
         return null

@@ -13,6 +13,7 @@ import './style/loginPage.css'
 import './style/prompt.css'
 import './style/notAshamedTree.css'
 import './style/noteStyle.css'
+import './style/colorPicker.css'
 
 createRoot(document.getElementById('root')!).render(   
     <StrictMode>

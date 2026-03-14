@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { up as up001} from './migrations/001_initial_schema';
 import { up as up002 } from './migrations/002_add_note_table_schema';
-
+import { up as up003 } from './migrations/003_removeCreatorColor_schema';
 interface Migration {
     name : string;
     up : (db : InstanceType<typeof Database>)=> void
@@ -9,7 +9,8 @@ interface Migration {
 
 const allMigration : Migration[] = [
     {name : '001_initial_schema', up : up001},
-    {name : '002_add_note_table_schema', up : up002}
+    {name : '002_add_note_table_schema', up : up002},
+    {name : '003_removeCreatorColor_schema.ts', up : up003}
 ];
 
 export function runMigration(db : InstanceType<typeof Database>){

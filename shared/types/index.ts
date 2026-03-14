@@ -45,7 +45,7 @@ export interface DeskContextType {
     setAllItems : (items : DeskContextType['items']) => void;
     refreshItems : () => void;
     isNew : (itemId : string)=>boolean;
-    markAsViewed : (itemId : string)=>void;
+    markAsViewed : (itemId : string, forced ?: boolean )=>void;
     containsNew : (deskId : string) => boolean;
 }
 

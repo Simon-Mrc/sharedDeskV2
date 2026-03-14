@@ -89,11 +89,12 @@ export function PlaceNote ({item} : {item : Item}) : JSX.Element{
 export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coord : {x:number,y:number} , item : Item}) : JSX.Element{
     const [error,setError] = useState<string|null>(null);
     const userContext = useContext(UserContext);
+    const deskContext = useContext(DeskContext);
     const [oldContent , setOldContent] = useState<{userName : string , userColor : string , userContent : string ,date : string}[] |null>(null)
     const [newcontent , setNewContent] = useState<{userName : string , userColor : string , userContent : string, date : string } |null>(null)
     async function contentInit(){
         const note = await getNoteById(item.id);
-        note ? setOldContent(JSON.parse(note.content)) : setError('Note must have been deleted')
+        note?.content && setOldContent(JSON.parse(note.content)) 
     }
     
 //////////////// NEVER FORGET THIS !!! OR LOOP FOREVER ////////////////
@@ -126,6 +127,7 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
         ////////////////////////////////////////////////////////////////////
         const [animation , setAnimationD] = useState<string>('foldin');
             function endwithease(){
+                deskContext?.markAsViewed(item.id, true)
                 setTimeout(()=>{
                     setAnimationD('foldout')
                     setTimeout((()=>{
@@ -146,7 +148,7 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
                 <button className="CloseNoteBtn" onClick={endwithease}>✕</button>
                 <h2 className="TitleForNote">{item.name}</h2>
                 {oldContent?.map((object)=>(
-                <div className="OldPart" style={{color : object.userColor}}>     
+                <div className="OldPart" key={object.date} style={{color : object.userColor}}>     
                 <div style={{color : object.userColor}} > {`${object.userContent}` } </div>
                 <div style={{color : object.userColor}} > {`by : ${object.userName} at : ${object.date}` } </div>
                 </div>         

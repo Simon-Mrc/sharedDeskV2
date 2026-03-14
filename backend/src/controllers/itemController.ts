@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////
 //////////////////////////    IMPORT HERE     ////////////////////////
 //////////////////////////////////////////////////////////////////////
-import { Request, response, Response } from 'express';
+import { Request,  Response } from 'express';
 import db from '../db/database';
 import { Desk, Item } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
@@ -17,8 +17,10 @@ const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
     try{
         const userId = (req as any).user.userId
         let arrayOfItems = db.prepare(`
-            SELECT * FROM items
-            WHERE createdBy = ?
+            SELECT items.*, users.userColor as creatorColor
+            FROM items
+            JOIN users ON items.createdBy = users.id
+            WHERE items.createdBy = ?
             `).all(userId) as Item[];
         res.json(arrayOfItems);
     }catch(error){
@@ -30,8 +32,10 @@ const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
 const getItemById = (req: Request<{id : string}>,res:Response<Item|null>)=>{
     try{
         let item = db.prepare(`
-            SELECT * FROM items
-            WHERE id = ?
+            SELECT items.*, users.userColor as creatorColor
+            FROM items
+            JOIN users ON items.createdBy = users.id
+            WHERE items.id = ?
             `).get(req.params.id) as Item;
         res.json(item)
     }catch(error){
@@ -40,7 +44,7 @@ const getItemById = (req: Request<{id : string}>,res:Response<Item|null>)=>{
 }
 
 /////////////////////////////// CREATE ITEM  /////////////////////////////
-const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|null>)=>{
+const createItem =async (req : Request<{},{},Omit<Item,'id'|'creatorColor'>>,res:Response<Item|null>)=>{
     try{
         const id = randomUUID();
         const userId =(req as any).user.userId;
@@ -48,10 +52,10 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|
         const myTransaction = db.transaction(()=>{
             db.prepare(`
                 INSERT INTO items
-                (id,deskId,name,type,x,y,accessPassword,createdBy,creatorColor,parentId)
+                (id,deskId,name,type,x,y,accessPassword,createdBy,parentId)
                 VALUES
-                (?,?,?,?,?,?,?,?,?,?)
-                `).run(id,req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,hashPswrd,userId,req.body.creatorColor,req.body.parentId);
+                (?,?,?,?,?,?,?,?,?)
+                `).run(id,req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,hashPswrd,userId,req.body.parentId);
                 const arrayOfUserId = db.prepare(`
                 SELECT userId FROM deskAccess
                 WHERE deskId = ?    
@@ -65,8 +69,10 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|
                     `).run(id,object.userId,Date.now(),0)                    
                 });
                 const newItem = db.prepare(`
-                    SELECT * FROM items
-                    WHERE id = ?
+                    SELECT items.*, users.userColor as creatorColor 
+                    FROM items
+                    JOIN users ON users.id = items.createdBy
+                    WHERE items.id = ?
                     `).get(id) as Item;        
             return newItem
             }
@@ -79,7 +85,7 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'>>,res:Response<Item|
 }
 
 /////////////////////////////// UPDATE ITEM BY ID /////////////////////////////
-const updateItemById = (req:Request<{id : string},{},Omit<Item,'id'>>,res:Response<{message : string}|{error:string}>)=>{
+const updateItemById = (req:Request<{id : string},{},Omit<Item,'id'|'creatorColor'>>,res:Response<{message : string}|{error:string}>)=>{
     try{
         const userId = (req as any).user.userId;
         const myTransaction = db.transaction(()=>{
@@ -90,10 +96,9 @@ const updateItemById = (req:Request<{id : string},{},Omit<Item,'id'>>,res:Respon
                 type = ?,
                 x= ?,
                 y=?,
-                accessPassword = ?,
-                creatorColor = ?
+                accessPassword = ?
                 WHERE id = ?
-                `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.body.creatorColor,req.params.id);     
+                `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.params.id);     
                 db.prepare(`
                     UPDATE itemUpdates SET
                     lastModified = ?
@@ -130,8 +135,10 @@ const deleteItemById = (req : Request<{id:string}>,res:Response<{message:string}
 const getAllItemByDeskId = (req : Request<{deskId : string}>,res : Response <Item[]|null>)=>{
     try{
         const arrayOfItems = db.prepare(`
-            SELECT * FROM items
-            WHERE deskId = ?
+            SELECT items.*, users.userColor as creatorColor
+            FROM items
+            JOIN users ON items.createdBy = users.id
+            WHERE items.deskId = ?
             `).all(req.params.deskId) as Item[]
         return res.json(arrayOfItems);
     }catch(error){

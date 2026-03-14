@@ -11,16 +11,16 @@ const createNote =async (req : Request<{},{},{itemB :Omit<Item,'id'>, content : 
     try{
         const id = randomUUID();
         const {itemB , content} = req.body;
-        const {deskId , name , x , y ,creatorColor ,parentId} = itemB;      
+        const {deskId , name , x , y  ,parentId} = itemB;      
         const userId =(req as any).user.userId;
         const hashPswrd = req.body.itemB.accessPassword ? await bcrypt.hash(req.body.itemB.accessPassword,10) :null;
         const myTransaction = db.transaction(()=>{
             db.prepare(`
                 INSERT INTO items
-                (id,deskId,name,type,x,y,accessPassword,createdBy,creatorColor,parentId)
+                (id,deskId,name,type,x,y,accessPassword,createdBy,parentId)
                 VALUES
-                (?,?,?,?,?,?,?,?,?,?)
-                `).run(id,deskId,name,'note',x,y,hashPswrd,userId,creatorColor,parentId);
+                (?,?,?,?,?,?,?,?,?)
+                `).run(id,deskId,name,'note',x,y,hashPswrd,userId,parentId);
                 const arrayOfUserId = db.prepare(`
                 SELECT userId FROM deskAccess
                 WHERE deskId = ?    
@@ -40,8 +40,10 @@ const createNote =async (req : Request<{},{},{itemB :Omit<Item,'id'>, content : 
                 (?,?)
                 `).run(id,content)
                 const newItem = db.prepare(`
-                    SELECT * FROM items
-                    WHERE id = ?
+                    SELECT items.* , users.userColor as creatorColor
+                    FROM items
+                    JOIN users ON users.id = items.createdBy
+                    WHERE items.id = ?
                     `).get(id) as Item;        
             return newItem
             }

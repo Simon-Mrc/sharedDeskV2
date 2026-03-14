@@ -27,13 +27,13 @@ export function DeskProvider({children} : {children : ReactNode}){
 //////////////////////// REFRESH ITEM ON DESK CHANGES ///////////////////
         useEffect(()=>{
             if(currentDesk?.id){allItemHandler(currentDesk.id);}
-        },[currentDesk]);
+        },[currentDesk,userContext?.user?.userColor]);
 //////////////////////// REFRESH DESKS ON USER CHANGES ///////////////////
         useEffect(()=>{
             setCurrentDesk(null);
             setItems(null);
             if(userContext?.user){refreshDesks();}
-        },[userContext?.user])
+        },[userContext?.user?.id])
 
         async function switchDesk(deskId : string){
             setCurrentDesk(await getDeskById(deskId))
@@ -83,7 +83,7 @@ async function getAllUpdates(){
 }
 useEffect(()=>{
     if(userContext?.user){getAllUpdates();}
-},[currentDesk,userContext?.user])
+},[currentDesk,userContext?.user?.id])
 
 /////////////////////////////////// ISNEW HELPER FUNCTION //////////////////////
 function isNew(itemId : string) : boolean{
@@ -92,8 +92,8 @@ function isNew(itemId : string) : boolean{
     else{return false}
 }
 //////////////////////////////UPDATES ALL HELPER FUNCTION //////////////////////////////
-async function markAsViewed(itemId: string){
-    if (isNew(itemId)){
+async function markAsViewed(itemId: string, forced : boolean=false){
+    if (forced || isNew(itemId)){
         await updateViewed(itemId);
         setItemUpdates(prev => prev?.map(object => 
             object.itemId === itemId 
