@@ -42,9 +42,9 @@ export async function deleteFile(id : string){
 }
 
 //////////////////////////////DOWNLOAD FILE //////////////////////////////////
-export async function downloadFile(itemId: string): Promise<void>{
+export async function downloadFile(id: string): Promise<void>{
     try{
-        const result = await fetch(`${BASE_URL}/files/download/${itemId}`,{
+        const result = await fetch(`${BASE_URL}/files/download/${id}`,{
             method: 'GET',
             headers: authHeaders()
         })
@@ -60,5 +60,20 @@ export async function downloadFile(itemId: string): Promise<void>{
     }
 }
 
+////////////////////////// UPDATE FILE WITH DOWNLOAD CONTENT //////////////////
+export async function updateFile(id : string ,file : File) : Promise<void>{
+    try{
+        const formData = new FormData();
+        formData.append('file',file);
+        const result = await fetch(`${BASE_URL}/files/${id}`,{
+            method : 'PATCH',
+            headers : authHeadersMultipart(),
+            body : formData
+        })
+        console.log('success');
+    }catch(error){
+        console.log('failure');
+    }
+}
 
 

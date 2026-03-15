@@ -15,4 +15,6 @@ router.post('/upload',authenticateToken,upload.single('file'),  fileController.u
 
 router.delete('/delete/:id',authenticateToken,fileController.deleteFileDb);
 
+router.patch(`/:id`, authenticateToken,upload.single('file'), fileController.updateFile);
+
 export default router

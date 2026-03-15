@@ -101,4 +101,27 @@ const deleteFileDb =async  (req : Request<{id : string}> , res : Response)=>{
     }
 }
 
-export default {uploadFile, deleteFileDb, downloadFile}
+/////////////////////////// UPDATE FILE WITH DOWNLOAD CONTENT ///////////////////
+const updateFile = async (req : Request<{id : string}>, res : Response)=>{
+    try{
+        const file = req.file;
+        if(file){
+            const item = db.prepare(`
+                SELECT * FROM items
+                WHERE id = ?
+                `).get(req.params.id) as Item;
+            const filePath = await saveFile(file,item.deskId)
+            db.prepare(`
+                UPDATE items SET
+                filePath = ?
+                WHERE id = ?
+                `).run(filePath,req.params.id);
+            return res.json(null)
+        }
+        return res.status(500).json(null);
+    }catch(error){
+        return res.status(500).json(null);
+    }
+}
+
+export default {uploadFile, deleteFileDb, downloadFile, updateFile}
