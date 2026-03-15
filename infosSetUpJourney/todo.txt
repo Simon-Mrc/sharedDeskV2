@@ -1,9 +1,18 @@
 ############## GLOBAL LIST NO PARTICULAR ORDER ##################
- /!\ work on animations and css
- /!\ finish all social feature
- /!\ reset db with proper datas
- /!\ finish all account setting (actually didn t even started yet)
- /!\ finish all item setting
- /!\ finish all desk setting (actually didn t even started yet)
+ /!\ Unable drag on directly on section for upload file
+ /!\ Show prompt and think about better UX for upload and download
+ /!\ Download several icons and ask for possible extension when upload (ppt, js, css, ts word .... i ll handle this manually i think)
+ /!\ finish all account setting 
+ /!\ Really need to think about duplicate option (maybe just for file to avoid recursion and too many data storage ?)
+ /!\ Rethink global structure around UX 
  /!\ Poilish all 
- /!\ Add mail system and struggle with massive backend changes !
+ /!\ 
+
+ ######################## ABSOLUTE MUST DO ##########################
+ /!\ Add mail system now that i have done several migrations shouldn t be too hard
+ /!\ Create a tutorial for new user : This is a must because it s not that intuitive
+
+ ######################### NICE TO HAVE BUT NOT QUITE SURE ########################
+ /!\ Add possibility for user to customize entire interface (color mostly)
+ /!\ Add userName with associated color on sharedDesk ?
+ /!\ Add userName on top of userColor as a little stamp on file creation for download ?

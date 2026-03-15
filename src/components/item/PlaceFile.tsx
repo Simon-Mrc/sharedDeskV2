@@ -1,8 +1,9 @@
-import { useContext, useState, type JSX } from "react";
+import { useContext, useRef, useState, type JSX } from "react";
 import type { Item } from "../../../shared/types";
 import { OptionMenu } from "./OptionMenu";
 import { AccessPromptFile, AccessPromptNote } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
+import { downloadFile, updateFile } from "../../api/file";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -14,6 +15,7 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
     const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
     const [hasAccess , setHasAccess] = useState<boolean>(false);
     const [check , setCheck] = useState<number>(0);
+    const [dropArea , setDropArea] = useState<boolean>(false);
     const deskContext = useContext(DeskContext)
 
     return (
@@ -26,20 +28,21 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
             }}
         onDoubleClick={()=>
             {
-                setCheck(1)
+                setCheck(1);
                 if(item.accessPassword && !hasAccess){
                     setHasAccess(false);
                     setAccessPrompt(true);
                 }
                 else{
-                    
-        ///////////////////////////////////////////////////////
+                    item.filePath ? downloadFile(item.id) : setDropArea(true)
                 }
             }}
+       
         onClick={()=>deskContext?.markAsViewed(item.id)}
         ///////////////////////////////////////////////////////
         onContextMenu={(e)=>
             {
+                setCheck(0);
                 e.preventDefault();
                 e.stopPropagation();                
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -64,7 +67,7 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
         {accessPrompt&&
             <AccessPromptFile 
             onClose = {()=> setAccessPrompt(false)}
-            setHasAccess = {()=>setHasAccess}
+            setDropArea = {()=>setDropArea(true)}
             setOptionMenu = {()=> setOptionMenu(true)}
             item = {item}
             check = {check}
@@ -77,6 +80,81 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
             item = {item}
             />
         }
+        {dropArea &&
+            <DropArea 
+            onClose = {()=>{setDropArea(false)}}
+            item = {item} />
+        }
+        </div>
+    )
+}
+
+///////////////////////////////// DROP AREA JSX FUNCTION ////////////////////////
+export function DropArea({onClose,item} : {onClose : ()=>void, item : Item}) : JSX.Element{
+   const [areaClass , setAreaClass] = useState<string>('');
+   const deskContext = useContext(DeskContext);
+    async function handleUpdate(file : File){
+        const itemUpdated = await updateFile(item.id,file);
+        itemUpdated ? deskContext?.setOneItem(itemUpdated) : 
+        setError('File not eligible to download')
+    }
+    const inputRef = useRef<HTMLInputElement>(null);
+    
+    
+    ///////////////////////////////////////////////////////////////////////
+    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
+        ////////////////////////////////////////////////////////////////////
+        const [animation , setAnimationD] = useState<string>('');
+            function endwithease(){
+                setTimeout(()=>{
+                    setAnimationD('fadeOut')
+                    setTimeout((()=>{
+                        onClose()}),500)
+            },1)
+        }
+        const [error,setError] = useState<string|null>(null);
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    return(
+        <div className={`overlay ${animation}`} onClick={endwithease}>
+            <div className={`dropArea ${areaClass}`} onClick={(e)=>{e.stopPropagation()}}
+            onDragOver={(e)=>{
+                e.preventDefault();
+                setAreaClass('highlighted')
+            }}
+            onDragLeave={()=>{
+                setAreaClass('');
+            }}
+            onDrop={async (e)=>{
+                e.preventDefault();
+                await handleUpdate(e.dataTransfer.files[0]);
+                endwithease();
+            }}
+            >
+                <div className="PopupDropZone" >
+                <div style={{gridColumn: "1 / -1", textAlign :"center" }}>
+                <h2 className="TitleDropZone">Drop Your File</h2>
+                </div>
+                </div>
+                <span className="dropSeparator">or</span>
+                <div>
+                <button onClick={()=> inputRef.current?.click()}>
+                    Select from computer 💻
+                </button>
+                <input 
+                type="file"
+                ref={inputRef}
+                style={{display:'none'}}
+                onChange={async (e)=> 
+                    {e.target.files?.[0] && await handleUpdate(e.target.files[0]);
+                    endwithease()
+                    }} />
+                <button className="popup-close" onClick={endwithease}>✕</button>
+                </div>
+                {error && 
+                 <span  className="errorDropZOne">{error}</span>
+                }
+            </div>
         </div>
     )
 }

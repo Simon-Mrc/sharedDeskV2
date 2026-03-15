@@ -3,6 +3,7 @@ import { deleteItem, updateItem } from "../../api/item";
 import type { Item } from "../../../shared/types";
 import { DeskContext } from "../../context/DeskContext";
 import { UserContext } from "../../context/UserContext";
+import { deleteFile } from "../../api/file";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 ////////////////// ALL JSX FUNCTION FOR OPTION PROMPT ON ITEMS HERE ! //////////////////
@@ -116,7 +117,7 @@ export function DeletePrompt({onClose , item} : {onClose : ()=>void , item : Ite
     async function deleteHandler(){
         if(input === item.name && userContext?.user?.id === item.createdBy){
             /////// DELETE IN DB //////////
-            await deleteItem(item.id);
+            item.filePath!=null ? await deleteFile(item.id) : await deleteItem(item.id);
             ///// HERE WE DON T UPDATE FROM ARRAY BECAUSE IT WOULD HAVE NEEDED RECURSIVE FUNCTION //////
             //// DELETE IS RECURSIVE FOR FILES AND FOLDER AND HANDLE BY FOREIGN KEY IN DB //////
             //// SO REFRESH ITEMS JUST CALL THE NEW ARRAY OF ITEM TO UPDATE DESKCONTEXT /////////

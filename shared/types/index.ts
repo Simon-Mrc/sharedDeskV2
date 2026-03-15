@@ -60,7 +60,7 @@ export interface Item {
     y : number;
     accessPassword? : string|null;
     createdBy : User['id'];
-    creatorColor : User['userColor'];
+    creatorColor ?: User['userColor'];
     parentId : null | Item['id'];
     filePath ?: string|null
 }

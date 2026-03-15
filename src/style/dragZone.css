@@ -1,0 +1,126 @@
+/* ============================================
+   DROP AREA CONTAINER
+   matches .PopupWithBlurr style
+   ============================================ */
+.dropArea {
+    background: #282853;
+    border: 3px dashed #b3a1e2;      /* dashed = classic drop zone feel */
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 380px;
+    min-height: 220px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    z-index: 101;
+    animation: popIn 0.5s ease;      /* reuses your existing popIn keyframe */
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+/* ============================================
+   HIGHLIGHTED STATE — on drag over
+   ============================================ */
+.highlighted {
+    border-color: #c8b4ff;
+    background: #32325e;
+    box-shadow: 0 0 0 4px rgba(200, 180, 255, 0.15);
+}
+
+/* ============================================
+   DROP ZONE TITLE
+   ============================================ */
+.TitleDropZone {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    text-align: center;
+}
+
+/* ============================================
+   DROP ICON HINT
+   little emoji hint above the title
+   ============================================ */
+.TitleDropZone::before {
+    content: '📂';
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   CLOSE BUTTON
+   matches .CloseNoteBtn style
+   ============================================ */
+.CloseDropZone {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #888888;
+    line-height: 1;
+    box-shadow: none;
+    margin: 0;
+}
+
+.CloseDropZone:hover {
+    color: #ffffff;
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   ERROR POPUP
+   ============================================ */
+.PopupDropZone {
+    background: #3a1a1a;
+    border: 1px solid #f87171;
+    border-radius: 6px;
+    padding: 6px 14px;
+    width: 100%;
+    text-align: center;
+    animation: popIn 0.3s ease;
+}
+
+.errorDropZOne {
+    font-size: 12px;
+    color: #f87171;
+    white-space: nowrap;
+}
+
+/* ============================================
+   LOADING STATE — while uploading
+   ============================================ */
+.dropArea.loading {
+    opacity: 0.7;
+    pointer-events: none;     /* prevents interaction during upload */
+    border-color: #888888;
+}
+
+/* ============================================
+   SEPARATOR between drop and button
+   ============================================ */
+.dropSeparator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    color: #888888;
+    font-size: 12px;
+}
+
+.dropSeparator::before,
+.dropSeparator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #3a3a5e;
+}

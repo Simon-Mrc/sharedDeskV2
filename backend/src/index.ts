@@ -9,8 +9,8 @@ import desksRouter from './routes/desks';
 import deskAccessRouter from './routes/deskAccess';
 import itemsRouter from './routes/items';
 import itemUpdatesRouter from './routes/itemUpdates';
-import notesRouter from './routes/notes'
-import filesRouter from './routes/files'
+import notesRouter from './routes/notes';
+import filesRouter from './routes/files';
 
 ///////////////////////////////////////////////////////////////////////
 //////////  SET APP FUNCTION FROM INSTALLED MODULES  FIRST  ////////////

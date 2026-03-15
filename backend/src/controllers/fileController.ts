@@ -102,7 +102,7 @@ const deleteFileDb =async  (req : Request<{id : string}> , res : Response)=>{
 }
 
 /////////////////////////// UPDATE FILE WITH DOWNLOAD CONTENT ///////////////////
-const updateFile = async (req : Request<{id : string}>, res : Response)=>{
+const updateFile = async (req : Request<{id : string}>, res : Response<Item|null>)=>{
     try{
         const file = req.file;
         if(file){
@@ -116,7 +116,13 @@ const updateFile = async (req : Request<{id : string}>, res : Response)=>{
                 filePath = ?
                 WHERE id = ?
                 `).run(filePath,req.params.id);
-            return res.json(null)
+            const newItem = db.prepare(`
+                SELECT items.*, users.userColor as creatorColor
+                FROM items
+                JOIN users ON items.createdBy = users.id
+                WHERE items.id = ?
+                `).get(req.params.id) as Item;
+            return res.json(newItem)
         }
         return res.status(500).json(null);
     }catch(error){

@@ -41,6 +41,7 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
         onClick={()=>deskContext?.markAsViewed(item.id)}
         onContextMenu={(e)=>
             {
+                setCheck(0);
                 e.preventDefault();
                 e.stopPropagation();                
                 const rect = e.currentTarget.getBoundingClientRect();

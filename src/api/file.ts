@@ -32,7 +32,7 @@ export async function uploadFile(item : Omit<Item,'creatorColor'|'id'>, file : F
 //////////////////////////////////////// DELETE FILE /////////////////////////////////
 export async function deleteFile(id : string){
     try{
-        const result = await fetch(`${BASE_URL}/files/${id}`,{
+        const result = await fetch(`${BASE_URL}/files/delete/${id}`,{
             method : 'DELETE',
             headers : authHeaders()
         })
@@ -61,7 +61,7 @@ export async function downloadFile(id: string): Promise<void>{
 }
 
 ////////////////////////// UPDATE FILE WITH DOWNLOAD CONTENT //////////////////
-export async function updateFile(id : string ,file : File) : Promise<void>{
+export async function updateFile(id : string ,file : File) : Promise<Item|null>{
     try{
         const formData = new FormData();
         formData.append('file',file);
@@ -70,9 +70,10 @@ export async function updateFile(id : string ,file : File) : Promise<void>{
             headers : authHeadersMultipart(),
             body : formData
         })
-        console.log('success');
+        return await result.json() ?? null;
     }catch(error){
         console.log('failure');
+        return null
     }
 }
 
