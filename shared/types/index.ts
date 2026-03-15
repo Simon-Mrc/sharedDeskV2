@@ -62,6 +62,7 @@ export interface Item {
     createdBy : User['id'];
     creatorColor : User['userColor'];
     parentId : null | Item['id'];
+    filePath ?: string|null
 }
 
 export interface Note {
