@@ -9,6 +9,14 @@ export function authHeaders() {
         'Authorization': `Bearer ${token}`
     }
 }
+///////////////////////// AUTH HEADER THAT DOESN T SPECIFY CONTENT-TYPE FOR DL //////////////////
+export function authHeadersMultipart(){
+    const token = localStorage.getItem('token');
+    return {
+        'Authorization': `Bearer ${token}`
+        // NO Content-Type! browser sets it automatically!
+    }
+}
 //////////////////////////// PARSE HELPER FOR STRING[] PROPS /////////////////////////
 export function parseHelper(user : Omit<User,'password'>|null){
     if(!user){
