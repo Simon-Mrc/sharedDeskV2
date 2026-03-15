@@ -47,6 +47,8 @@ export interface DeskContextType {
     isNew : (itemId : string)=>boolean;
     markAsViewed : (itemId : string, forced ?: boolean )=>void;
     containsNew : (deskId : string) => boolean;
+    setOneItem : (item : Item) => void;
+    findOneItem : (itemId : string) => Item
 }
 
 export interface Item {

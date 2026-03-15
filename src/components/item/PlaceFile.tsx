@@ -8,7 +8,7 @@ import { DeskContext } from "../../context/DeskContext";
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
 /////// WAY MORE COMPLICATED THAN FILE PART DUE TO POSSIBILITY TO NAVIGATE THROUGH SECTION /////////
 /////// VIA FOLDER ///// ALSO ADDED SECURITY RIGHT AWAY TO PREVENT NAVIGATION IF PASSWORD ///////////
-export function PlaceFile ({item} : {item : Item}) : JSX.Element{
+export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void }) : JSX.Element{
     const [optionMenu , setOptionMenu] = useState<boolean>(false);
     const [coord , setCoord] = useState<{x : number,y : number}>({x:0,y:0});
     const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
@@ -19,6 +19,7 @@ export function PlaceFile ({item} : {item : Item}) : JSX.Element{
     return (
     <div>
         <div className="icon fadeIn" 
+            draggable = {false}
             id={item.id} 
             style={{left : item.x, top :item.y,
             background : `${item.creatorColor}`
@@ -50,6 +51,11 @@ export function PlaceFile ({item} : {item : Item}) : JSX.Element{
                 else{
                     setOptionMenu(true)
                 }
+        }}
+        onMouseDown={(e)=>{
+            e.preventDefault();
+            const rect = e.currentTarget.getBoundingClientRect();
+            propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
         }}>
 
             <img  src="/icons/file.png" alt="file"></img>

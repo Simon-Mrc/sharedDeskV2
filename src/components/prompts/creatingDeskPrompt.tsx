@@ -13,7 +13,6 @@ export function CreatingDeskPrompt({onClose} :{onClose : ()=>void}):JSX.Element{
     async function createDeskIn(){
         const newDesk = await createDesk(input);
         deskContext?.refreshDesks();
-        console.log(newDesk);
         if(newDesk){
             console.log(newDesk.id);
             deskContext?.switchDesk(newDesk.id);

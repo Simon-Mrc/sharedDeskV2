@@ -16,7 +16,6 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
     async function searchHandler(){
         const arrayOfFriend = await getUserBySearch(search);
         setArrayOffFriends(arrayOfFriend);
-        console.log(arrayOfFriend);
     }
 
     ///////////////////////////////////////////////////////////////////////

@@ -66,11 +66,21 @@ export function DeskProvider({children} : {children : ReactNode}){
             return newItem? newItem : null;
         }
 
-///////////////////////////// UPDATE ITEM LIST //////////////////////
+///////////////////////////// UPDATE ITEM LIST AND UPDATE JUST 1 ITEM //////////////////////
     function setAllItems(items : DeskContextType['items'] ){
         setItems(items);
-    }
+    };
 
+    function setOneItem(item : Item){
+        items &&
+        setAllItems(items.map((object)=> object.id === item.id ? item : object))
+    }
+//////////////////// FIND 1 ITEM HELPER FUNCTION ////////////////
+function findOneItem(itemId : Item['id']) : Item{
+    const item = items?.find((object)=>object.id === itemId);
+    if (!item) throw new Error(`Item with id ${itemId} not found`);
+    return item  
+}
 ///////////////////////// REFRESH ALL ITEMS //////////////////////
 async function refreshItems(){
         if(currentDesk){
@@ -116,7 +126,7 @@ function containsNew(deskId : string) : boolean{
 ///////////////////////////////////// PROVIDES !! ////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
         return(
-            <DeskContext.Provider value={{currentDesk,desks,items,loaded,itemUpdates,switchDesk,refreshDesks,createItemDesk,setAllItems,refreshItems,isNew,markAsViewed,containsNew}}>
+            <DeskContext.Provider value={{currentDesk,desks,items,loaded,itemUpdates,switchDesk,refreshDesks,createItemDesk,setAllItems,refreshItems,isNew,markAsViewed,containsNew, setOneItem, findOneItem}}>
                 {children}
             </DeskContext.Provider>
         )
