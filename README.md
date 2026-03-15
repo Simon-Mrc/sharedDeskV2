@@ -1,24 +1,29 @@
-> ## ⚠️ `////!!!//// WARNING ////!!!//// AI GENERATED SUMMARY ////!!!//// NOT THAT ACCURATE ////!!!!////`
-> ### *`////!!!//// LAZY ASS ME STILL TAKING IT ////!!!////`*
->
-> So globally it's an accurate resume but structure isn't exactly as described.
-> Backend is way more than 2 tables — Full CRUD for all 4 tables + some other routes designed for specific needs.
->
-> Most inaccurate thing is roadmap :
-> | # | What |
-> |---|------|
-> | #1 | Is gonna be some basic social features |
-> | #2 | Is gonna be all functions for options set up |
-> | #3 | Is gonna make this an all functionnal app with draggable / all social enable |
-> | #4 | Rework back end to add validations and some other middleware i have to think about |
-> | #5 | Is gonna be rework on app globally (css + functions + backend) so it all works flawlessly |
-> | #6 | Is gonna be the big big work : Adding a mailbox system that ll require a new table to be designed so i ll learn about how to face migration and massive db changes issues on a fully functionnal app |
-> | #7 | Stop lazyass commit only on main branch and do separate branch for new features even if i am working on my own |
+>#### UPCOMING FEATURES #####
+>############## GLOBAL LIST NO PARTICULAR ORDER ##################
+ /!\ Unable drag on directly on section for upload file
+ /!\ Show prompt and think about better UX for upload and download
+ /!\ Download several icons and ask for possible extension when upload (ppt, js, css, ts word .... i ll handle this manually i think)
+ /!\ finish all account setting 
+ /!\ Really need to think about duplicate option (maybe just for file to avoid recursion and too many data storage ?)
+ /!\ Rethink global structure around UX 
+ /!\ Poilish all 
+ /!\ 
+
+ ######################## ABSOLUTE MUST DO ##########################
+ /!\ Add mail system now that i have done several migrations shouldn t be too hard
+ /!\ Create a tutorial for new user : This is a must because it s not that intuitive
+
+ ######################### NICE TO HAVE BUT NOT QUITE SURE ########################
+ /!\ Add possibility for user to customize entire interface (color mostly)
+ /!\ Add userName with associated color on sharedDesk ?
+ /!\ Add userName on top of userColor as a little stamp on file creation for download ?
 >
 > Keep in mind that this is a **learning project** — not designed to be professional right away!
 > My main focus tho is to do this **the right way** in order to learn the good practice and industry ways of doing!
 
 ---
+> ## ⚠️ `////!!!//// WARNING ////!!!//// AI GENERATED SUMMARY ////!!!//// NOT THAT ACCURATE ////!!!!////`
+> ### *`////!!!//// LAZY ASS ME STILL TAKING IT ////!!!////`*
 >   ### *`////!!!//// IT STARTS HERE !!! ////!!!////`*
 ---
 # 🖥️ SharedDesk V2
