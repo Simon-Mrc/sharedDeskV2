@@ -47,7 +47,12 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
                 else{
                     item.filePath ? downloadFile(item.id) : setDropArea(true)
                 }
-                if(isFileHighlighted) tutorialContext?.nextStep()
+                if(isFileHighlighted){
+                    tutorialContext?.nextStep()
+                    setTimeout(()=>{
+                        setDropArea(false)
+                    },2500)
+                } 
             }}
        
         onClick={()=>deskContext?.markAsViewed(item.id)}

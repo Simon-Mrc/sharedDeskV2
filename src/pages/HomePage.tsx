@@ -9,8 +9,9 @@ export function HomePage(): JSX.Element {
     const [animation , setAnimation] = useState<string>('hidden');
     const userContext = useContext(UserContext);
     const tutorialContext = useContext(TutorialContext);
-    const [messagePosition, setMessagePosition] = useState<'center'|'top'|'hidden'>('hidden')
-    
+    const [messagePosition, setMessagePosition] = useState<'center'|'top'|'hidden'>('hidden');
+    const [textMessageClass, setTextMessageCLass] = useState<string>('');
+
     useEffect(()=>{
         if(userContext?.logged){
             setAnimation('fadeIn')
@@ -49,7 +50,7 @@ export function HomePage(): JSX.Element {
                     <div className="tutorialOverlay"/>
     
                     {/* floating message */}
-                    <div className={`tutorialMessage ${messagePosition}`}>
+                    <div className={`tutorialMessage ${messagePosition}`} key={tutorialContext.step}>
                         <p className="tutorialMessageText">{tutorialContext.message}</p>
                         {tutorialContext.subMessage && 
                             <p className="tutorialSubMessage">{tutorialContext.subMessage}</p>

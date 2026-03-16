@@ -3,8 +3,6 @@
     position: fixed;
     inset: 0;                /* covers full screen */
     background: rgba(117, 117, 117, 0.6);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -155,12 +153,10 @@
 /* ─── POP IN ANIMATION ─────────────────────────────────────── */
 @keyframes popIn {
     from {
-        filter: blur(1px);
         opacity: 0;
         transform: scale(0.95) translateY(10px);
     }
     to {
-        filter: blur(0px);
         opacity: 1;
         transform: scale(1) translateY(0);
     }

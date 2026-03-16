@@ -240,8 +240,8 @@ export const TUTORIAL_STEPS : TutorialStep[] = [
     {
         step       : 33,
         target     : null,
-        trigger    : {auto:5000},
-        message    : "🖱️ You can also drag and drop directly onto the file icon!",
+        trigger    : {auto:7000},
+        message    : "🖱️ You can also drag and drop directly onto the desk!",
     },
 
     ////////////////////////////// PHASE 7 : OUTRO //////////////////////////////

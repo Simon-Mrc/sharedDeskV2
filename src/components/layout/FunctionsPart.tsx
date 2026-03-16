@@ -17,7 +17,9 @@ export function FunctionsPart():JSX.Element{
     const tutorialContext = useContext(TutorialContext);
     const isHighlighted = (tutorialContext?.currentTarget === 'createDesk' && tutorialContext.isActive);
     const isTreeHighlighted = (tutorialContext?.currentTarget  === 'folderTree' && tutorialContext.isActive);
-    
+    let isConfirmHighlighted = false;
+    if (tutorialContext?.step) {isConfirmHighlighted = tutorialContext?.step>=33 ;}
+
     return(
         <div  style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
             <div className="functionsPart">
@@ -34,7 +36,11 @@ export function FunctionsPart():JSX.Element{
             
             <button id="saveCurrent">💾 Save Desk</button>
             <button id="getLinkBtn">🔗GET LINK</button>
-            <button id="socialBtn" onClick={()=>setSocialMenu(true)}>👥 Friends{userContext?.user?.notif.length!=0 && '🔔'}</button>
+            <button id="socialBtn" 
+            className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
+            onClick={()=>setSocialMenu(true)}>
+                👥 Friends{userContext?.user?.notif.length!=0 && '🔔'}
+            </button>
             {socialMenu &&
             <SocialMenu onClose = {()=> setSocialMenu(false)} />}
             <button 
