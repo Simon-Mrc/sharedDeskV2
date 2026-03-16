@@ -1,7 +1,7 @@
 ############## GLOBAL LIST NO PARTICULAR ORDER ##################
- /!\ Unable drag on directly on section for upload file
+ /!\ 
  /!\ Show prompt and think about better UX for upload and download
- /!\ Download several icons and ask for possible extension when upload (ppt, js, css, ts word .... i ll handle this manually i think)
+ /!\
  /!\ finish all account setting 
  /!\ Really need to think about duplicate option (maybe just for file to avoid recursion and too many data storage ?)
  /!\ Rethink global structure around UX 

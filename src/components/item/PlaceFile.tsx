@@ -5,7 +5,6 @@ import { AccessPromptFile } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { downloadFile, updateFile } from "../../api/file";
 import { TutorialContext } from "../../context/TutorialContext";
-import { getFileIcon } from "../../utils/fileIcons";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -20,8 +19,10 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
     const [dropArea , setDropArea] = useState<boolean>(false);
     const deskContext = useContext(DeskContext);
     const tutorialContext = useContext(TutorialContext);
-    const iconData = getFileIcon(item.name);
-    const Icon = iconData.icon;
+    let ext = '';
+    if (typeof item.filePath === 'string'){
+        ext = item.filePath.split('.').pop()?.toLowerCase()  ?? ''    
+    } 
 
     ///////////////////////////////// TUTORIAL TARGETS ////////////////////////////////////////
     const isFileHighlighted  = tutorialContext?.currentTarget === 'file'
@@ -77,7 +78,7 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
             const rect = e.currentTarget.getBoundingClientRect();
             propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
         }}>
-            <img  src="/icons/file.png" alt="folder"></img>
+            <img  src={`/icons/${ext}.png` || `/icons/${ext}.jpg`} alt="folder"></img>
             <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&
@@ -110,7 +111,6 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
 export function DropArea({onClose,item, isDropHighlighted } : {onClose : ()=>void, item : Item, isDropHighlighted : boolean}) : JSX.Element{
    const [areaClass , setAreaClass] = useState<string>('');
    const deskContext = useContext(DeskContext);
-   const tutorialContext = useContext(TutorialContext);
 
     async function handleUpdate(file : File){
         const itemUpdated = await updateFile(item.id,file);
