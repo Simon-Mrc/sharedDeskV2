@@ -4,6 +4,9 @@ import { UserContext } from "../../context/UserContext";
 import type { Item } from "../../../shared/types";
 import { SectionContext } from "../../context/SectionContext";
 import { updateViewed } from "../../api/item";
+import { TutorialContext } from "../../context/TutorialContext"; 
+import { TUTORIAL_STEPS } from "../../context/TutorialContext"; 
+
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
 export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{
@@ -14,6 +17,23 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
     const [type , setType] = useState<Item['type']>("file");
     const [name , setName] = useState<string>('');
     const [error,setError] = useState<string>('');
+    const tutorialContext = useContext(TutorialContext)
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////TUTORIAL TARGETS /////////////////////////////////////////////////////
+    const currentTrigger = TUTORIAL_STEPS[tutorialContext?.step ?? 0]?.trigger
+    const isFileHighlighted   = tutorialContext?.currentTarget === 'fileButton'
+    const isNoteHighlighted   = tutorialContext?.currentTarget === 'noteButton'
+    const isFolderHighlighted = tutorialContext?.currentTarget === 'folderButton'
+    const isNameHighlighted   = tutorialContext?.currentTarget === 'folderNameInput' 
+                             || tutorialContext?.currentTarget === 'noteNameInput'
+                             || tutorialContext?.currentTarget === 'fileNameInput'
+    const isConfirmHighlighted = tutorialContext?.currentTarget === 'confirmFolder'
+                              || tutorialContext?.currentTarget === 'confirmNote'
+                              || tutorialContext?.currentTarget === 'confirmFile'
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     async function itemHandler(){
         /////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
         ///////////////////////////////LATER CONCERN /////////////////////////////
@@ -30,6 +50,7 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 parentId : sectionContext?.currentSection ?? null  
             });
             newItem && updateViewed(newItem.id);
+            if(isConfirmHighlighted) tutorialContext?.nextStep()
             endwithease();       
         }
         else{
@@ -57,18 +78,54 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
             <button className="popup-close" onClick={endwithease}>✕</button>
             <h2 className="popup-title">New note , file , or folder ?</h2>
             <p className="popup-subtitle">Choose wisely</p>
-            <button onClick={()=> setType('file')}>a file 📑!</button>
-            <button onClick={()=> setType('folder')}>a folder 📁 !</button>
-            <button onClick={()=> setType('note')}>a note 📝!</button>
-            <input className="ModernInput"
-            onChange={(input)=>setName(input.target.value)}
-            placeholder={`Enter your ${type} name`} />
+            <button 
+                className={isFileHighlighted ? 'tutorialHighlight' : ''}
+                onClick={()=>{
+                    setType('file')
+                    if(isFileHighlighted && typeof currentTrigger === 'object') {
+                        // auto steps 9/10/11 advance on their own, no nextStep needed here!
+                    }
+                    if(tutorialContext?.currentTarget === 'fileButton' 
+                        && typeof currentTrigger !== 'object') tutorialContext?.nextStep()
+                }}>
+                a file 📑!
+            </button>
+            <button 
+                className={isFolderHighlighted ? 'tutorialHighlight' : ''}
+                onClick={()=>{
+                    setType('folder')
+                    if(isFolderHighlighted 
+                        && typeof currentTrigger !== 'object') tutorialContext?.nextStep() // ← step 11 → 12
+                }}>
+                a folder 📁 !
+            </button>
+            <button 
+                className={isNoteHighlighted ? 'tutorialHighlight' : ''}
+                onClick={()=>{
+                    setType('note')
+                    if(isNoteHighlighted 
+                        && typeof currentTrigger !== 'object') tutorialContext?.nextStep() // ← step 20 → 21
+                }}>
+                a note 📝!
+            </button>
+            <input 
+                className={`ModernInput ${isNameHighlighted ? 'tutorialHighlight' : ''}`}
+                onChange={(input)=>{
+                    setName(input.target.value)
+                    if(isNameHighlighted) tutorialContext?.nextStep() // ← step 12/21/30 → next on first keystroke
+                }}
+                placeholder={`Enter your ${type} name`} 
+            />
             {error && 
                  <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
                  <span  className="error">{error}</span>
                  </div>
             }
-            <button onClick={()=>itemHandler()}> {`Create your ${type} `}</button>
+            <button 
+                className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
+                onClick={()=>itemHandler()}>
+                {`Create your ${type} `}
+            </button>
         </div>
     </div>
 

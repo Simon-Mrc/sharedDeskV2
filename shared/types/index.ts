@@ -87,6 +87,17 @@ export interface ItemUpdateType {
     deskId : string;
 }
 
+export interface TutorialContextType {
+    isActive: boolean;
+    step: number;
+    currentTarget: string  | null; 
+    message: string;
+    subMessage : string;
+    nextStep: ()=>void       
+    skipTutorial: ()=>void 
+    startTutorial : ()=>void
+}
+
 export interface CreateUserPayload {
     name : string;
     userName : string;

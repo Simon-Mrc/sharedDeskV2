@@ -4,6 +4,7 @@ import { NotAshamedTree } from "./NotAshamedTree";
 import { SocialMenu } from "../social/SocialMenu";
 import { UserContext } from "../../context/UserContext";
 import { SectionContext } from "../../context/SectionContext";
+import { TutorialContext } from "../../context/TutorialContext";
 
 //////////////////  ROOT OF ALL FUNCTION FROM SIDEBAR UPPER PART  //////////////////
 ////////////////// NOT MUCH TO COMMENT ON THO PRETTY CLEAR ITSELF //////////////////
@@ -13,12 +14,21 @@ export function FunctionsPart():JSX.Element{
     const [notAshamedTree , setNotAshamedTree] = useState<boolean>(false);
     const [socialMenu , setSocialMenu] = useState<boolean>(false);
     const sectionContext = useContext(SectionContext);
+    const tutorialContext = useContext(TutorialContext);
+    const isHighlighted = tutorialContext?.currentTarget === 'createDesk';
+    const isTreeHighlighted = tutorialContext?.currentTarget === 'folderTree';
     
     return(
         <div>
             <div className="functionsPart">
             <button id="createUserBtn">📫 Conversations</button>
-            <button onClick={()=>setCreatingPrompt(true)}>➕ New Desk</button>
+            <button 
+                className={isHighlighted ? 'tutorialHighlight' : ''}
+                onClick={()=>{
+                    setCreatingPrompt(true);
+                    if(isHighlighted) tutorialContext?.nextStep()  // ← step 2 → 3
+                }}>
+                ➕ New Desk</button>
             {creatingPrompt && <CreatingDeskPrompt onClose={()=>setCreatingPrompt(false)}/>}
             
             <button id="saveCurrent">💾 Save Desk</button>
@@ -26,7 +36,16 @@ export function FunctionsPart():JSX.Element{
             <button id="socialBtn" onClick={()=>setSocialMenu(true)}>👥 Friends{userContext?.user?.notif.length!=0 && '🔔'}</button>
             {socialMenu &&
             <SocialMenu onClose = {()=> setSocialMenu(false)} />}
-            <button id="shamingTree" className="icon-btn" title="Show Tree" onClick={()=>setNotAshamedTree(!notAshamedTree)}>🌳</button>
+            <button 
+                id="shamingTree" 
+                className={`icon-btn ${isTreeHighlighted ? 'tutorialHighlight' : ''}`} // ← ADD class
+                title="Show Tree" 
+                onClick={()=>{
+                    setNotAshamedTree(!notAshamedTree)
+                    if(isTreeHighlighted) tutorialContext?.nextStep() // ← ADD : step 18 → 19
+                }}>
+                🌳
+            </button>
             {notAshamedTree &&
             <NotAshamedTree 
             onClose = {()=> setNotAshamedTree(false)}

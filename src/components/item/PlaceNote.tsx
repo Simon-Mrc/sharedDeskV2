@@ -5,7 +5,7 @@ import { AccessPromptNote } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { getNoteById, updateNoteContent } from "../../api/note";
 import { UserContext } from "../../context/UserContext";
-
+import { TutorialContext } from "../../context/TutorialContext";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -17,11 +17,19 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
     const [hasAccess , setHasAccess] = useState<boolean>(false);
     const [noteContent , setNoteContent] = useState<boolean>(false);
     const [check , setCheck] = useState<number>(0);
-    const deskContext = useContext(DeskContext)
+    const deskContext = useContext(DeskContext);
+    const tutorialContext = useContext(TutorialContext);
+
+    //////////////////// TUTORIAL TARGETS ///////////////////////////////
+    const isNoteHighlighted     = tutorialContext?.currentTarget === 'note'
+    const isCloseHighlighted    = tutorialContext?.currentTarget === 'closeNote'
+    /////////////////////////////////////////////////////////////////////////////
+
 
     return (
     <div>
-        <div className="icon fadeIn" 
+        <div 
+            className={`icon fadeIn ${isNoteHighlighted ? 'tutorialHighlight' : ''}`}
             id={item.id} 
             draggable = {false}
             style={{left : item.x, top :item.y,
@@ -37,6 +45,7 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
                 else{
                     setNoteContent(true)
                 }
+                if(isNoteHighlighted) tutorialContext?.nextStep()
             }}
         onClick={()=>deskContext?.markAsViewed(item.id)}
         onContextMenu={(e)=>
@@ -85,6 +94,7 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
             onClose = {()=> setNoteContent(false)}
             coord = {coord}
             item = {item}
+            isCloseHighlighted={isCloseHighlighted}
             />
         }
         </div>
@@ -94,12 +104,16 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
 ////////////////// NOTE CONTENT DOM FUNCTION ////////////////// FETCH AND UPDATE CONTENT FROM/TO DB //////////////////
 
 ////////////////// //////////////////
-export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coord : {x:number,y:number} , item : Item}) : JSX.Element{
+export function NoteContent ({onClose, coord, item, isCloseHighlighted} : {onClose : ()=>void , coord : {x:number,y:number} , item : Item, isCloseHighlighted : boolean}) : JSX.Element{
     const [error,setError] = useState<string|null>(null);
     const userContext = useContext(UserContext);
     const deskContext = useContext(DeskContext);
-    const [oldContent , setOldContent] = useState<{userName : string , userColor : string , userContent : string ,date : string}[] |null>(null)
-    const [newcontent , setNewContent] = useState<{userName : string , userColor : string , userContent : string, date : string } |null>(null)
+    const [oldContent , setOldContent] = useState<{userName : string , userColor : string , userContent : string ,date : string}[] |null>(null);
+    const [newcontent , setNewContent] = useState<{userName : string , userColor : string , userContent : string, date : string } |null>(null);
+    const tutorialContext = useContext(TutorialContext);
+    const isContentHighlighted = tutorialContext?.currentTarget === 'noteContent';
+
+
     async function contentInit(){
         const note = await getNoteById(item.id);
         note?.content && setOldContent(JSON.parse(note.content)) 
@@ -153,7 +167,14 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
                 left : coord.x,
                 top : coord.y,
                 position : "relative"}}>
-                <button className="CloseNoteBtn" onClick={endwithease}>✕</button>
+                <button 
+                    className={`CloseNoteBtn ${isCloseHighlighted ? 'tutorialHighlight' : ''}`} 
+                    onClick={()=>{
+                        endwithease()
+                        if(isCloseHighlighted) tutorialContext?.nextStep();
+                    }}>
+                    ✕
+                </button>
                 <h2 className="TitleForNote">{item.name}</h2>
                 {oldContent?.map((object)=>(
                 <div className="OldPart" key={object.date} style={{color : object.userColor}}>     
@@ -162,10 +183,15 @@ export function NoteContent ({onClose, coord, item} : {onClose : ()=>void , coor
                 </div>         
                 ))}
                 {user &&
-                <textarea className="NoteContent"
-                value={newcontent?.userContent ?? '' }
-                 onChange={(input)=>setNewContent({userName : user.userName ,userColor :user.userColor ,  userContent : input.target.value, date : dateNow})}
-                 placeholder="Your imagination is the limite lol"/>
+                <textarea 
+                className={`NoteContent ${isContentHighlighted ? 'tutorialHighlight' : ''}`} 
+                value={newcontent?.userContent ?? ''}
+                onChange={(input)=>{
+                    setNewContent({userName : user.userName, userColor : user.userColor, userContent : input.target.value, date : dateNow})
+                    if(isContentHighlighted) tutorialContext?.nextStep() 
+                }}
+                placeholder="Your imagination is the limite lol"
+            />
                 }
                 {error && 
                  <div className="PopupNote">

@@ -4,6 +4,8 @@ import { SectionContext } from "../../context/SectionContext";
 import { OptionMenu } from "./OptionMenu";
 import { AccessPromptFolder } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
+import { TutorialContext } from "../../context/TutorialContext"; 
+import { TUTORIAL_STEPS } from "../../context/TutorialContext";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -19,11 +21,20 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
     const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
     const [hasAccess , setHasAccess] = useState<boolean>(false);
     const [check , setCheck] = useState<number>(0);
-    const deskContext = useContext(DeskContext)
+    const deskContext = useContext(DeskContext);
+    const tutorialContext = useContext(TutorialContext);
+
+    /////////////////////////////////TUTORIAL TARGETS//////////////////////////////
+    const isHighlighted   = tutorialContext?.currentTarget === 'folder'
+    const currentTrigger  = TUTORIAL_STEPS[tutorialContext?.step ?? 0]?.trigger
+    const isContextStep   = currentTrigger === 'contextmenu'   // step 15
+    const isDblClickStep  = currentTrigger === 'dblclick'      // step 17
+    //////////////////////////////////////////////////////////////////////////////
 
     return (
     <div>
-        <div className="icon fadeIn" 
+        <div 
+            className={`icon fadeIn ${isHighlighted ? 'tutorialHighlight' : ''}`} 
             draggable = {false}
             id={item.id} 
             style={{left : item.x, top :item.y,
@@ -39,6 +50,7 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
                 else{
                     switchSection?.(item.id);updateDepth?.(depth+1)
                 }
+                if(isHighlighted && isDblClickStep) tutorialContext?.nextStep()
             }}
         onClick={()=>deskContext?.markAsViewed(item.id)}
         
@@ -56,6 +68,7 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
                 else{
                     setOptionMenu(true)
                 }
+                if(isHighlighted && isContextStep) tutorialContext?.nextStep()
         }}
         onMouseDown={(e)=>{
             e.preventDefault();

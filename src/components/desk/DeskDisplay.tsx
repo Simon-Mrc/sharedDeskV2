@@ -6,6 +6,7 @@ import { PlaceFolder } from "../item/PlaceFolder";
 import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
 import { PlaceNote } from "../item/PlaceNote";
 import { updateItem } from "../../api/item";
+import { TutorialContext } from "../../context/TutorialContext";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// DESK DISPLAY JSX /////////////////////////
@@ -19,6 +20,8 @@ export function DeskDisplay():JSX.Element{
     const depth  = sectionContext?.depth as number;
     const updateDepth = sectionContext?.updateDepth;
     const [animationClass, setAnimationClass] = useState<"hidden"|"section-enter">("hidden");
+    const tutorialContext = useContext(TutorialContext);
+    const isDeskHighlighted = tutorialContext?.currentTarget === 'deskDisplay'
 ////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
@@ -75,7 +78,12 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
             {Array.from({ length: sectionContext?.depth ?? 0 }).map((_, index) => (
                 <div key={index} className="ranged"/>
             ))}
-            <div className={`desk-column-large ${animationClass}`} onContextMenu={(e)=>{
+            <div className={`desk-column-large ${animationClass} ${isDeskHighlighted ? 'tutorialHighlight' : ''}`}
+                onContextMenu={(e)=>{
+                    e.preventDefault()
+                    if(isDeskHighlighted){
+                        tutorialContext?.nextStep() 
+                    }
                 setShowItemPrompt(true);
                 const rect = e.currentTarget.getBoundingClientRect();
                 setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });

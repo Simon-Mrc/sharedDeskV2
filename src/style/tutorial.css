@@ -1,0 +1,327 @@
+/* ============================================
+   TUTORIAL OVERLAY — blurs and blocks everything
+   ============================================ */
+.tutorialOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1000;
+    pointer-events: all;
+    animation: overlayFadeIn 0.8s ease forwards;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ============================================
+   TUTORIAL MESSAGE CONTAINER
+   starts center, slides to top
+   ============================================ */
+.tutorialMessage {
+    position: fixed;
+    left: 50%;
+    z-index: 1002;
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+
+    /* apple-ish : frosted glass */
+    background: rgba(30, 30, 50, 0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(200, 180, 255, 0.25);
+    border-radius: 20px;
+    padding: 1rem 1.6rem;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* subtle inner light */
+
+    max-width: 380px;
+    width: 85%;
+
+    /* smooth slide from center to top */
+    transition: top 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 1.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.6s ease;
+}
+
+/* ============================================
+   CENTER POSITION — message appears here first
+   ============================================ */
+.tutorialMessage.center {
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    animation: smokeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================
+   TOP POSITION — slides here after 1s
+   ============================================ */
+.tutorialMessage.top {
+    top: 1.2rem;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================
+   HIDDEN — between steps
+   ============================================ */
+.tutorialMessage.hidden {
+    opacity: 0;
+    pointer-events: none;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+/* ============================================
+   SMOKE IN — apple-style appearing from mist
+   ============================================ */
+@keyframes smokeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-42%) scale(0.92);
+        filter: blur(16px);
+    }
+    40% {
+        opacity: 0.7;
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-50%) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* ============================================
+   MESSAGE TEXT — typewriter, apple style
+   ============================================ */
+.tutorialMessageText {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+
+    /* slower, smoother typewriter */
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typewriter 1.6s steps(35) forwards;
+}
+
+@keyframes typewriter {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+}
+
+/* ============================================
+   SUB MESSAGE — fades in after main text
+   ============================================ */
+.tutorialSubMessage {
+    font-size: 0.8rem;
+    color: rgba(200, 180, 255, 0.75);
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+
+    /* delayed fade in */
+    opacity: 0;
+    animation: subFadeIn 0.2s ease 1.2s forwards;  /* starts after typewriter! */
+}
+
+@keyframes subFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+    }
+}
+
+/* ============================================
+   STEP INDICATOR
+   ============================================ */
+.tutorialStepIndicator {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.08em;
+    font-weight: 300;
+}
+
+/* ============================================
+   SKIP BUTTON
+   ============================================ */
+.tutorialSkip {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 0.7rem;
+    font-weight: 400;
+    padding: 3px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 0.2rem;
+    transition: color 0.3s ease,
+                border-color 0.3s ease,
+                background 0.3s ease;
+    box-shadow: none;
+    letter-spacing: 0.05em;
+}
+
+.tutorialSkip:hover {
+    color: rgba(200, 180, 255, 0.9);
+    border-color: rgba(200, 180, 255, 0.4);
+    background: rgba(200, 180, 255, 0.08);
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   HIGHLIGHT — punches element through overlay
+   ============================================ */
+.tutorialHighlight {
+    position: relative;
+    z-index: 1001 !important;
+    pointer-events: all !important;
+    border-radius: 8px;
+    animation: tutorialBounce 1.6s ease infinite !important;
+    /* subtle glow ring */
+    outline: 2px solid rgba(200, 180, 255, 0.5) !important;
+    outline-offset: 3px;
+}
+
+/* ============================================
+   BOUNCE — gentle, slow, apple-ish
+   ============================================ */
+@keyframes tutorialBounce {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 4px 20px rgba(200, 180, 255, 0.2);
+    }
+    50% {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(200, 180, 255, 0.45);
+    }
+}
+
+/* ============================================
+   BOUNCE for .icon elements
+   preserves translate(-50%, -50%) positioning!
+   ============================================ */
+@keyframes tutorialBounceIcon {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(0);
+        box-shadow: 0 4px 20px rgba(200, 180, 255, 0.2);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(-6px);
+        box-shadow: 0 12px 30px rgba(200, 180, 255, 0.45);
+    }
+}
+
+.icon.tutorialHighlight {
+    animation: tutorialBounceIcon 1.6s ease infinite !important;
+}
+
+/* ============================================
+   FIX : elements inside overlays (popups, prompts)
+   need higher z-index to punch through
+   ============================================ */
+.overlay .tutorialHighlight,
+.PopupWithBlurr .tutorialHighlight {
+    z-index: 1003 !important;  /* above tutorialOverlay AND message! */
+}
+
+/* ============================================
+   MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+    .tutorialMessage {
+        max-width: 88vw;
+        padding: 0.9rem 1.2rem;
+    }
+
+    .tutorialMessage.top {
+        top: 0.6rem;
+    }
+
+    .tutorialMessageText {
+        font-size: 0.95rem;
+        white-space: normal;           /* allow wrap on small screens */
+        animation: fadeInMobile 1s ease forwards;  /* typewriter breaks on wrap! */
+    }
+
+    .tutorialSubMessage {
+        font-size: 0.78rem;
+    }
+}
+
+/* replace typewriter with simple fade on mobile */
+@keyframes fadeInMobile {
+    from { opacity: 0; filter: blur(4px); }
+    to   { opacity: 1; filter: blur(0px); }
+}
+
+/* ============================================
+FIX STACKING CONTEXT FOR POPUPS DURING TUTORIAL
+lifts the popup ABOVE the tutorial overlay
+so highlighted elements inside can punch through!
+============================================ */
+.tutorialActive .overlay {
+ z-index: 1001 !important;
+}
+
+.tutorialActive .PopupWithBlurr {
+ z-index: 1002 !important;
+}
+.tutorialActive .PopupWithBlurrOption {
+    z-index: 1002 !important;
+   }
+.tutorialActive .overlay .tutorialHighlight,
+.tutorialActive .PopupWithBlurr .tutorialHighlight {
+ z-index: 1003 !important;
+ position: relative;
+}
+.tutorialActive .overlay .tutorialHighlight,
+.tutorialActive .PopupWithBlurrOption .tutorialHighlight {
+ z-index: 1003 !important;
+ position: relative;
+}
+
+/* ============================================
+   FIX : lift desk-column-large above tutorialOverlay
+   so user can right click it during tutorial
+   without creating a stacking context that traps children!
+   ============================================ */
+.tutorialActive .desk-column-large {
+    position: relative;
+    z-index: 1001 !important;
+}
+
+.tutorialActive .desk-column-large .overlay {
+    z-index: 1002 !important;
+}
+
+.tutorialActive .desk-column-large .PopupWithBlurr {
+    z-index: 1003 !important;
+}
+
+.tutorialActive .desk-column-large .tutorialHighlight {
+    z-index: 1004 !important;
+    position: relative;
+}

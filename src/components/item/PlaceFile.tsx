@@ -1,9 +1,10 @@
 import { useContext, useRef, useState, type JSX } from "react";
 import type { Item } from "../../../shared/types";
 import { OptionMenu } from "./OptionMenu";
-import { AccessPromptFile, AccessPromptNote } from "./../prompts/AccessPrompt";
+import { AccessPromptFile } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { downloadFile, updateFile } from "../../api/file";
+import { TutorialContext } from "../../context/TutorialContext";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -16,11 +17,18 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
     const [hasAccess , setHasAccess] = useState<boolean>(false);
     const [check , setCheck] = useState<number>(0);
     const [dropArea , setDropArea] = useState<boolean>(false);
-    const deskContext = useContext(DeskContext)
+    const deskContext = useContext(DeskContext);
+    const tutorialContext = useContext(TutorialContext);
+
+    ///////////////////////////////// TUTORIAL TARGETS ////////////////////////////////////////
+    const isFileHighlighted  = tutorialContext?.currentTarget === 'file'
+    const isDropHighlighted  = tutorialContext?.currentTarget === 'dropArea'
+    ////////////////////////////////////////////////////////////////////////////////////////
 
     return (
     <div>
-        <div className="icon fadeIn" 
+        <div 
+            className={`icon fadeIn ${isFileHighlighted ? 'tutorialHighlight' : ''}`} 
             draggable = {false}
             id={item.id} 
             style={{left : item.x, top :item.y,
@@ -36,6 +44,7 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
                 else{
                     item.filePath ? downloadFile(item.id) : setDropArea(true)
                 }
+                if(isFileHighlighted) tutorialContext?.nextStep()
             }}
        
         onClick={()=>deskContext?.markAsViewed(item.id)}
@@ -83,16 +92,19 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
         {dropArea &&
             <DropArea 
             onClose = {()=>{setDropArea(false)}}
-            item = {item} />
+            item = {item}
+            isDropHighlighted={isDropHighlighted} />
         }
         </div>
     )
 }
 
 ///////////////////////////////// DROP AREA JSX FUNCTION ////////////////////////
-export function DropArea({onClose,item} : {onClose : ()=>void, item : Item}) : JSX.Element{
+export function DropArea({onClose,item, isDropHighlighted } : {onClose : ()=>void, item : Item, isDropHighlighted : boolean}) : JSX.Element{
    const [areaClass , setAreaClass] = useState<string>('');
    const deskContext = useContext(DeskContext);
+   const tutorialContext = useContext(TutorialContext);
+
     async function handleUpdate(file : File){
         const itemUpdated = await updateFile(item.id,file);
         itemUpdated ? deskContext?.setOneItem(itemUpdated) : 
@@ -117,7 +129,9 @@ export function DropArea({onClose,item} : {onClose : ()=>void, item : Item}) : J
     ////////////////////////////////////////////////////////////////////////////////
     return(
         <div className={`overlay ${animation}`} onClick={endwithease}>
-            <div className={`dropArea ${areaClass}`} onClick={(e)=>{e.stopPropagation()}}
+            <div 
+            className={`dropArea ${areaClass} ${isDropHighlighted ? 'tutorialHighlight' : ''}`}
+            onClick={(e)=>{e.stopPropagation()}}
             onDragOver={(e)=>{
                 e.preventDefault();
                 setAreaClass('highlighted')
