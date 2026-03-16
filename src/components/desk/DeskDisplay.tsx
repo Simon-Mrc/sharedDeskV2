@@ -7,6 +7,7 @@ import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
 import { PlaceNote } from "../item/PlaceNote";
 import { updateItem } from "../../api/item";
 import { TutorialContext } from "../../context/TutorialContext";
+import { CreateFilePrompt } from "../prompts/CreateFilePrompt";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// DESK DISPLAY JSX /////////////////////////
@@ -21,7 +22,7 @@ export function DeskDisplay():JSX.Element{
     const updateDepth = sectionContext?.updateDepth;
     const [animationClass, setAnimationClass] = useState<"hidden"|"section-enter">("hidden");
     const tutorialContext = useContext(TutorialContext);
-    const isDeskHighlighted = tutorialContext?.currentTarget === 'deskDisplay'
+    const isDeskHighlighted = tutorialContext?.currentTarget === 'deskDisplay';
 ////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
@@ -49,6 +50,7 @@ export function DeskDisplay():JSX.Element{
 const [offCoord,setOffCoord] = useState<{X : number,Y:number}>({X : 0 , Y : 0});
 const [itemId, setItemId] = useState<string>('');
 const [isDragging , setIsDragging] = useState<boolean>(false);
+const [areaClass , setAreaClass] = useState<string>('');
 
 async function udpdateHandler(itemToDbId : string) : Promise<void>{
     const itemToDb = deskContext?.findOneItem(itemToDbId);
@@ -70,6 +72,11 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
     setOffCoord(offCoord);
     setIsDragging(true);
 }
+////////////////DRAG FOR DOWNLOAD HERE ///////////////////////////
+
+const [showFilePrompt,setShowFilePrompt] = useState<boolean>(false);
+const [error,setError] = useState<string>('');
+const [fileContent , setFileContent] = useState<File|null>(null)
 //////////////////  JSX ELEMENT  //////////   EMPTY ARRAY TRICK FOR DEPTH UPDATES   //////////////////////////
 /////////////////// getBoundingClientRect() for mouse positionning not depending on parent //////////////////
     return(
@@ -78,8 +85,24 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
             {Array.from({ length: sectionContext?.depth ?? 0 }).map((_, index) => (
                 <div key={index} className="ranged"/>
             ))}
-            <div className={`desk-column-large ${animationClass} ${isDeskHighlighted ? 'tutorialHighlight' : ''}`}
-                
+            <div className={`desk-column-large ${animationClass} ${areaClass} ${isDeskHighlighted ? 'tutorialHighlight' : ''}`}
+                // Drag for upload part
+                onDragOver={(e)=>{
+                    e.preventDefault();
+                    setAreaClass('highlighted')
+                }}
+                onDragLeave={()=>{
+                    setAreaClass('');
+                }}
+                onDrop={(e)=>{
+                    e.preventDefault();
+                    setAreaClass('');
+                    e.dataTransfer.files[0]!=null && setFileContent(e.dataTransfer.files[0])
+                    setShowFilePrompt(true);
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
+                }}
+                //////////////////////////////
                 onContextMenu={(e)=>{
                     e.preventDefault()
                     if(isDeskHighlighted){
@@ -90,6 +113,7 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
                 setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
                 e.preventDefault()
                 }}
+                // Drag file handler here
                 onMouseMove={(e)=>{
                     const rect = e.currentTarget.getBoundingClientRect();
                     isDragging &&
@@ -100,12 +124,21 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
                     udpdateHandler(itemId);
                 }}
                 >
+                    {error &&
+                    <span  className="errorDropZOne">{error}</span>
+                   }
                     {sectionContext?.currentSection &&
                     <button style={tutorialContext?.isActive ? { pointerEvents: "none" } : {} }onClick={()=>goBack()}>←</button>}
                     {showItemPrompt &&
-                <CreateItemPrompt 
-                onClose = {()=>setShowItemPrompt(false)}
-                coord =  {coord}/>
+                    <CreateItemPrompt 
+                    onClose = {()=>setShowItemPrompt(false)}
+                    coord =  {coord} />
+                    }
+                    {showFilePrompt &&
+                    <CreateFilePrompt 
+                    onClose = {()=>setShowFilePrompt(false)}
+                    coord =  {coord}
+                    fileContent = {fileContent}/>
                     }
             {arrayOfItem.map((item)=>(
                 item.type === 'folder'

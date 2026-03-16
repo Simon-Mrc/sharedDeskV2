@@ -3,6 +3,8 @@ import { Sidebar } from "../components/layout/Sidebar";
 import { DeskDisplay } from "../components/desk/DeskDisplay";
 import { UserContext } from "../context/UserContext";
 import { TutorialContext } from "../context/TutorialContext";
+import type { Desk } from "../../shared/types";
+import { DeskContext } from "../context/DeskContext";
 
 //////// HOME PAGE YOU DON T SAY //////////////
 export function HomePage(): JSX.Element {
@@ -10,7 +12,7 @@ export function HomePage(): JSX.Element {
     const userContext = useContext(UserContext);
     const tutorialContext = useContext(TutorialContext);
     const [messagePosition, setMessagePosition] = useState<'center'|'top'|'hidden'>('hidden');
-    const [textMessageClass, setTextMessageCLass] = useState<string>('');
+    const deskContext = useContext(DeskContext)
 
     useEffect(()=>{
         if(userContext?.logged){
@@ -21,8 +23,7 @@ export function HomePage(): JSX.Element {
     },[userContext?.logged])
 
     useEffect(()=>{
-        const tutorialDone = localStorage.getItem(`tutorial_${userContext?.user?.id}`);
-        if(userContext?.user && !tutorialDone){
+        if(userContext?.user && deskContext?.desks?.length===0){
             tutorialContext?.startTutorial();
         }
     },[userContext?.user?.id])

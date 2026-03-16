@@ -81,19 +81,19 @@ export const TUTORIAL_STEPS : TutorialStep[] = [
     {
         step       : 9,
         target     : 'fileButton',
-        trigger    : {auto:3000},
+        trigger    : {auto:4500},
         message    : "📑 A file...",
     },
     {
         step       : 10,
         target     : 'noteButton',
-        trigger    : {auto:3000},
+        trigger    : {auto:4500},
         message    : "📝 A note...",
     },
     {
         step       : 11,
         target     : 'folderButton',
-        trigger    : {auto:3000},
+        trigger    : {auto:4500},
         message    : "📁 Or a folder!",
         submessage : "Let's create one! Click on folder!"
     },
@@ -114,7 +114,7 @@ export const TUTORIAL_STEPS : TutorialStep[] = [
     {
         step       : 14,
         target     : null,
-        trigger    : {auto:1500},
+        trigger    : {auto:4500},
         message    : "🎉 There it is!",
         submessage : "Like a real computer, you can right click it to see options!"
     },
@@ -300,13 +300,11 @@ export function TutorialProvider({children} : {children : ReactNode}){
     }
 
     function startTutorial(){
-        console.log('startTutorial called!')  // ← does this even fire?
-        setStep(0)
-        setCurrentTarget(TUTORIAL_STEPS[0].target ?? null)
-        setMessage(TUTORIAL_STEPS[0].message)
-        setSubMessage(TUTORIAL_STEPS[0].submessage ?? '')
-        setIsActive(true)
-        console.log('isActive should be true now')
+        setStep(0);
+        setCurrentTarget(TUTORIAL_STEPS[0].target ?? null);
+        setMessage(TUTORIAL_STEPS[0].message);
+        setSubMessage(TUTORIAL_STEPS[0].submessage ?? '');
+        setIsActive(true);
     }
 
     return(

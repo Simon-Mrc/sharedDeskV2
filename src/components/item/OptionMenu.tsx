@@ -67,7 +67,7 @@ export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord 
                 <button >duplicate!</button>
                 {/* {duplicatePrompt &&
                 <DuplicatePrompt onClose = {()=> setDuplicatePrompt(false)} />} */}
-                <button  className={`popup-closeOption" ${isHighlighted ? 'tutorialHighlight' : ''}`} 
+                <button  className={`popup-closeOption ${isHighlighted ? 'tutorialHighlight' : ''}`} 
                 onClick={()=>{
                     tutorialContext?.isActive ?
                     tutorialContext?.nextStep() : endwithease()  ; 
