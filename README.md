@@ -1,150 +1,188 @@
-> ## ⚠️ `////!!!//// WARNING ////!!!//// AI GENERATED SUMMARY ////!!!//// NOT THAT ACCURATE ////!!!!////`
-> ### *`////!!!//// LAZY ASS ME STILL TAKING IT ////!!!////`*
->
-> So globally it's an accurate resume but structure isn't exactly as described.
-> Backend is way more than 2 tables — Full CRUD for all 4 tables + some other routes designed for specific needs.
->
-> Most inaccurate thing is roadmap :
-> | # | What |
-> |---|------|
-> | #1 | Is gonna be some basic social features |
-> | #2 | Is gonna be all functions for options set up |
-> | #3 | Is gonna make this an all functionnal app with draggable / all social enable |
-> | #4 | Rework back end to add validations and some other middleware i have to think about |
-> | #5 | Is gonna be rework on app globally (css + functions + backend) so it all works flawlessly |
-> | #6 | Is gonna be the big big work : Adding a mailbox system that ll require a new table to be designed so i ll learn about how to face migration and massive db changes issues on a fully functionnal app |
-> | #7 | Stop lazyass commit only on main branch and do separate branch for new features even if i am working on my own |
->
+> [!NOTE]
 > Keep in mind that this is a **learning project** — not designed to be professional right away!
-> My main focus tho is to do this **the right way** in order to learn the good practice and industry ways of doing!
+> My main focus though is to do this **the right way** in order to learn the good practices and industry ways of doing!
 
 ---
+
+## 🚀 Upcoming Features
+### 🌐 Global List
+
+- [ ] Unable to drag directly on section for file upload
+- [ ] Show prompt and think about better UX for upload and download
+- [ ] Download several icons and ask for possible extension when uploading *(ppt, js, css, ts, word ... — will handle manually)*
+- [ ] Finish all account settings
+- [ ] Really need to think about duplicate option *(maybe just for files to avoid recursion and too much data storage?)*
+- [ ] Rethink global structure around UX
+- [ ] Polish everything
+
+---
+
+### 🔴 Absolute Must Do
+
+- [ ] Add mail system — now that several migrations are done, shouldn't be too hard
+- [ ] Create a tutorial for new users — **this is a must** because it's not that intuitive
+
+---
+
+### 💡 Nice to Have *(but not quite sure)*
+
+- [ ] Add possibility for users to customize the entire interface *(colors mostly)*
+- [ ] Add userName with associated color on sharedDesk
+- [ ] Add userName on top of userColor as a little stamp on file creation for download
+
+---
+> ## ⚠️ `////!!!//// WARNING ////!!!//// AI GENERATED SUMMARY ////!!!////*
 >   ### *`////!!!//// IT STARTS HERE !!! ////!!!////`*
 ---
-# 🖥️ SharedDesk V2
+# 🖥️ SharedDesk
 
-A browser-based desktop experience — organize your files and folders in a visual workspace, share desks with friends, and collaborate!
+A collaborative virtual desktop application where users can create shared workspaces ("desks"), place files, notes and folders on them, and collaborate in real time with access control and notifications.
+Mostly think for friends and family to who just want to share pictures and stuff in a nice UI with nice UX. can be usefull for small team work and student group projects.
 
 ---
 
-## ✨ Features
+## 🚀 Features
 
-- 🗂️ **Visual Desktop** — place files and folders freely on your desk
-- 📁 **Navigable Folders** — double click to enter, back button to exit
-- 🖱️ **Context Menu** — right click on desk to create items, right click on items to rename, delete, or set a password
-- 🎨 **User Colors** — each user has a color reflected on their created items
-- 👥 **Social Features** *(in progress)* — add friends, share desks, manage access roles
-- 🔐 **Auth** — secure password hashing with bcrypt
+- 📁 **Virtual Desks** — Create and manage workspaces with drag-and-drop item placement
+- 📝 **Collaborative Notes** — Multi-user notes with auto-save, history, and per-user color attribution
+- 📂 **File Upload / Download** — Attach files to items, store them on disk, download with one double-click
+- 🔒 **Password Protection** — Lock any item (file, note, folder) behind a password
+- 👥 **Access Control** — Invite users to desks, manage access types (admin / read)
+- ✨ **New Item Notifications** — Visual indicators when items have been modified since your last visit
+- 🎨 **User Color** — Each user gets a color that follows their created items
+- 🗂️ **Folders & Sections** — Navigate through nested folders with animated transitions
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer      | Technology                        |
-|------------|-----------------------------------|
-| Frontend   | React + TypeScript + Vite         |
-| Backend    | Node.js + Express + TypeScript    |
-| Database   | SQLite (better-sqlite3)           |
-| Auth       | bcrypt                            |
-| Dev tools  | Nodemon, ESLint                   |
+### Frontend
+| Tool | Usage |
+|------|-------|
+| React + TypeScript | UI framework |
+| Vite | Dev server & bundler |
+| CSS modules (custom) | Styling — no UI library |
+| Fetch API | HTTP calls |
+
+### Backend
+| Tool | Usage |
+|------|-------|
+| Node.js + Express | REST API server |
+| TypeScript | Type safety |
+| better-sqlite3 | Embedded SQLite database |
+| Multer | File upload handling (memory storage) |
+| bcrypt | Password hashing |
+| jsonwebtoken | Auth via JWT |
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure Overview (not all of it : tried to ls all and ask chatgpt to comput the organisation but he struggled it seems)
 
 ```
-sharedDeskV2/
-├── backend/          # Express API + SQLite DB
-├── src/              # React frontend
-│   ├── context/      # SectionContext, DeskContext, UserContext
-│   └── components/   # DeskDisplay, PlaceFile, PlaceFolder, OptionMenu...
-├── shared/           # Shared TypeScript types (frontend + backend)
-├── public/           # Static assets (icons...)
-├── index.html
-├── vite.config.ts
-└── package.json
+v2-sharedDesk/
+├── shared/
+│   └── types/              # Shared TypeScript types (Item, Desk, User...)
+├── backend/
+│   ├── src/
+│   │   ├── controllers/    # Route logic (desk, item, note, file, user...)
+│   │   ├── routes/         # Express routers
+│   │   ├── middleware/      # Auth (JWT) + validation stubs
+│   │   ├── services/       # fileService (save/delete files on disk)
+│   │   ├── db/             # better-sqlite3 database setup
+│   │   └── index.ts        # Entry point
+│   └── uploads/            # Stored files (per desk subfolder)
+└── src/                    # Frontend
+    ├── api/                # Fetch API calls (user, desk, item, note, file...)
+    ├── components/
+    │   ├── item/           # PlaceFile, PlaceFolder, PlaceNote
+    │   └── prompts/        # CreateItemPrompt, OptionMenu, AccessPrompt, DropArea
+    ├── context/            # DeskContext, UserContext, SectionContext
+    └── assets/css/         # All CSS files (modular, no UI library)
 ```
 
 ---
 
-## 🚀 Getting Started
+## ⚙️ Setup
 
 ### Prerequisites
-- Node.js >= 18
+- Node.js 18+
 - npm
 
-### Installation
+### Install
 
 ```bash
-# Clone the repo
-git clone https://github.com/Simon-Mrc/sharedDeskV2.git
-cd sharedDeskV2
-
-# Install dependencies
+# Install frontend dependencies
 npm install
+
+# Install backend dependencies
+cd backend && npm install
 ```
 
-### Run in development
+### Environment
+
+Create `backend/.env` :
+```env
+JWT_SECRET= ******
+PORT=3000
+```
+
+### Run
 
 ```bash
-# Run frontend + backend together
+# Start backend
+cd backend && npm run dev
+
+# Start frontend (separate terminal)
 npm run dev
 ```
 
-> Frontend runs on `http://localhost:5173`
-> Backend runs on `http://localhost:3000`
+Frontend runs on `http://localhost:5173`  
+Backend runs on `http://localhost:3000`
 
 ---
 
-## 🗄️ Database Schema
+## 🔑 Auth
 
-```sql
--- Users
-CREATE TABLE users (
-    id          TEXT PRIMARY KEY,
-    name        TEXT NOT NULL,
-    userName    TEXT NOT NULL UNIQUE,
-    mail        TEXT NOT NULL,
-    accountType TEXT DEFAULT 'user',   -- 'admin' | 'user' | 'premium'
-    friendList  TEXT DEFAULT '[]',
-    notif       TEXT DEFAULT '[]',
-    userColor   TEXT DEFAULT '#FF5733',
-    password    TEXT NOT NULL
-);
-
--- Items (files & folders)
-CREATE TABLE items (
-    id           TEXT PRIMARY KEY,
-    name         TEXT NOT NULL,
-    type         TEXT NOT NULL,        -- 'file' | 'folder'
-    x            REAL NOT NULL,
-    y            REAL NOT NULL,
-    parentId     TEXT,                 -- null = root of desk
-    deskId       TEXT NOT NULL,
-    userId       TEXT NOT NULL,
-    creatorColor TEXT DEFAULT '#FF5733',
-    password     TEXT                  -- optional folder protection
-);
-```
+All protected routes require a `Bearer` token in the `Authorization` header.  
+Token is obtained via `POST /users/login` and stored in `localStorage`.
 
 ---
 
-## 🗺️ Roadmap
+## 📡 API  NOTABLE ONES Overview (7tables for now with 30 more or so custom routes including CRUD for most important ones)
 
-- [x] Visual desk with draggable items
-- [x] Navigable folder system with animations
-- [x] Right click context menu on items
-- [ ] Rename / Delete / Password protect items
-- [ ] Duplicate items (recursive with new ids)
-- [ ] Friend system (add, invite to desk)
-- [ ] Shared desks with role-based access (`viewer` | `editor`)
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | `/users/login` | Login, returns JWT |
+| POST | `/users` | Register |
+| GET | `/desks/user` | Get all desks for current user |
+| POST | `/desks` | Create a desk |
+| GET | `/items/desks/:deskId` | Get all items for a desk |
+| POST | `/items` | Create an item |
+| POST | `/notes` | Create a note |
+| GET | `/notes/:itemId` | Get note content |
+| POST | `/files/upload` | Upload a file (multipart/form-data) |
+| GET | `/files/download/:id` | Download a file |
+| PATCH | `/files/:id` | Attach a file to existing item |
+| DELETE | `/files/:id` | Delete a file and its item |
+| POST | `/deskAccess/:deskId` | Invite a user to a desk |
 
 ---
 
-## 👤 Author
+**Why no UI library?**  
+100% custom CSS.Good learning exercise and full visual control.
 
-**Simon** — [@Simon-Mrc](https://github.com/Simon-Mrc)
+**File storage on disk for now**  
+
+**DB Transactions**
 
 ---
 
-*Project built from scratch as a learning project — React, TypeScript, Express, SQLite all in one! 🚀*
+## 🚧 Known Limitations / TODO
+
+- [ ] Zod validation on all routes 
+- [ ] WebSockets for real-time chaet
+- [ ] File type restrictions and size limits on upload
+- [ ] Proper error messages on the frontend
+- [ ] Tests
+
+---
