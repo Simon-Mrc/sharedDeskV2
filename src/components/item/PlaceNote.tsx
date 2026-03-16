@@ -27,7 +27,7 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
 
 
     return (
-    <div>
+    <div style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
         <div 
             className={`icon fadeIn ${isNoteHighlighted ? 'tutorialHighlight' : ''}`}
             id={item.id} 

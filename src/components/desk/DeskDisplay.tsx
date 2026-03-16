@@ -73,12 +73,13 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
 //////////////////  JSX ELEMENT  //////////   EMPTY ARRAY TRICK FOR DEPTH UPDATES   //////////////////////////
 /////////////////// getBoundingClientRect() for mouse positionning not depending on parent //////////////////
     return(
-      <div className="centerDisplayed">
+      <div className="centerDisplayed" style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
         <div className="globalHome">
             {Array.from({ length: sectionContext?.depth ?? 0 }).map((_, index) => (
                 <div key={index} className="ranged"/>
             ))}
             <div className={`desk-column-large ${animationClass} ${isDeskHighlighted ? 'tutorialHighlight' : ''}`}
+                
                 onContextMenu={(e)=>{
                     e.preventDefault()
                     if(isDeskHighlighted){
@@ -100,7 +101,7 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
                 }}
                 >
                     {sectionContext?.currentSection &&
-                    <button className="back-btn" onClick={()=>goBack()}>←</button>}
+                    <button style={tutorialContext?.isActive ? { pointerEvents: "none" } : {} }onClick={()=>goBack()}>←</button>}
                     {showItemPrompt &&
                 <CreateItemPrompt 
                 onClose = {()=>setShowItemPrompt(false)}

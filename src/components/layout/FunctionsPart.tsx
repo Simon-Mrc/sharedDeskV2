@@ -15,14 +15,15 @@ export function FunctionsPart():JSX.Element{
     const [socialMenu , setSocialMenu] = useState<boolean>(false);
     const sectionContext = useContext(SectionContext);
     const tutorialContext = useContext(TutorialContext);
-    const isHighlighted = tutorialContext?.currentTarget === 'createDesk';
-    const isTreeHighlighted = tutorialContext?.currentTarget === 'folderTree';
+    const isHighlighted = (tutorialContext?.currentTarget === 'createDesk' && tutorialContext.isActive);
+    const isTreeHighlighted = (tutorialContext?.currentTarget  === 'folderTree' && tutorialContext.isActive);
     
     return(
-        <div>
+        <div  style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
             <div className="functionsPart">
             <button id="createUserBtn">📫 Conversations</button>
-            <button 
+            <button
+                style={tutorialContext?.isActive ? { pointerEvents: "all" } : {}} 
                 className={isHighlighted ? 'tutorialHighlight' : ''}
                 onClick={()=>{
                     setCreatingPrompt(true);

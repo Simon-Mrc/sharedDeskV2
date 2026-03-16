@@ -55,7 +55,10 @@ export function CreatingDeskPrompt({onClose} :{onClose : ()=>void}):JSX.Element{
                     className={`ModernInput ${inputAnimation} ${isInputHighlighted ? 'tutorialHighlight' : ''}`}
                     onChange={(input)=>{
                         setInput(input.target.value)
-                        if(isInputHighlighted) tutorialContext?.nextStep()  // ← step 3 → 4
+                        setTimeout(()=>{
+                            if(isInputHighlighted) tutorialContext?.nextStep()  // ← step 3 → 4
+
+                        },1000)
                     }}
                     placeholder="Enter a name for new desk"/>
                  {error && 

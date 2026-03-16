@@ -5,6 +5,7 @@ import { AccessPromptFile } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { downloadFile, updateFile } from "../../api/file";
 import { TutorialContext } from "../../context/TutorialContext";
+import { getFileIcon } from "../../utils/fileIcons";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -19,6 +20,8 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
     const [dropArea , setDropArea] = useState<boolean>(false);
     const deskContext = useContext(DeskContext);
     const tutorialContext = useContext(TutorialContext);
+    const iconData = getFileIcon(item.name);
+    const Icon = iconData.icon;
 
     ///////////////////////////////// TUTORIAL TARGETS ////////////////////////////////////////
     const isFileHighlighted  = tutorialContext?.currentTarget === 'file'
@@ -69,8 +72,7 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
             const rect = e.currentTarget.getBoundingClientRect();
             propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
         }}>
-
-            <img  src="/icons/file.png" alt="file"></img>
+            <img  src="/icons/file.png" alt="folder"></img>
             <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&

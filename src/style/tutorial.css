@@ -42,8 +42,6 @@
         0 4px 24px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* subtle inner light */
 
-    max-width: 380px;
-    width: 85%;
 
     /* smooth slide from center to top */
     transition: top 1.5s cubic-bezier(0.4, 0, 0.2, 1),
@@ -54,30 +52,38 @@
 /* ============================================
    CENTER POSITION — message appears here first
    ============================================ */
-.tutorialMessage.center {
+   .tutorialMessage.center {
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
-    animation: smokeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: smokeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transition: none !important; /* ← no transition on appear, only smokeIn! */
 }
 
 /* ============================================
    TOP POSITION — slides here after 1s
    ============================================ */
-.tutorialMessage.top {
+   .tutorialMessage.top {
     top: 1.2rem;
     transform: translateX(-50%) translateY(0);
+    transition: top 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.6s ease; /* ← transition ONLY on .top not on base! */
 }
+
 
 /* ============================================
    HIDDEN — between steps
    ============================================ */
-.tutorialMessage.hidden {
+   .tutorialMessage.hidden {
     opacity: 0;
     pointer-events: none;
     top: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%); /* ← ADD THIS! was missing! */
+    transition: none !important; /* ← no transition when resetting to hidden! */
 }
 
+/* style={{ pointerEvents: "none" }} */
 /* ============================================
    SMOKE IN — apple-style appearing from mist
    ============================================ */
@@ -244,7 +250,7 @@
    ============================================ */
 .overlay .tutorialHighlight,
 .PopupWithBlurr .tutorialHighlight {
-    z-index: 1003 !important;  /* above tutorialOverlay AND message! */
+    z-index: 1004 !important;  /* above tutorialOverlay AND message! */
 }
 
 /* ============================================
@@ -283,25 +289,23 @@ lifts the popup ABOVE the tutorial overlay
 so highlighted elements inside can punch through!
 ============================================ */
 .tutorialActive .overlay {
- z-index: 1001 !important;
+    z-index: 1005 !important; /* ← highest! sidebar popups always on top */
 }
 
 .tutorialActive .PopupWithBlurr {
- z-index: 1002 !important;
+    z-index: 1006 !important;
 }
 .tutorialActive .PopupWithBlurrOption {
-    z-index: 1002 !important;
-   }
-.tutorialActive .overlay .tutorialHighlight,
-.tutorialActive .PopupWithBlurr .tutorialHighlight {
- z-index: 1003 !important;
- position: relative;
+    z-index: 1006 !important;
 }
 .tutorialActive .overlay .tutorialHighlight,
+.tutorialActive .PopupWithBlurr .tutorialHighlight,
 .tutorialActive .PopupWithBlurrOption .tutorialHighlight {
- z-index: 1003 !important;
- position: relative;
+    z-index: 1007 !important;
+    position: relative;
 }
+
+
 
 /* ============================================
    FIX : lift desk-column-large above tutorialOverlay
@@ -324,4 +328,11 @@ so highlighted elements inside can punch through!
 .tutorialActive .desk-column-large .tutorialHighlight {
     z-index: 1004 !important;
     position: relative;
+}
+
+/* ============================================
+   tutorial message always on top of everything!
+   ============================================ */
+.tutorialMessage {
+    z-index: 1010 !important; /* ← nothing beats the message! */
 }

@@ -22,15 +22,15 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////TUTORIAL TARGETS /////////////////////////////////////////////////////
     const currentTrigger = TUTORIAL_STEPS[tutorialContext?.step ?? 0]?.trigger
-    const isFileHighlighted   = tutorialContext?.currentTarget === 'fileButton'
-    const isNoteHighlighted   = tutorialContext?.currentTarget === 'noteButton'
-    const isFolderHighlighted = tutorialContext?.currentTarget === 'folderButton'
-    const isNameHighlighted   = tutorialContext?.currentTarget === 'folderNameInput' 
-                             || tutorialContext?.currentTarget === 'noteNameInput'
-                             || tutorialContext?.currentTarget === 'fileNameInput'
-    const isConfirmHighlighted = tutorialContext?.currentTarget === 'confirmFolder'
-                              || tutorialContext?.currentTarget === 'confirmNote'
-                              || tutorialContext?.currentTarget === 'confirmFile'
+    const isFileHighlighted   = (tutorialContext?.currentTarget === 'fileButton') && tutorialContext.isActive;
+    const isNoteHighlighted   = (tutorialContext?.currentTarget === 'noteButton') && tutorialContext.isActive;
+    const isFolderHighlighted = tutorialContext?.currentTarget === 'folderButton' && tutorialContext.isActive;
+    const isNameHighlighted   = (tutorialContext?.currentTarget === 'folderNameInput' && tutorialContext.isActive)
+                             || (tutorialContext?.currentTarget === 'noteNameInput' && tutorialContext.isActive)
+                             || (tutorialContext?.currentTarget === 'fileNameInput' && tutorialContext.isActive)
+    const isConfirmHighlighted = (tutorialContext?.currentTarget === 'confirmFolder' && tutorialContext.isActive)
+                              || (tutorialContext?.currentTarget === 'confirmNote' && tutorialContext.isActive) 
+                              || (tutorialContext?.currentTarget === 'confirmFile' && tutorialContext.isActive);
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +73,7 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
+    <div className={`overlay ${animation}`} onClick={()=>endwithease()} style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
         <div className="PopupWithBlurr" onClick={(e)=>e.stopPropagation()}>
             <button className="popup-close" onClick={endwithease}>✕</button>
             <h2 className="popup-title">New note , file , or folder ?</h2>
@@ -112,7 +112,9 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 className={`ModernInput ${isNameHighlighted ? 'tutorialHighlight' : ''}`}
                 onChange={(input)=>{
                     setName(input.target.value)
-                    if(isNameHighlighted) tutorialContext?.nextStep() // ← step 12/21/30 → next on first keystroke
+                    if(isNameHighlighted && (tutorialContext.step === 11)) {setType('folder'); tutorialContext?.nextStep()}
+                    if(isNameHighlighted && (tutorialContext.step === 20)) {setType('note'); tutorialContext?.nextStep()}
+                    if(isNameHighlighted && (tutorialContext.step != 11 && tutorialContext.step != 20)) {setType('file'); tutorialContext?.nextStep()} // ← step 12/21/30 → next on first keystroke
                 }}
                 placeholder={`Enter your ${type} name`} 
             />

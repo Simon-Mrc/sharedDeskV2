@@ -127,7 +127,7 @@ export const TUTORIAL_STEPS : TutorialStep[] = [
     {
         step       : 16,
         target     : null,
-        trigger    : {auto:5000},
+        trigger    : 'click',
         message    : "👀 You'll discover all these options later!",
     },
     {
@@ -295,6 +295,8 @@ export function TutorialProvider({children} : {children : ReactNode}){
     
     function skipTutorial(){
         setIsActive(false);
+        setStep(1000);
+        setCurrentTarget('');
     }
 
     function startTutorial(){

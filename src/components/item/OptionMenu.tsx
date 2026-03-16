@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import type { Item } from "../../../shared/types"
 import { NamePrompt, PasswordPrompt, DeletePrompt } from "./../prompts/OptionPrompts";
+import { TutorialContext } from "../../context/TutorialContext";
 
 ////////////////////////////////////BIG ONE HERE OPTION MENU FOR FILES AND FOLDERS ////////////////////////////////////
 ////////////////////////////USE EFFECT FOR ARRAY OF TRUTH ACTUALLY NOT NEEDED FOR NOW ////////////////////////////////////
@@ -11,6 +12,9 @@ export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord 
     const [passwordPrompt , setPasswordPrompt] = useState<boolean>(false);
     const [duplicatePrompt , setDuplicatePrompt] = useState<boolean>(false);
     const [hidden,setHidden] = useState<string>('');
+    const tutorialContext = useContext(TutorialContext);
+    const isHighlighted = (tutorialContext?.step === 15 && tutorialContext.isActive);
+
     useEffect(()=>{
         const arrayOfTruth = [namePrompt,deletePrompt,passwordPrompt,duplicatePrompt];
         if (arrayOfTruth.includes(true)){
@@ -63,7 +67,13 @@ export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord 
                 <button >duplicate!</button>
                 {/* {duplicatePrompt &&
                 <DuplicatePrompt onClose = {()=> setDuplicatePrompt(false)} />} */}
-                <button className="popup-closeOption" onClick={endwithease}>✕</button>
+                <button  className={`popup-closeOption" ${isHighlighted ? 'tutorialHighlight' : ''}`} 
+                onClick={()=>{
+                    tutorialContext?.isActive ?
+                    tutorialContext?.nextStep() : endwithease()  ; 
+                    endwithease()
+                }}
+                    >✕</button>
             </div>
         </div>
     )

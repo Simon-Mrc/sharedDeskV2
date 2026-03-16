@@ -11,6 +11,7 @@
  ######################## ABSOLUTE MUST DO ##########################
  /!\ Add mail system now that i have done several migrations shouldn t be too hard
  /!\ Create a tutorial for new user : This is a must because it s not that intuitive
+ Fix tutorial 9/10/11 well almost every step
 
  ######################### NICE TO HAVE BUT NOT QUITE SURE ########################
  /!\ Add possibility for user to customize entire interface (color mostly)
