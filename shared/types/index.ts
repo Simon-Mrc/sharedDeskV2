@@ -25,6 +25,7 @@ export interface Desk {
     urlLink : string | null;
     accessPassword : string|null;
     createdAt : string;
+    allUsersNameNColor ?: {userId : string, userName : string, userColor : string}[];
 }
 
 export interface DeskAccess {
@@ -62,7 +63,8 @@ export interface Item {
     createdBy : User['id'];
     creatorColor ?: User['userColor'];
     parentId : null | Item['id'];
-    filePath ?: string|null
+    filePath ?: string|null;
+    creatorName ?:string;
 }
 
 export interface Note {

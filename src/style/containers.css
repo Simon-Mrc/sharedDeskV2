@@ -44,5 +44,38 @@
   border-radius: 8px;
 }
 
+/* ============================================
+   USER STAMP — positioned on top-right of img
+   ============================================ */
+.userStamp {
+  position: absolute;
+  top: 5px;
+  right: -11px;
+
+  /* Stamp look */
+  background: rgba(152, 220, 230, 0.548);
+  color: #000000;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  padding: 2px 5px;
+  border: 1.5px solid rgba(39, 52, 172, 0.699);
+  border-radius: 5px;
+
+  /* Rubber-stamp feel */
+  opacity: 0.85;
+  transform: rotate(15deg);
+  transform-origin: top right;
+
+  /* Sit above the image */
+  z-index: 1;
+  pointer-events: none;
+}
 
 

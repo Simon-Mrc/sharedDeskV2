@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { type ItemUpdateType, type Desk, type DeskContextType, type Item } from "../../shared/types";
 import { UserContext } from "./UserContext";
-import { getAllDesk } from "../api/deskAccess";
+import { getAllDesk, getAllUserNColor } from "../api/deskAccess";
 import { createItem, getAllItemFromUpdate, getAllUpdatesAndDesk, getItemByDeskId, updateViewed } from "../api/item";
 import { getDeskById } from "../api/desk";
 import { createNote } from "../api/note";
@@ -36,7 +36,11 @@ export function DeskProvider({children} : {children : ReactNode}){
         },[userContext?.user?.id])
 
         async function switchDesk(deskId : string){
-            setCurrentDesk(await getDeskById(deskId))
+            const allUsersNameNColor = await getAllUserNColor(deskId);
+            const currentDeskFromDb = await getDeskById(deskId);
+            if(currentDeskFromDb){
+                setCurrentDesk({...currentDeskFromDb, allUsersNameNColor: allUsersNameNColor??undefined})
+            }
         }
 ///////////////////////// CREATE ITEM FUNCTION (DOM AND DB) //////////////////////
         async function createItemDesk (item : Omit<Item,'id'>) : Promise <Item |null> {

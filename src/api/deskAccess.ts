@@ -32,3 +32,17 @@ export async function inviteToDesk(friendId : string ,deskId:string) : Promise<{
         return {message : 'failed to access db'}
     }
 }
+
+////////////////////////GET ALL USERID USERNAME USERCOLOR BY DESKID //////////////////
+export async function getAllUserNColor(deskId : string) : Promise<{userId : string, userName : string, userColor : string}[]|null>{
+    try{
+        const result = await fetch(`${BASE_URL}/deskAccess/users/${encodeURIComponent(deskId)}`,{
+            method : 'GET',
+            headers : authHeaders()
+        })
+        const arrayOfUser = await result.json();
+        return arrayOfUser;
+    }catch(error){
+        return null;
+    }
+}

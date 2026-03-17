@@ -78,7 +78,10 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
             const rect = e.currentTarget.getBoundingClientRect();
             propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
         }}>
-            <img  src={`/icons/${ext}.png` || `/icons/${ext}.jpg`} alt="folder"></img>
+            <img  src={`/icons/${ext}.png` || `/icons/${ext}.jpg`} alt="Empty no type "></img>
+            {item.creatorName && <span className="userStamp" 
+            style={{ color: item.creatorColor, borderColor: item.creatorColor }}
+            >{item.creatorName}</span>}
             <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&
@@ -173,7 +176,7 @@ export function DropArea({onClose,item, isDropHighlighted } : {onClose : ()=>voi
                 <button className="popup-close" onClick={endwithease}>✕</button>
                 </div>
                 {error && 
-                 <span  className="errorDropZOne">{error}</span>
+                 <span  className="errorDropZone">{error}</span>
                 }
             </div>
         </div>

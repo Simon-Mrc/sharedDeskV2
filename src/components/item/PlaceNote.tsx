@@ -71,6 +71,9 @@ export function PlaceNote ({item , propsHandler} : {item : Item , propsHandler :
         >
 
             <img  src="/icons/note.png" alt="note"></img>
+            {item.creatorName && <span className="userStamp" 
+            style={{ color: item.creatorColor, borderColor: item.creatorColor }}
+            >{item.creatorName}</span>}
             <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&

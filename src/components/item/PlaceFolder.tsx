@@ -77,6 +77,9 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
         }}>
 
             <img  src="/icons/folder.jpg" alt="folder"></img>
+            {item.creatorName && <span className="userStamp" 
+            style={{ color: item.creatorColor, borderColor: item.creatorColor }}
+            >{item.creatorName}</span>}
             <span className = "icon-label">{item.accessPassword&& '🔒'}{item.name}{deskContext?.isNew(item.id)&& '✨'}</span>
         </div>
         {accessPrompt&&

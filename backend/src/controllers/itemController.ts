@@ -17,9 +17,10 @@ const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
     try{
         const userId = (req as any).user.userId
         let arrayOfItems = db.prepare(`
-            SELECT items.*, users.userColor as creatorColor
+            SELECT items.*, users.userColor AS creatorColor,
+            users.userName AS creatorName
             FROM items
-            JOIN users ON items.createdBy = users.id
+            LEFT JOIN users ON items.createdBy = users.id
             WHERE items.createdBy = ?
             `).all(userId) as Item[];
         res.json(arrayOfItems);
@@ -32,9 +33,10 @@ const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
 const getItemById = (req: Request<{id : string}>,res:Response<Item|null>)=>{
     try{
         let item = db.prepare(`
-            SELECT items.*, users.userColor as creatorColor
+            SELECT items.*, users.userColor as creatorColor,
+            users.userName as creatorName
             FROM items
-            JOIN users ON items.createdBy = users.id
+            LEFT JOIN users ON items.createdBy = users.id
             WHERE items.id = ?
             `).get(req.params.id) as Item;
         res.json(item)
@@ -69,9 +71,10 @@ const createItem =async (req : Request<{},{},Omit<Item,'id'|'creatorColor'>>,res
                     `).run(id,object.userId,Date.now(),0)                    
                 });
                 const newItem = db.prepare(`
-                    SELECT items.*, users.userColor as creatorColor 
+                    SELECT items.*, users.userColor as creatorColor,
+                    users.userName as creatorName
                     FROM items
-                    JOIN users ON users.id = items.createdBy
+                    LEFT JOIN users ON users.id = items.createdBy
                     WHERE items.id = ?
                     `).get(id) as Item;        
             return newItem
@@ -135,9 +138,10 @@ const deleteItemById = (req : Request<{id:string}>,res:Response<{message:string}
 const getAllItemByDeskId = (req : Request<{deskId : string}>,res : Response <Item[]|null>)=>{
     try{
         const arrayOfItems = db.prepare(`
-            SELECT items.*, users.userColor as creatorColor
+            SELECT items.*, users.userColor as creatorColor,
+            users.userName as creatorName
             FROM items
-            JOIN users ON items.createdBy = users.id
+            LEFT JOIN users ON items.createdBy = users.id
             WHERE items.deskId = ?
             `).all(req.params.deskId) as Item[]
         return res.json(arrayOfItems);

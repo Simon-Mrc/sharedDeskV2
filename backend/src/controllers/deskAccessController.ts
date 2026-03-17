@@ -81,13 +81,14 @@ const getAllSharedDeskIdByUserId = (req : Request,res : Response<Desk[]|null>)=>
 }
 
 /////////////////////////////// GET ALL USER OF GIVEN DESK //////////////////////////
-const getAllUsersByDeskId = (req : Request<{deskId : string}>,res: Response<{userId : string}[]|null>)=>{
+const getAllUsersByDeskId = (req : Request<{deskId : string}>,res: Response<{userId : string, userName : string, userColor : string}[]|null>)=>{
     try{
         let arrayOfId = db.prepare(`
-            SELECT userId FROM deskAccess
-            WHERE deskId = ?
-            `).all(req.params.deskId) as {userId : string}[];
-        res.json(arrayOfId)
+            SELECT deskAccess.userId, users.userName, users.userColor FROM deskAccess
+            JOIN users ON users.id = deskAccess.userId
+            WHERE deskAccess.deskId = ?
+            `).all(req.params.deskId) as {userId : string , userName : string, userColor : string}[];
+        return res.json(arrayOfId)
     }catch(error){
         res.status(404).json(null);
     }

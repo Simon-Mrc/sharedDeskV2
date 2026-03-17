@@ -1,4 +1,5 @@
 const BASE_URL = 'http://localhost:3000'
+import type { Desk } from "../../shared/types";
 import { authHeaders } from "./user"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +24,7 @@ export async function createDesk(name : string){
 }
 
 ///////////////////////////////// GET DESK BY ID ///////////////////////////////
-export async function getDeskById(id : string){
+export async function getDeskById(id : string) : Promise<Desk|null>{
     try {
         const response = await fetch(`${BASE_URL}/desks/${id}`,{
             method : 'GET',
