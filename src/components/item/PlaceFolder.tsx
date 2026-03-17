@@ -6,12 +6,16 @@ import { AccessPromptFolder } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { TutorialContext } from "../../context/TutorialContext"; 
 import { TUTORIAL_STEPS } from "../../context/TutorialContext";
+import { updateItem } from "../../api/item";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
 /////// WAY MORE COMPLICATED THAN FILE PART DUE TO POSSIBILITY TO NAVIGATE THROUGH SECTION /////////
 /////// VIA FOLDER ///// ALSO ADDED SECURITY RIGHT AWAY TO PREVENT NAVIGATION IF PASSWORD ///////////
-export function PlaceFolder ({item , propsHandler,currentFileHandler } : {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void , currentFileHandler : (item : Item)=> void}) : JSX.Element{
+export function PlaceFolder ({item , propsHandler,currentFileHandler, targetFileHandler } : 
+    {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void ,
+     currentFileHandler : (item : Item|null)=> void,
+     targetFileHandler : (item : Item|null)=> void}) : JSX.Element{
     const sectionContext = useContext(SectionContext);
     const switchSection = sectionContext?.switchSection;
     const depth  = sectionContext?.depth as number;
@@ -24,6 +28,7 @@ export function PlaceFolder ({item , propsHandler,currentFileHandler } : {item :
     const deskContext = useContext(DeskContext);
     const tutorialContext = useContext(TutorialContext);
     const [areaClass , setAreaClass] = useState<string>('');
+    const [zindex,setZindex] = useState<number>(1)
 
     /////////////////////////////////TUTORIAL TARGETS//////////////////////////////
     const isHighlighted   = tutorialContext?.currentTarget === 'folder'
@@ -39,7 +44,8 @@ export function PlaceFolder ({item , propsHandler,currentFileHandler } : {item :
             draggable = {false}
             id={item.id} 
             style={{left : item.x, top :item.y,
-            background : `${item.creatorColor}`
+            background : `${item.creatorColor}`,
+            zIndex : zindex
             }}
         onDoubleClick={()=>
             {
@@ -76,18 +82,15 @@ export function PlaceFolder ({item , propsHandler,currentFileHandler } : {item :
             e.preventDefault();
             const rect = e.currentTarget.getBoundingClientRect();
             propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
+            currentFileHandler(item);
+            setZindex(0)
+        }}
+        onMouseUp={()=>{
+            setZindex(1);
         }}
         
-        onDragOver={(e)=>{
-            e.preventDefault();
-            setAreaClass('highlighted')
-        }}
-        onDragLeave={()=>{
-            setAreaClass('');
-        }}
-        onDrop={()=>{
-            
-        }}
+        onMouseEnter={()=>targetFileHandler(item)}
+        onMouseLeave={()=> targetFileHandler(null)}
         >
 
             <img  src="/icons/folder.jpg" alt="folder"></img>

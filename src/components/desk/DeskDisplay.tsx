@@ -25,6 +25,7 @@ export function DeskDisplay():JSX.Element{
     const tutorialContext = useContext(TutorialContext);
     const isDeskHighlighted = tutorialContext?.currentTarget === 'deskDisplay';
     const [currentFile , setCurrentFile] = useState<Item|null>(null);
+    const [targetFile , setTargetFile] = useState<Item|null>(null);
 ////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
@@ -47,8 +48,12 @@ export function DeskDisplay():JSX.Element{
             }
         }
     }
- function currentFileHandler(item : Item) : void {
+
+ ///////////////////////DROPPING ONTO FOLDER /////////////////////////////////   
+ function currentFileHandler(item : Item|null) : void {
     setCurrentFile(item);
+ } function targetFileHandler(item : Item|null) : void {
+    setTargetFile(item);
  }
 ///////////////////////////DRAGGABLE ITEM PART ////////////////////////////////
 const [offCoord,setOffCoord] = useState<{X : number,Y:number}>({X : 0 , Y : 0});
@@ -127,9 +132,15 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     isDragging &&
                     dragHandler(e.clientX-rect.left,e.clientY-rect.top)
                 }}
-                onMouseUp={()=>{
+                onMouseUp={async ()=>{
                     setIsDragging(false);
-                    udpdateHandler(itemId);
+                    if((targetFile?.id !== itemId && targetFile) && currentFile){
+                        const newFile = {...currentFile, parentId : targetFile.id};
+                        await updateItem(newFile);
+                        deskContext?.refreshItems();
+                    }        
+                    else{await udpdateHandler(itemId);}
+                    setCurrentFile(null)
                 }}
                 >
                     {/* User On Desk Display */}
@@ -164,12 +175,15 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                 ? (<PlaceFolder key = {item.id} item = {item} 
                     propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}
                     currentFileHandler = {currentFileHandler}
+                    targetFileHandler = {targetFileHandler}
                  />)
                 : (item.type === 'file' ? 
                     <PlaceFile key = {item.id} item = {item}
-                    propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}/> :
+                    propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}
+                    currentFileHandler = {currentFileHandler}/> :
                      <PlaceNote key = {item.id} item = {item} 
-                propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}  /> )
+                propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}
+                currentFileHandler = {currentFileHandler}  /> )
             )
             )}
             </div>
