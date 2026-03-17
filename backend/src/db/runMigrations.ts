@@ -5,6 +5,7 @@ import { up as up003 } from './migrations/003_removeCreatorColor_schema';
 import { up as up004 } from './migrations/004_add_column_item_schema';
 import { up as up005 } from './migrations/005_add_column_users_avatarFilePath_schema';
 import { up as up006 } from './migrations/006_add_column_users_avatarFilePath_schema';
+import { up as up007 } from './migrations/007_add_unique_mail_users_schema';
 
 interface Migration {
     name : string;
@@ -17,7 +18,8 @@ const allMigration : Migration[] = [
     {name : '003_removeCreatorColor_schema.ts', up : up003},
     {name : '004_add_column_item_schema' , up : up004},
     {name : '005_add_column_users_avatarFilePath_schema' , up : up005},
-    {name : '006_add_column_users_avatarFilePath_schema' , up : up006}
+    {name : '006_add_column_users_avatarFilePath_schema' , up : up006},
+    {name : 'migrations/007_add_unique_mail_users_schema', up : up007}
 ];
 
 export function runMigration(db : InstanceType<typeof Database>){
