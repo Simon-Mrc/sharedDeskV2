@@ -76,7 +76,11 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
 
 const [showFilePrompt,setShowFilePrompt] = useState<boolean>(false);
 const [error,setError] = useState<string>('');
-const [fileContent , setFileContent] = useState<File|null>(null)
+const [fileContent , setFileContent] = useState<File|null>(null);
+////////////////////USER DISPLAY HERE /////////////////////////////
+const existingDesk = deskContext?.currentDesk ;
+const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
+
 //////////////////  JSX ELEMENT  //////////   EMPTY ARRAY TRICK FOR DEPTH UPDATES   //////////////////////////
 /////////////////// getBoundingClientRect() for mouse positionning not depending on parent //////////////////
     return(
@@ -85,7 +89,7 @@ const [fileContent , setFileContent] = useState<File|null>(null)
             {Array.from({ length: sectionContext?.depth ?? 0 }).map((_, index) => (
                 <div key={index} className="ranged"/>
             ))}
-            <div className={`desk-column-large ${animationClass} ${areaClass} ${isDeskHighlighted ? 'tutorialHighlight' : ''}`}
+            <div className={`desk-column-large ${animationClass} ${areaClass} ${isDeskHighlighted ? 'tutorialHighlight' : ''}`}                
                 // Drag for upload part
                 onDragOver={(e)=>{
                     e.preventDefault();
@@ -124,6 +128,17 @@ const [fileContent , setFileContent] = useState<File|null>(null)
                     udpdateHandler(itemId);
                 }}
                 >
+                    {/* User On Desk Display */}
+                    <div className="userDisplayOnDesk">
+                    {allUsersNameNColor &&
+                allUsersNameNColor.map((element) => (
+                    <div key={element.userId}>
+                        <div className="colorContainer" style={{backgroundColor : element.userColor}}></div>
+                        <span className="userNameDisplay">{element.userName}</span>
+                    </div>
+                ))}
+                    </div>
+
                     {error &&
                     <span  className="errorDropZOne">{error}</span>
                    }

@@ -47,10 +47,12 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 accessPassword : null,
                 createdBy : userContext?.user?.id,
                 creatorColor : userContext?.user?.userColor,
-                parentId : sectionContext?.currentSection ?? null  
+                parentId : sectionContext?.currentSection ?? null,
+                creatorName : userContext.user.userName  
             });
-            newItem && updateViewed(newItem.id);
-            if(isConfirmHighlighted) tutorialContext?.nextStep()
+            newItem && await updateViewed(newItem.id);
+            deskContext.refreshItems();
+            if(isConfirmHighlighted) tutorialContext?.nextStep();
             endwithease();       
         }
         else{

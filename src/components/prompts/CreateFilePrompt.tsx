@@ -34,8 +34,9 @@ export function CreateFilePrompt({onClose ,coord, fileContent} : {onClose : ()=>
                 y : coord.y,
                 accessPassword : null,
                 createdBy : userContext?.user?.id,
-                creatorColor : userContext?.user?.userColor,
-                parentId : sectionContext?.currentSection ?? null  
+                creatorColor : userContext.user.userColor,
+                parentId : sectionContext?.currentSection ?? null,
+                creatorName : userContext.user.userName
             })
             if(newItem && fileContent){
             await handleUpdate(fileContent,newItem);
