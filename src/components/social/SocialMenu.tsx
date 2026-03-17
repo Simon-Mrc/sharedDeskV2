@@ -7,7 +7,9 @@ import { UserContext } from "../../context/UserContext";
 /////////////////////////////// SOCIAL MENU PURE JSX FUNCTION ////////////////////////////////
 //////////// ROOT FOR ALL SOCIAL FEATURES ///////// HANDLES THE STATES OF PROMPTS////////////////
 export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
+    let isConfirmHighlighted =false;
     const userContext = useContext(UserContext);
+    isConfirmHighlighted = (userContext?.user?.notif.length !==0);
     const [searchFriend, setSearchFriend] = useState<boolean>(false);
     const [friendList, setFriendList] = useState<boolean>(false);
     const [invit , setInvit] = useState<boolean>(false);
@@ -51,7 +53,8 @@ export function SocialMenu({onClose} : {onClose : ()=>void}):JSX.Element{
                     />}
                     </div>
 
-                    <button onClick={()=> setFriendList(true)} >Show FriendList</button>
+                    <button className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
+                    onClick={()=> setFriendList(true)} >Show FriendList</button>
                     {friendList &&
                     <FriendList 
                     onClose = {()=> setFriendList(false)} 

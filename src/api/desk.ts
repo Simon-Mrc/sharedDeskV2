@@ -26,7 +26,7 @@ export async function createDesk(name : string){
 ///////////////////////////////// GET DESK BY ID ///////////////////////////////
 export async function getDeskById(id : string) : Promise<Desk|null>{
     try {
-        const response = await fetch(`${BASE_URL}/desks/${id}`,{
+        const response = await fetch(`${BASE_URL}/desks/${encodeURIComponent(id)}`,{
             method : 'GET',
             headers : authHeaders()
         })

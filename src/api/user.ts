@@ -97,13 +97,14 @@ export async function getUserBySearch(search : string) : Promise<Omit<User,'pass
 }
 
 //////////////////////////// UPDATE USER CALL /////////////////////////
-export async function updateUserById(user : Omit<User,'password'>){
+export async function updateUserById(user : Omit<User,'password'>) : Promise<{message:string}|null>{
     try{
         const result = await fetch(`${BASE_URL}/users/${user.id}`,{
             method : 'PUT',
             headers : authHeaders(),
             body : JSON.stringify(user)
         })
+        return await result.json();
     }catch(error){
         console.log('fail to access db')
         return null;

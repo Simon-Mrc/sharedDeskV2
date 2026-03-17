@@ -99,9 +99,10 @@ const updateItemById = (req:Request<{id : string},{},Omit<Item,'id'|'creatorColo
                 type = ?,
                 x= ?,
                 y=?,
-                accessPassword = ?
+                accessPassword = ?,
+                parentId = ?
                 WHERE id = ?
-                `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.params.id);     
+                `).run(req.body.deskId,req.body.name,req.body.type,req.body.x,req.body.y,req.body.accessPassword,req.body.parentId,req.params.id);     
                 db.prepare(`
                     UPDATE itemUpdates SET
                     lastModified = ?

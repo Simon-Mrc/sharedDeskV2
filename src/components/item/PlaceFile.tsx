@@ -10,7 +10,7 @@ import { TutorialContext } from "../../context/TutorialContext";
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
 /////// WAY MORE COMPLICATED THAN FILE PART DUE TO POSSIBILITY TO NAVIGATE THROUGH SECTION /////////
 /////// VIA FOLDER ///// ALSO ADDED SECURITY RIGHT AWAY TO PREVENT NAVIGATION IF PASSWORD ///////////
-export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void }) : JSX.Element{
+export function PlaceFile ({item , propsHandler,currentFileHandler} : {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void ,currentFileHandler : (item : Item|null)=> void}) : JSX.Element{
     const [optionMenu , setOptionMenu] = useState<boolean>(false);
     const [coord , setCoord] = useState<{x : number,y : number}>({x:0,y:0});
     const [accessPrompt , setAccessPrompt] = useState<boolean>(false);
@@ -19,6 +19,8 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
     const [dropArea , setDropArea] = useState<boolean>(false);
     const deskContext = useContext(DeskContext);
     const tutorialContext = useContext(TutorialContext);
+    const [zindex,setZindex] = useState<number>(1);
+
     let ext = '';
     if (typeof item.filePath === 'string'){
         ext = item.filePath.split('.').pop()?.toLowerCase()  ?? ''    
@@ -36,7 +38,8 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
             draggable = {false}
             id={item.id} 
             style={{left : item.x, top :item.y,
-            background : `${item.creatorColor}`
+            background : `${item.creatorColor}`,
+            zIndex : zindex
             }}
         onDoubleClick={()=>
             {
@@ -76,7 +79,12 @@ export function PlaceFile ({item , propsHandler} : {item : Item , propsHandler :
         onMouseDown={(e)=>{
             e.preventDefault();
             const rect = e.currentTarget.getBoundingClientRect();
-            propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
+            propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top });
+            setZindex(0);
+            currentFileHandler(item);
+        }}
+        onMouseUp={()=>{
+            setZindex(1);
         }}>
             <img  src={`/icons/${ext}.png` || `/icons/${ext}.jpg`} alt="Empty no type "></img>
             {item.creatorName && <span className="userStamp" 
