@@ -18,7 +18,7 @@ export function FunctionsPart():JSX.Element{
     const isHighlighted = (tutorialContext?.currentTarget === 'createDesk' && tutorialContext.isActive);
     const isTreeHighlighted = (tutorialContext?.currentTarget  === 'folderTree' && tutorialContext.isActive);
     let isConfirmHighlighted = false;
-    if (tutorialContext?.step) {isConfirmHighlighted = tutorialContext?.step>=33 ;}
+    if (tutorialContext?.step) {isConfirmHighlighted = (tutorialContext?.step>=33 && tutorialContext.isActive) || (userContext?.user?.notif.length !==0) ;}
 
     return(
         <div  style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
@@ -29,7 +29,7 @@ export function FunctionsPart():JSX.Element{
                 className={isHighlighted ? 'tutorialHighlight' : ''}
                 onClick={()=>{
                     setCreatingPrompt(true);
-                    if(isHighlighted) tutorialContext?.nextStep()  // ← step 2 → 3
+                    if(isHighlighted) tutorialContext?.nextStep();
                 }}>
                 ➕ New Desk</button>
             {creatingPrompt && <CreatingDeskPrompt onClose={()=>setCreatingPrompt(false)}/>}
@@ -45,11 +45,11 @@ export function FunctionsPart():JSX.Element{
             <SocialMenu onClose = {()=> setSocialMenu(false)} />}
             <button 
                 id="shamingTree" 
-                className={`icon-btn ${isTreeHighlighted ? 'tutorialHighlight' : ''}`} // ← ADD class
+                className={`icon-btn ${isTreeHighlighted ? 'tutorialHighlight' : ''}`}
                 title="Show Tree" 
                 onClick={()=>{
                     setNotAshamedTree(!notAshamedTree)
-                    if(isTreeHighlighted) tutorialContext?.nextStep() // ← ADD : step 18 → 19
+                    if(isTreeHighlighted) tutorialContext?.nextStep()
                 }}>
                 🌳
             </button>

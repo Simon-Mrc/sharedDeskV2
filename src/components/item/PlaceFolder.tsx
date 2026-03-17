@@ -11,7 +11,7 @@ import { TUTORIAL_STEPS } from "../../context/TutorialContext";
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
 /////// WAY MORE COMPLICATED THAN FILE PART DUE TO POSSIBILITY TO NAVIGATE THROUGH SECTION /////////
 /////// VIA FOLDER ///// ALSO ADDED SECURITY RIGHT AWAY TO PREVENT NAVIGATION IF PASSWORD ///////////
-export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void }) : JSX.Element{
+export function PlaceFolder ({item , propsHandler,currentFileHandler } : {item : Item , propsHandler : (itemId:string , offCoord:{X:number, Y: number})=>void , currentFileHandler : (item : Item)=> void}) : JSX.Element{
     const sectionContext = useContext(SectionContext);
     const switchSection = sectionContext?.switchSection;
     const depth  = sectionContext?.depth as number;
@@ -23,6 +23,7 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
     const [check , setCheck] = useState<number>(0);
     const deskContext = useContext(DeskContext);
     const tutorialContext = useContext(TutorialContext);
+    const [areaClass , setAreaClass] = useState<string>('');
 
     /////////////////////////////////TUTORIAL TARGETS//////////////////////////////
     const isHighlighted   = tutorialContext?.currentTarget === 'folder'
@@ -34,7 +35,7 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
     return (
     <div>
         <div 
-            className={`icon fadeIn ${isHighlighted ? 'tutorialHighlight' : ''}`} 
+            className={`icon fadeIn ${areaClass} ${isHighlighted ? 'tutorialHighlight' : ''}`} 
             draggable = {false}
             id={item.id} 
             style={{left : item.x, top :item.y,
@@ -70,11 +71,24 @@ export function PlaceFolder ({item , propsHandler} : {item : Item , propsHandler
                 }
                 if(isHighlighted && isContextStep) tutorialContext?.nextStep()
         }}
+
         onMouseDown={(e)=>{
             e.preventDefault();
             const rect = e.currentTarget.getBoundingClientRect();
             propsHandler(item.id ,{X : e.clientX-rect.left,Y:e.clientY-rect.top })
-        }}>
+        }}
+        
+        onDragOver={(e)=>{
+            e.preventDefault();
+            setAreaClass('highlighted')
+        }}
+        onDragLeave={()=>{
+            setAreaClass('');
+        }}
+        onDrop={()=>{
+            
+        }}
+        >
 
             <img  src="/icons/folder.jpg" alt="folder"></img>
             {item.creatorName && <span className="userStamp" 

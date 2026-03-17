@@ -1,4 +1,4 @@
-import { useContext, useState, type JSX } from "react";
+import { useContext, useEffect, useState, type JSX } from "react";
 import { UserContext } from "../../context/UserContext";
 import { getUserById, updateUserById } from "../../api/user";
 import { AvatarMenu } from "../userAndAccount/AccountFunctions";
@@ -50,10 +50,11 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
   
   const [premiumMenu,setPremiumMenu] = useState<boolean>(false);
   
-  const [avatarMenu, setAvatarMenu] = useState<boolean>(false);
-  
+  const [avatarMenu, setAvatarMenu] = useState<boolean>(false);  
+
   const [color,setColor] = useState<string>(userContext?.user?.userColor ?? '');
-  
+  const [colorInfo,setColorInfo] = useState<boolean>(false);
+
   async function colorHandler(){
     if(userContext?.user){
         const user = userContext.user;
@@ -137,6 +138,23 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                           onClose()}),500)
               },1)
           }
+          const [colorAnimation , setColorAnimation] = useState<string>('');
+            useEffect(()=>{
+              console.log('test');
+              if(colorAnimation==='fadeIn tutorialMessageText'){
+                const timer = setTimeout(()=>{
+                  setTimeout(()=>{
+                    setColorAnimation('fadeOut');
+                    setTimeout((()=>{
+                        setColorInfo(false);
+                        setUserNameInfo(false);
+                      }),500)
+            },1)
+                },2000)
+                return ()=> clearTimeout(timer);
+              }
+            },[colorAnimation]);
+      
       ////////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////////
     
@@ -152,9 +170,16 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                         onChange={(input)=>setColor(input.target.value)} />
                         <button  
                         onClick={()=>{
-                        colorHandler()}} 
+                        colorHandler();
+                        setColorInfo(true)
+                        setColorAnimation('fadeIn tutorialMessageText')}} 
                         > 🎨</button>
                       </div>
+                      {colorInfo && 
+                       <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                       Color changed with success !   
+                       </div>}
+
                       {/* Change userName part */}
                      <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
                         <input    
@@ -165,8 +190,9 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                         <button  
                         onClick={async ()=>{
                         changeUserNameHandler();
-                        setUserNameInput('')
-                        }} 
+                        setUserNameInput('');
+                        setUserNameInfo(true);
+                        setColorAnimation('fadeIn tutorialMessageText')}} 
                         > 🎨</button>
                       </div>
                       {errorName && 
@@ -174,6 +200,10 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                           <span  className="error">{errorName}</span>
                         </div>
                       }
+                      {userNameInfo && 
+                       <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                       UserName changed with success !   
+                       </div>}
 
                       {/* Change mail part */}
                       <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
@@ -185,7 +215,8 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                         <button  
                         onClick={async ()=>{
                           await changeMailHandler();
-                          setMailInput('')
+                          setMailInput('');
+                          setColorAnimation('fadeIn tutorialMessageText')
                           }
                         } 
                         > 🎨</button>
@@ -195,23 +226,32 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                           <span  className="error">{errorMail}</span>
                         </div>
                       }
+                      {mailInfo && 
+                      <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                      Mail changed with success !   
+                      </div>}
 
+                      {/* Set avatar part */}
                       <button onClick={()=> setAvatarMenu(true)} >Change Avatar</button>
                       {avatarMenu &&
                       <AvatarMenu 
                       onClose = {()=> setAvatarMenu(false)} 
                       />}
+                      
+                      {/* Change password part */}
+                       {/* <button onClick={()=> setPasswordMenu(true)} >Change password</button>
+                      {passwordMenu &&
+                      <FriendList 
+                      onClose = {()=> setPasswordMenu(false)} 
+                      />}
+                      */}
+                      {/* Change account type */}
+                      {/* <button onClick={()=> setPremiumMenu(true)} >Show FriendList</button>
+                      {premiumMenu &&
+                      <FriendList 
+                      onClose = {()=> setPremiumMenu(false)} 
+                      />} */}
                       {/* <button onClick={()=> setFriendList(true)} >Show FriendList</button>
-                      {friendList &&
-                      <FriendList 
-                      onClose = {()=> setFriendList(false)} 
-                      />}
-                      <button onClick={()=> setFriendList(true)} >Show FriendList</button>
-                      {friendList &&
-                      <FriendList 
-                      onClose = {()=> setFriendList(false)} 
-                      />}
-                      <button onClick={()=> setFriendList(true)} >Show FriendList</button>
                       {friendList &&
                       <FriendList 
                       onClose = {()=> setFriendList(false)} 
@@ -232,4 +272,5 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                   </div> 
               </div>
           )
-}
+        }
+

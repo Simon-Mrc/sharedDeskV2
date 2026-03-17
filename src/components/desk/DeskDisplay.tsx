@@ -8,6 +8,7 @@ import { PlaceNote } from "../item/PlaceNote";
 import { updateItem } from "../../api/item";
 import { TutorialContext } from "../../context/TutorialContext";
 import { CreateFilePrompt } from "../prompts/CreateFilePrompt";
+import type { Item } from "../../../shared/types";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// DESK DISPLAY JSX /////////////////////////
@@ -23,6 +24,7 @@ export function DeskDisplay():JSX.Element{
     const [animationClass, setAnimationClass] = useState<"hidden"|"section-enter">("hidden");
     const tutorialContext = useContext(TutorialContext);
     const isDeskHighlighted = tutorialContext?.currentTarget === 'deskDisplay';
+    const [currentFile , setCurrentFile] = useState<Item|null>(null);
 ////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
@@ -45,7 +47,9 @@ export function DeskDisplay():JSX.Element{
             }
         }
     }
-
+ function currentFileHandler(item : Item) : void {
+    setCurrentFile(item);
+ }
 ///////////////////////////DRAGGABLE ITEM PART ////////////////////////////////
 const [offCoord,setOffCoord] = useState<{X : number,Y:number}>({X : 0 , Y : 0});
 const [itemId, setItemId] = useState<string>('');
@@ -158,7 +162,9 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
             {arrayOfItem.map((item)=>(
                 item.type === 'folder'
                 ? (<PlaceFolder key = {item.id} item = {item} 
-                    propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}/>)
+                    propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}
+                    currentFileHandler = {currentFileHandler}
+                 />)
                 : (item.type === 'file' ? 
                     <PlaceFile key = {item.id} item = {item}
                     propsHandler = {(itemId:string , offCoord:{X:number, Y: number})=>propsHandler(itemId, offCoord)}/> :

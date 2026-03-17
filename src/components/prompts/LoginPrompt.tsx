@@ -72,5 +72,4 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
             </div>
         </div>
     )
-
 }

@@ -27,7 +27,7 @@ export function up(db : InstanceType<typeof Database>) : void{
         db.exec(`
         ALTER TABLE newUser RENAME TO users    
         `);
-});
-    db.pragma('foreign_keys = ON');
+    });
     myTransaction();
+    db.pragma('foreign_keys = ON');
 }

@@ -15,11 +15,11 @@ interface Migration {
 const allMigration : Migration[] = [
     {name : '001_initial_schema', up : up001},
     {name : '002_add_note_table_schema', up : up002},
-    {name : '003_removeCreatorColor_schema.ts', up : up003},
+    {name : '003_removeCreatorColor_schema', up : up003},
     {name : '004_add_column_item_schema' , up : up004},
     {name : '005_add_column_users_avatarFilePath_schema' , up : up005},
     {name : '006_add_column_users_avatarFilePath_schema' , up : up006},
-    {name : 'migrations/007_add_unique_mail_users_schema', up : up007}
+    {name : '007_add_unique_mail_users_schema', up : up007}
 ];
 
 export function runMigration(db : InstanceType<typeof Database>){
