@@ -125,3 +125,20 @@ export async function getUserById (id : string) : Promise<Omit<User,'password'> 
         return null;
     }
 }
+
+///////////////////// CHANGE AVATAR ////////////////////////////
+export async function changeAvatar(id : string, file:File) : Promise<{avatarFilePath : string} |null>{
+    try{
+        const formData = new FormData();
+        formData.append('file',file);
+        const result = await fetch(`${BASE_URL}/users/avatar/${id}`,{
+            method : 'PATCH',
+            headers : authHeadersMultipart(),
+            body : formData
+        })
+        const avatarFilePath = await result.json();
+        return avatarFilePath;
+    }catch(error){
+        return null;
+    }
+}

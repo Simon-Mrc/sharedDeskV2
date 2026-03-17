@@ -3,6 +3,9 @@ import userController from '../controllers/userController';
 import { authenticateToken } from '../middleware/authMiddleware';
 import { validate } from '../middleware/validateMiddleware';
 import { UserSchema, LoginSchema, UpdateUserSchema } from '../validation/schemas';
+import multer from 'multer';
+
+const upload = multer({ storage: multer.memoryStorage() }) // ← keeps file in memory as buffer
 
 const router = Router();
 
@@ -21,5 +24,7 @@ router.delete('/:id',authenticateToken, userController.deleteUserById);
 router.get('/:id',authenticateToken, userController.getById);  // ← just points to controller!
 
 router.get('/',authenticateToken, userController.getAll);
+
+router.patch('/avatar/:id', authenticateToken,upload.single('file'), userController.changeAvatar);
 
 export default router;
