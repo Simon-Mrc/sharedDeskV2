@@ -8,6 +8,7 @@ export interface User {
     friendList : string[];
     notif : string[];
     userColor : string;
+    avatarFilePath ?: string|null;
 }
 
 export interface UserContextType {

@@ -3,6 +3,7 @@ import db from '../db/database';
 import { User, JwtPayload } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { saveFile } from '../services/fileService';
 
 
 ////////////////////////////////////GET USER BY SEARCHING /////////////////////////////////////
@@ -151,6 +152,27 @@ const login = async (req : Request <{},{},{mail : string,password:string}> , res
     }
 }
 
+/////////////////////////// CHANGE AVATAR FUNCTION //////////////////////
+const changeAvatar = async (req : Request<{id : string}>, res : Response<{avatarFilePath : string}|null>)=>{
+    try{
+        const uploadFile = req.file;
+        if(uploadFile?.originalname.split('.').pop()?.toLocaleLowerCase() === 'png' ||
+        uploadFile?.originalname.split('.').pop()?.toLocaleLowerCase() === 'jpg'){
+            const filePath =await saveFile(uploadFile,req.params.id);
+            db.prepare(`
+                UPDATE users SET avatarFilePath = ?
+                WHERE id = ?
+                `).run(filePath,req.params.id);
+            return res.json({avatarFilePath : filePath});
+            
+        }else{
+            return res.json(null);
+        } 
+    }catch(error){
+        return res.json(null)
+    }
+}
 
 
-export default { getById, getAll, createUser,updateUser,deleteUserById,getUserByUserName,login,getBySearch }
+export default { getById, getAll, createUser, changeAvatar,
+    updateUser,deleteUserById,getUserByUserName,login,getBySearch }

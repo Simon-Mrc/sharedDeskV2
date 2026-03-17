@@ -1,6 +1,7 @@
 import { useContext, useState, type JSX } from "react";
 import { UserContext } from "../../context/UserContext";
 import { getUserById, updateUserById } from "../../api/user";
+import { AvatarMenu } from "../userAndAccount/AccountFunctions";
 
 
 //////////////////// ACCOUNT PART PUR JSX NOTHING TO SEE FOR NOW ///////////////////
@@ -11,7 +12,9 @@ export function AccountPart():JSX.Element{
         <div>
           <div className="sidebar-section">
             <div className="user-display">
-              <div className="user-avatar" >?</div>
+              <div className="user-avatar" >
+                <img src={`../backend/${context?.user?.avatarFilePath}`}></img>
+              </div>
               <div className="user-info">
                 <span id="userNameDisplay" className="user-name">{context?.user?.name ?? "?"}</span>
                 <span id="userTypeDisplay" className="user-type"></span>
@@ -32,6 +35,7 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
 
 //// CHANGES USERNAME /// CHANGE COLOR /// CHANGE MAIL ? /// BUY PREMIUM ? // CHANGEPASSWORD //CHANGE MAIL ///
   const [userNameMenu,setUserNameMenu] = useState<boolean>(false);
+  const [avatarMenu, setAvatarMenu] = useState<boolean>(false);
   const userContext = useContext(UserContext);
   const [mailMenu,setMailMenu] = useState<boolean>(false);
   const [passwordMenu,setPasswordMenu] = useState<boolean>(false);
@@ -46,6 +50,7 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
         await updateUserById(updatedUser);
     }
   }
+
 
       ///////////////////////////////////////////////////////////////////////
       /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
@@ -75,6 +80,11 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                         > 🎨</button>
                       </div>
 
+                      <button onClick={()=> setAvatarMenu(true)} >Change Avatar</button>
+                      {avatarMenu &&
+                      <AvatarMenu 
+                      onClose = {()=> setAvatarMenu(false)} 
+                      />}
                       {/* <button onClick={()=> setFriendList(true)} >Show FriendList</button>
                       {friendList &&
                       <FriendList 
@@ -99,24 +109,11 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
                       {friendList &&
                       <FriendList 
                       onClose = {()=> setFriendList(false)} 
-                      />}
-                      <button onClick={()=> setFriendList(true)} >Show FriendList</button>
-                      {friendList &&
-                      <FriendList 
-                      onClose = {()=> setFriendList(false)} 
                       />} */}
-                      <button className="popup-closeOption" 
+                      {/* <button className="popup-closeOption" 
                       style={{gridColumn: "1 / -1", textAlign :"center" }}
-                      onClick={endwithease}>✕</button>
-                  </div>
+                      onClick={endwithease}>✕</button> */}
+                  </div> 
               </div>
           )
 }
-
-// const [error,setError] = useState('');
-// const [inputAnimation , setInputAnimation] = useState<string>('');
-// const [userName,setUserName] = useState<string>('');
-// const [mail,setMail] = useState<string>('');
-// const [password,setPassword] = useState<string>('');
-// const [newpPassword,setNewPassword] = useState<string>('');
-// const [passwordConfirm,setPasswordConfirm] = useState<string>('');
