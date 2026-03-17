@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { type ItemUpdateType, type Desk, type DeskContextType, type Item } from "../../shared/types";
 import { UserContext } from "./UserContext";
 import { getAllDesk, getAllUserNColor } from "../api/deskAccess";
-import { createItem, getAllItemFromUpdate, getAllUpdatesAndDesk, getItemByDeskId, updateViewed } from "../api/item";
+import { createItem,  getAllUpdatesAndDesk, getItemByDeskId, updateViewed } from "../api/item";
 import { getDeskById } from "../api/desk";
 import { createNote } from "../api/note";
 
