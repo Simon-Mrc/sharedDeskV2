@@ -5,7 +5,7 @@ import { PlaceFile } from "../item/PlaceFile";
 import { PlaceFolder } from "../item/PlaceFolder";
 import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
 import { PlaceNote } from "../item/PlaceNote";
-import { updateItem } from "../../api/item";
+import { getItemById, updateItem } from "../../api/item";
 import { TutorialContext } from "../../context/TutorialContext";
 import { CreateFilePrompt } from "../prompts/CreateFilePrompt";
 import type { Item } from "../../../shared/types";
@@ -28,6 +28,7 @@ export function DeskDisplay():JSX.Element{
     ///// Current and target used for dropping onto folders or backbutton
     const [currentFile , setCurrentFile] = useState<Item|null>(null);
     const [targetFile , setTargetFile] = useState<Item|null>(null);
+    const [onBackBtn ,setOnBackBtn] = useState<boolean>(false);
 ////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
@@ -57,6 +58,17 @@ export function DeskDisplay():JSX.Element{
  } function targetFileHandler(item : Item|null) : void {
     setTargetFile(item);
  }
+ async function dropBackBtnHandler(item : Item){
+    if (onBackBtn){
+        if (item.parentId){
+            const oldItem = await getItemById(item.parentId);
+            if (oldItem){const newItem = {...item , parentId : oldItem?.parentId};
+            await updateItem(newItem);
+            deskContext?.setOneItem(newItem);
+           }
+        }
+    }
+}
 ///////////////////////////DRAGGABLE ITEM PART ////////////////////////////////
 const [offCoord,setOffCoord] = useState<{X : number,Y:number}>({X : 0 , Y : 0});
 const [itemId, setItemId] = useState<string>('');
@@ -136,12 +148,16 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                 }}
                 onMouseUp={async ()=>{
                     setIsDragging(false);
+                    setOnBackBtn(false);
+                    
                     if((targetFile?.id !== itemId && targetFile) && currentFile){
                         const newFile = {...currentFile, parentId : targetFile.id};
                         await updateItem(newFile);
                         deskContext?.refreshItems();
                     }        
-                    else{await udpdateHandler(itemId);}
+                    else if (!onBackBtn){await udpdateHandler(itemId);}
+                    else{currentFile && dropBackBtnHandler(currentFile)}
+                    setTargetFile(null);
                     setCurrentFile(null)
                 }}
                 >
@@ -160,7 +176,15 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     <span  className="errorDropZOne">{error}</span>
                    }
                     {sectionContext?.currentSection &&
-                    <button style={tutorialContext?.isActive ? { pointerEvents: "none" } : {} }onClick={()=>goBack()}>←</button>}
+                    <button 
+                    className="back-btn"
+                    style={tutorialContext?.isActive ? { pointerEvents: "none" } : {zIndex : 1000 }  }
+                    onClick={
+                        ()=>goBack()
+                    }
+                    onMouseEnter={()=>setOnBackBtn(true)}
+                    onMouseLeave={()=>setOnBackBtn(false)}
+                    >←</button>}
                     {showItemPrompt &&
                     <CreateItemPrompt 
                     onClose = {()=>setShowItemPrompt(false)}
