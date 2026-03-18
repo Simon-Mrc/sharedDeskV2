@@ -94,6 +94,7 @@ button:active {
    BACK BUTTON
    ============================================ */
 .back-btn {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
