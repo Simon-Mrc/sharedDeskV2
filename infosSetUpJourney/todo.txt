@@ -10,9 +10,11 @@
 
  ######################## ABSOLUTE MUST DO ##########################
  /!\ Add mail system now that i have done several migrations shouldn t be too hard
+ /!\ SetUp validation (zod Axio in backend ?)
+ /!\ Start thinking and implementing testing 
  
 
  ######################### NICE TO HAVE BUT NOT QUITE SURE ########################
  /!\ Add possibility for user to customize entire interface (color mostly)
- /!\ Add userName with associated color on sharedDesk ?
- /!\ Add userName on top of userColor as a little stamp on file creation for download ?
+ /!\ 
+ /!\ 

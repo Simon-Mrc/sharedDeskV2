@@ -288,11 +288,10 @@ body {
 .ranged {
   flex: 0 0 2rem;
   width: 2rem;
-  max-width: 2rem;
+  max-width: 1.3rem;
   padding: 0;
-  border: 1px solid #2a2a3e;
-  background-color: #383858;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border-right: 1px solid #000000;
+  background-color: #0000007e;
   border-radius: 6px;
   overflow: hidden;
   pointer-events: none;
