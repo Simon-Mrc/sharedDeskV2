@@ -18,11 +18,14 @@ export function DeskProvider({children} : {children : ReactNode}){
         const userContext = useContext(UserContext);
 ///////////////////////// REFRESH ALL DESK USER HAS ACCESS TO //////////////////////
         async function refreshDesks(){
-            setDesks(await getAllDesk());
+            const allDesks = await getAllDesk();
+            setDesks(allDesks);
+            return allDesks;
         }
         async function allItemHandler(deskId: string){
             setItems(await getItemByDeskId(deskId)as Item[]);
             setLoaded(true);
+            return (await getItemByDeskId(deskId)as Item[])
         }
 //////////////////////// REFRESH ITEM ON DESK CHANGES ///////////////////
         useEffect(()=>{
@@ -30,14 +33,29 @@ export function DeskProvider({children} : {children : ReactNode}){
         },[currentDesk,userContext?.user?.userColor]);
 //////////////////////// REFRESH DESKS ON USER CHANGES ///////////////////
         useEffect(()=>{
-            setCurrentDesk(null);
-            setItems(null);
-            if(userContext?.user){refreshDesks();}
+            if(!userContext?.user){
+                setDesks(null);
+                setCurrentDesk(null);
+                setItems(null);
+            }
+            else{
+                async function init(){
+                    const allDesks = await refreshDesks();
+                    setDesks(allDesks);
+                    if(allDesks){
+                        setCurrentDesk(allDesks[0])
+                        await switchDesk(allDesks[0].id);
+                        const allItems = await allItemHandler(allDesks[0].id);
+                        setItems(allItems);
+                    }
+                }
+                init();
+            }           
         },[userContext?.user?.id])
 
         async function switchDesk(deskId : string){
-            const allUsersNameNColor = await getAllUserNColor(deskId);
             const currentDeskFromDb = await getDeskById(deskId);
+            const allUsersNameNColor = await getAllUserNColor(deskId);
             if(currentDeskFromDb){
                 setCurrentDesk({...currentDeskFromDb, allUsersNameNColor: allUsersNameNColor??undefined})
             }
@@ -97,7 +115,7 @@ async function getAllUpdates(){
 }
 useEffect(()=>{
     if(userContext?.user){getAllUpdates();}
-},[currentDesk,userContext?.user?.id])
+},[currentDesk])
 
 /////////////////////////////////// ISNEW HELPER FUNCTION //////////////////////
 function isNew(itemId : string) : boolean{

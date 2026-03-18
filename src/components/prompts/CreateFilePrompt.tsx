@@ -3,7 +3,6 @@ import { DeskContext } from "../../context/DeskContext";
 import { UserContext } from "../../context/UserContext";
 import type { Item } from "../../../shared/types";
 import { SectionContext } from "../../context/SectionContext";
-import { updateViewed } from "../../api/item";
 import { updateFile } from "../../api/file";
 
 

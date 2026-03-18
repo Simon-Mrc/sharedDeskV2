@@ -49,6 +49,7 @@ export function PlaceFolder ({item , propsHandler,currentFileHandler, targetFile
             }}
         onDoubleClick={()=>
             {
+                // Check is used to know if user click or doubleclicked on item
                 setCheck(1)
                 if(item.accessPassword && !hasAccess){
                     setHasAccess(false);
@@ -77,7 +78,7 @@ export function PlaceFolder ({item , propsHandler,currentFileHandler, targetFile
                 }
                 if(isHighlighted && isContextStep) tutorialContext?.nextStep()
         }}
-
+        // OnMouse for draggable part
         onMouseDown={(e)=>{
             e.preventDefault();
             const rect = e.currentTarget.getBoundingClientRect();
@@ -88,7 +89,7 @@ export function PlaceFolder ({item , propsHandler,currentFileHandler, targetFile
         onMouseUp={()=>{
             setZindex(1);
         }}
-        
+        // OnMouse for dropping onto folder
         onMouseEnter={()=>targetFileHandler(item)}
         onMouseLeave={()=> targetFileHandler(null)}
         >

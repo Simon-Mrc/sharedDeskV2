@@ -22,8 +22,10 @@ export function DeskDisplay():JSX.Element{
     const depth  = sectionContext?.depth as number;
     const updateDepth = sectionContext?.updateDepth;
     const [animationClass, setAnimationClass] = useState<"hidden"|"section-enter">("hidden");
+    // Used for tutorial part here
     const tutorialContext = useContext(TutorialContext);
     const isDeskHighlighted = tutorialContext?.currentTarget === 'deskDisplay';
+    ///// Current and target used for dropping onto folders or backbutton
     const [currentFile , setCurrentFile] = useState<Item|null>(null);
     const [targetFile , setTargetFile] = useState<Item|null>(null);
 ////////////////// ANIMATION HANDLER HERE //////////////////

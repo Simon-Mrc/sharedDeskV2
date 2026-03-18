@@ -9,7 +9,7 @@ import { authHeaders } from "./user"
 ////////////////////////////////////////GET ALL ITEMS FROM DESKID /////////////////////////////////////////
 export async function getItemByDeskId (deskId : string) : Promise <Item[]|undefined |null> {
     try{
-        const result = await fetch(`${BASE_URL}/items/desks/${deskId}`,{
+        const result = await fetch(`${BASE_URL}/items/desks/${encodeURIComponent(deskId)}`,{
             method : 'GET',
             headers : authHeaders()
         })

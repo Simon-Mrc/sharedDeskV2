@@ -200,7 +200,7 @@ export function NoteContent ({onClose, coord, item, isCloseHighlighted} : {onClo
                     setNewContent({userName : user.userName, userColor : user.userColor, userContent : input.target.value, date : dateNow})
                     if(isContentHighlighted) tutorialContext?.nextStep() 
                 }}
-                placeholder="Your imagination is the limite lol"
+                placeholder="Write something !"
             />
                 }
                 {error && 

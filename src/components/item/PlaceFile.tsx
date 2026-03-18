@@ -76,6 +76,7 @@ export function PlaceFile ({item , propsHandler,currentFileHandler} : {item : It
                     setOptionMenu(true)
                 }
         }}
+        // OnMouse for draggable part
         onMouseDown={(e)=>{
             e.preventDefault();
             const rect = e.currentTarget.getBoundingClientRect();

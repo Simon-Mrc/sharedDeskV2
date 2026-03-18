@@ -9,8 +9,6 @@ import { DeskContext } from "../../context/DeskContext";
 ////////////////// ALL JSX FUNCTION FOR DESKS FUNCTIONS HERE ! //////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////!!!!!!!!!!!!!!!!!! ABSOLUTENOTFORGET !!!!!!!!!!!/////////////////
-
 /////////////////////////// INVITE MENU PART /////////////////////////////////
 export function InviteMenu({onClose,selectedDesk} : {onClose : ()=>void, selectedDesk : Desk|null}) : JSX.Element{
     const [friendMenu , setFriendMenu] = useState<boolean>(false);
