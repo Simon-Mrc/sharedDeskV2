@@ -148,6 +148,8 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                 }}
                 onMouseUp={async ()=>{
                     setIsDragging(false);
+                    setOnBackBtn(false);
+                    
                     if((targetFile?.id !== itemId && targetFile) && currentFile){
                         const newFile = {...currentFile, parentId : targetFile.id};
                         await updateItem(newFile);
@@ -155,6 +157,7 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     }        
                     else if (!onBackBtn){await udpdateHandler(itemId);}
                     else{currentFile && dropBackBtnHandler(currentFile)}
+                    setTargetFile(null);
                     setCurrentFile(null)
                 }}
                 >
