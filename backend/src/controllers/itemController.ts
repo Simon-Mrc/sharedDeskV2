@@ -36,6 +36,20 @@ export class ItemController {
         }
     }
 
+    createItem = async (req : Request<{},{},Omit<Item,'id'|'creatorColor'>>,res:Response<Item|null>,next : NextFunction)=>{
+    const userId = (req as any).user.userId;
+    let hashPswrd = '';
+    req.body.accessPassword ? hashPswrd = await bcrypt.hash(req.body.accessPassword ,10) : '';
+    try{
+        const newItem = itemServices.createItem(userId,hashPswrd,req.body);
+        res.json(newItem);
+    }catch(error){
+        next(error);
+    }
+
+    }
+    
+
 }
 
 /////////////////////////////// GET ALL ITEM BY USER /////////////////////////////
