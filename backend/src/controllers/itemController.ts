@@ -1,13 +1,13 @@
 //////////////////////////////////////////////////////////////////////
 //////////////////////////    IMPORT HERE     ////////////////////////
 //////////////////////////////////////////////////////////////////////
-import { Request,  Response } from 'express';
+import { NextFunction, Request,  Response } from 'express';
 import db from '../db/database';
 import { Desk, Item } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import Database from 'better-sqlite3';
-
+import { itemServices, ItemsServices } from '../services/itemServices';
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////    ROUTE FUNCTIONS     ////////////////////////
@@ -15,29 +15,26 @@ import Database from 'better-sqlite3';
 
 ////////////// REWORK WITH CLASSES ////////////////
 export class ItemController {
-    private db : InstanceType<typeof Database>;
-
-    constructor (db : InstanceType<typeof Database> ){
-        this.db = db
-    }
-    getAllItemByUserId(req : Request, res : Response<Item[]|null>){
-        try{
+    getAllItemsByUserId= (req : Request,
+        res : Response<Item[]|null>, next : NextFunction)=>{
             const userId = (req as any).user.userId;
-            let arrayOfItems = this.db.prepare(`
-                SELECT * ,users.userColor AS creatorColor,
-                users.userName AS creatorName
-                FROM items
-                LEFT JOIN users ON users.id = items.createdBy
-                WHERE items.createdBy
-                `).all(userId) as Item[]|null
-            res.json(arrayOfItems);
+            try{
+                const items = itemServices.getAllItermsByUserId(userId)
+            res.json(items)
+            }catch(error){
+            next(error)
+            }
+        }
+    
+    getItemById = (req: Request<{id : string}>,res:Response<Item|null>, next : NextFunction)=>{
+        const itemId = req.params.id;
+        try{
+            const item = itemServices.getItemById(itemId);
+            res.json(item)
         }catch(error){
-            res.status(404).json(null);
+            next(error)
         }
     }
-
-
-    
 
 }
 
@@ -54,7 +51,7 @@ const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
             `).all(userId) as Item[];
         res.json(arrayOfItems);
     }catch(error){
-        res.status(404).json(null)
+        res.json(null)
     }
 }
 
