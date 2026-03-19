@@ -6,11 +6,40 @@ import db from '../db/database';
 import { Desk, Item } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
+import Database from 'better-sqlite3';
 
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////    ROUTE FUNCTIONS     ////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+////////////// REWORK WITH CLASSES ////////////////
+export class ItemController {
+    private db : InstanceType<typeof Database>;
+
+    constructor (db : InstanceType<typeof Database> ){
+        this.db = db
+    }
+    getAllItemByUserId(req : Request, res : Response<Item[]|null>){
+        try{
+            const userId = (req as any).user.userId;
+            let arrayOfItems = this.db.prepare(`
+                SELECT * ,users.userColor AS creatorColor,
+                users.userName AS creatorName
+                FROM items
+                LEFT JOIN users ON users.id = items.createdBy
+                WHERE items.createdBy
+                `).all(userId) as Item[]|null
+            res.json(arrayOfItems);
+        }catch(error){
+            res.status(404).json(null);
+        }
+    }
+
+
+    
+
+}
 
 /////////////////////////////// GET ALL ITEM BY USER /////////////////////////////
 const getAllItemByUserId = (req : Request,res : Response<Item[]|null>)=>{
