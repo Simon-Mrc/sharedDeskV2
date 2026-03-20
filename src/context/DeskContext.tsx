@@ -23,9 +23,10 @@ export function DeskProvider({children} : {children : ReactNode}){
             return allDesks;
         }
         async function allItemHandler(deskId: string){
-            setItems(await getItemByDeskId(deskId)as Item[]);
+            const allItems = await getItemByDeskId(deskId)as Item[]; 
+            setItems(allItems);
             setLoaded(true);
-            return (await getItemByDeskId(deskId)as Item[])
+            return (allItems);
         }
 //////////////////////// REFRESH ITEM ON DESK CHANGES ///////////////////
         useEffect(()=>{
@@ -140,8 +141,6 @@ function containsNew(deskId : string) : boolean{
     return itemExists ?  true : false ;
     
 ///////// 2 OTHER WORKING OPTIONS TO KEEP IN MIND ////// WILL TRY TO USE ALL FROM TIME TO TIME ///////////
-    return !!itemExists; // !! converts to boolean
-    return Boolean(itemExists); // explicit but verbose
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
