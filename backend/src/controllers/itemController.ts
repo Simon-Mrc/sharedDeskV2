@@ -37,18 +37,28 @@ export class ItemController {
     }
 
     createItem = async (req : Request<{},{},Omit<Item,'id'|'creatorColor'>>,res:Response<Item|null>,next : NextFunction)=>{
-    const userId = (req as any).user.userId;
-    let hashPswrd = '';
-    req.body.accessPassword ? hashPswrd = await bcrypt.hash(req.body.accessPassword ,10) : '';
-    try{
-        const newItem = itemServices.createItem(userId,hashPswrd,req.body);
-        res.json(newItem);
-    }catch(error){
-        next(error);
-    }
-
+        const userId = (req as any).user.userId;
+        let hashPswrd = '';
+        req.body.accessPassword ? hashPswrd = await bcrypt.hash(req.body.accessPassword ,10) : '';
+        try{
+            const newItem = itemServices.createItem(userId,hashPswrd,req.body);
+            res.json(newItem);
+        }catch(error){
+            next(error);
+        }
     }
     
+    updateItemById = (req:Request<{id : string},{},Omit<Item,'id'|'creatorColor'>>,res:Response<Omit<Item,'creatorColor'>>, next : NextFunction)=>{
+        const userId = (req as any).user.userId;
+        const id = req.params.id;
+        const item = {...req.body,id}
+        try{
+            const updatedItem = itemServices.updateItemById(userId,item);
+            res.json(updatedItem);
+        }catch(error){
+            next(error);
+        }
+    }
 
 }
 
