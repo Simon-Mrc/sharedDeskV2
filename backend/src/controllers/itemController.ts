@@ -7,7 +7,7 @@ import { Desk, Item } from "../../../shared/types";
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import Database from 'better-sqlite3';
-import { itemServices, ItemsServices } from '../services/itemServices';
+import { itemServices } from '../services/itemServices';
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////    ROUTE FUNCTIONS     ////////////////////////
@@ -20,7 +20,7 @@ export class ItemController {
             const userId = (req as any).user.userId;
             try{
                 const items = itemServices.getAllItermsByUserId(userId)
-            res.json(items)
+            return res.json(items)
             }catch(error){
             next(error)
             }
@@ -30,7 +30,7 @@ export class ItemController {
         const itemId = req.params.id;
         try{
             const item = itemServices.getItemById(itemId);
-            res.json(item)
+            return res.json(item)
         }catch(error){
             next(error)
         }
@@ -38,13 +38,11 @@ export class ItemController {
 
     createItem = async (req : Request<{},{},Omit<Item,'id'|'creatorColor'>>,res:Response<Item|null>,next : NextFunction)=>{
         const userId = (req as any).user.userId;
-        let hashPswrd = '';
-        req.body.accessPassword ? hashPswrd = await bcrypt.hash(req.body.accessPassword ,10) : '';
         try{
-            const newItem = itemServices.createItem(userId,hashPswrd,req.body);
-            res.json(newItem);
+            const newItem = await itemServices.createItem(userId,req.body);
+            return res.json(newItem);
         }catch(error){
-            next(error);
+            await next(error);
         }
     }
     
@@ -54,12 +52,29 @@ export class ItemController {
         const item = {...req.body,id}
         try{
             const updatedItem = itemServices.updateItemById(userId,item);
-            res.json(updatedItem);
+            return res.json(updatedItem);
         }catch(error){
             next(error);
         }
     }
 
+    deleteItemById = (req : Request<{id:string}>,res:Response<null>, next : NextFunction)=>{
+        try{
+            const result = itemServices.deleteItemById(req.params.id);
+            return res.json(result);
+        }catch(error){
+            next(error);
+        }
+    }
+
+    getAllItemsByDeskId = (req : Request<{deskId : string}>,res : Response <Item[]|null>, next : NextFunction)=>{
+        try{
+            const arrayOfItems = itemServices.getAllItemByDeskId(req.params.deskId);
+            return res.json(arrayOfItems)
+        }catch(error){
+            next(error)
+        }
+    }
 }
 
 /////////////////////////////// GET ALL ITEM BY USER /////////////////////////////

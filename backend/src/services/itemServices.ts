@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Item } from "../../../shared/types";
 import db from '../db/database';
 import Database from "better-sqlite3";
+import * as bcrypt from 'bcrypt';
 
 export class ItemsServices{
         private db : InstanceType<typeof Database>;       
@@ -10,7 +11,6 @@ export class ItemsServices{
         }
    
         getAllItermsByUserId(userId : string) : Item[]{
-        try{
             let arrayOfItems = this.db.prepare(`
                 SELECT items.*, users.userColor AS creatorColor,
                 users.userName AS creatorName
@@ -19,13 +19,9 @@ export class ItemsServices{
                 WHERE items.createdBy = ?
                 `).all(userId) as Item[];
             return arrayOfItems;
-        }catch(error){
-            throw error
-        }
         }
         
         getItemById(itemId : string) : Item {
-            try{
                 let item = this.db.prepare(`
                     SELECT items.*, users.userColor as creatorColor,
                     users.userName as creatorName
@@ -34,14 +30,12 @@ export class ItemsServices{
                     WHERE items.id = ?
                     `).get(itemId) as Item;
                 return item
-            }catch(error){
-                throw error 
-            }
         }
 
-        createItem(userId : string, hashPswrd : string, item : Omit<Item,'id'|'creatorColor'>):
-        Item|null{
-            try{
+        async createItem(userId : string, item : Omit<Item,'id'|'creatorColor'>):
+        Promise<Item|null>{
+                let hashPswrd = '';
+                item.accessPassword ? hashPswrd = await bcrypt.hash(item.accessPassword ,10) : '';        
                 const id = randomUUID();
                 const myTransaction = this.db.transaction(()=>{
                     db.prepare(`
@@ -74,9 +68,6 @@ export class ItemsServices{
                 )
                 const newItem = myTransaction();
                 return newItem
-            }catch(error){
-                throw error;
-            }
         }
 
         updateItemById(
@@ -90,8 +81,7 @@ export class ItemsServices{
         parentId ,
         id ,
         createdBy } : Item
-    ): Omit<Item,'creatorColor'>{
-            try{
+        ): Omit<Item,'creatorColor'>{
                 const myTransaction = this.db.transaction(()=>{
                     this.db.prepare(`
                         UPDATE items SET
@@ -125,11 +115,27 @@ export class ItemsServices{
                         accessPassword ,
                         parentId ,
                         id }
-                }catch(error){
-                    throw (error);
-                }
+            }
+        
+        deleteItemById(id: string): null {
+                this.db.prepare(`
+                    DELETE FROM items
+                    WHERE id = ?
+                    `).run(id)
+                    return null;
+        }
+
+        getAllItemByDeskId(deskId : string) : Item[]|null{
+                const arrayOfItems = this.db.prepare(`
+                    SELECT items.*, users.userColor as creatorColor,
+                    users.userName as creatorName
+                    FROM items
+                    LEFT JOIN users ON items.createdBy = users.id
+                    WHERE items.deskId = ?
+                    `).all(deskId) as Item[] |null
+                return arrayOfItems;
         }
 }
 
-export const itemServices = new ItemsServices(db)
+export const itemServices =  new ItemsServices(db)
 
