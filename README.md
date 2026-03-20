@@ -1,3 +1,5 @@
+https://www.youtube.com/watch?v=YOP1Sev2xNY&t=89s // really not perfect needs to be rework and need to add a french presentation but i like the fact that this one is really true and spontaneous
+
 > [!NOTE]
 > Keep in mind that this is a **learning project** — not designed to be professional right away!
 > My main focus though is to do this **the right way** in order to learn the good practices and industry ways of doing!
