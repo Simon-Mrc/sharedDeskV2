@@ -3,6 +3,7 @@ import { Item } from "../../../shared/types";
 import db from '../db/database';
 import Database from "better-sqlite3";
 import * as bcrypt from 'bcrypt';
+import { FromDbError } from "../middleware/FromDbError";
 
 export class ItemsServices{
         private db : InstanceType<typeof Database>;       
@@ -83,7 +84,7 @@ export class ItemsServices{
         createdBy } : Item
         ): Omit<Item,'creatorColor'>{
                 const myTransaction = this.db.transaction(()=>{
-                    this.db.prepare(`
+                    const newItem = this.db.prepare(`
                         UPDATE items SET
                         deskId = ?,
                         name=?,
@@ -93,7 +94,8 @@ export class ItemsServices{
                         accessPassword = ?,
                         parentId = ?
                         WHERE id = ?
-                        `).run(deskId,name,type,x,y,accessPassword,parentId,id);     
+                        RETURNING * 
+                        `).get(deskId,name,type,x,y,accessPassword,parentId,id) as Omit<Item,'creatorColor'>|undefined;     
                         this.db.prepare(`
                             UPDATE itemUpdates SET
                             lastModified = ?
@@ -104,25 +106,24 @@ export class ItemsServices{
                             lastViewed = ?
                             WHERE (userId = ? AND itemId = ?)
                         `).run(Date.now(),userId,id);
+                        return newItem;
                     })
-                    myTransaction();
-                    return {createdBy ,
-                        deskId ,
-                        name ,
-                        type,
-                        x ,
-                        y ,
-                        accessPassword ,
-                        parentId ,
-                        id }
+                    const result = myTransaction();
+                    if(!result){
+                        throw new FromDbError('Item not found',404)
+                    }
+                    return result;
             }
         
         deleteItemById(id: string): null {
-                this.db.prepare(`
+                const result = this.db.prepare(`
                     DELETE FROM items
                     WHERE id = ?
                     `).run(id)
-                    return null;
+                if(result.changes === 0){
+                    throw new FromDbError('Item not found ', 404)
+                }
+                return null;
         }
 
         getAllItemByDeskId(deskId : string) : Item[]|null{
