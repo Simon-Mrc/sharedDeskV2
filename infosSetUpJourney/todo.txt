@@ -1,3 +1,10 @@
+############## First things to do  ##################
+ /!\ Rework all items services and controller from backend to take into account the new Error middleware handler
+ /!\ Clean all front end code with adding modules for component (DRY codes)
+ /!\ SetUp validation (zod Axio in backend ?) for items first 
+ /!\ Implement testing for items first 
+
+
 ############## GLOBAL LIST NO PARTICULAR ORDER ##################
  /!\ 
  /!\ Show prompt and think about better UX for upload and download
@@ -9,9 +16,10 @@
  /!\ 
 
  ######################## ABSOLUTE MUST DO ##########################
+ /!\ Rework all backend with same structure as items (clear separations of concerns)
  /!\ Add mail system now that i have done several migrations shouldn t be too hard
- /!\ SetUp validation (zod Axio in backend ?)
- /!\ Start thinking and implementing testing 
+ /!\ SetUp validation (zod Axio in backend ?) for all
+ /!\ set up testing for all
  
 
  ######################### NICE TO HAVE BUT NOT QUITE SURE ########################
