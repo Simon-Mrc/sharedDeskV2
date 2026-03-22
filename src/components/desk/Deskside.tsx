@@ -1,15 +1,13 @@
-import { useContext, useState, type JSX } from "react";
+import { useContext, type JSX } from "react";
 import { DeskContext } from "../../context/DeskContext";
-import type { Desk } from "../../../shared/types";
-import { DeskMenu } from "./DeskMenu";
+import { useModal } from "../../context/ModalContext";
 
 ////////////////////////////////////DESK SIDE JSX NOT MUCH TO SAY FOR NOW ////////////////////////////////////
 ///////////////////////// WILL HOST ALL SETTINGS FOR DESKS USER HAS ACCESS TO ////////////////////////////////////
 export function DeskSide():JSX.Element{
     const deskContext = useContext(DeskContext);
-    const [deskMenu , setDeskMenu] = useState<boolean>(false);
-    const [selectedDesk , setSelectedDesk] = useState<Desk|null>(null);
     const desks = deskContext?.desks;
+    const {openModal} = useModal();
     return(
         <div className="desksSide">
             <div className="section-header">
@@ -23,18 +21,11 @@ export function DeskSide():JSX.Element{
                 {desks?.map((desk)=>(
                     <div key = {desk.id} className="deskListInside">
                         <button  onClick={()=>deskContext?.switchDesk(desk.id)}>{desk.name}{deskContext?.containsNew(desk.id)&& '✨'}</button>
-                        <button onClick={()=>{
-                            setSelectedDesk(desk)
-                            setDeskMenu(true)}}>⚙️</button>
+                        <button onClick={()=>{openModal('deskMenu',desk)}}>⚙️</button>
                     </div>
                 ))}
 
             </div>
-                {deskMenu &&
-                <DeskMenu 
-                onClose = {()=>setDeskMenu(false)}
-                selectedDesk = {selectedDesk}
-                />}
         </div>    
     )
 }

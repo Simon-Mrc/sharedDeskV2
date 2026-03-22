@@ -3,12 +3,12 @@ import { SectionContext } from "../../context/SectionContext";
 import { DeskContext } from "../../context/DeskContext";
 import { PlaceFile } from "../item/PlaceFile";
 import { PlaceFolder } from "../item/PlaceFolder";
-import { CreateItemPrompt } from "../prompts/CreateItemPrompt";
 import { PlaceNote } from "../item/PlaceNote";
 import { getItemById, updateItem } from "../../api/item";
 import { TutorialContext } from "../../context/TutorialContext";
 import { CreateFilePrompt } from "../prompts/CreateFilePrompt";
 import type { Item } from "../../../shared/types";
+import { useModal } from "../../context/ModalContext";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// DESK DISPLAY JSX /////////////////////////
@@ -17,7 +17,6 @@ import type { Item } from "../../../shared/types";
 export function DeskDisplay():JSX.Element{
     const sectionContext = useContext(SectionContext);
     const deskContext = useContext(DeskContext);
-    const [showItemPrompt,setShowItemPrompt] = useState<boolean>(false);
     const [coord , setCoord] = useState<{x:number,y:number}>({x:0,y:0});
     const depth  = sectionContext?.depth as number;
     const updateDepth = sectionContext?.updateDepth;
@@ -29,6 +28,7 @@ export function DeskDisplay():JSX.Element{
     const [currentFile , setCurrentFile] = useState<Item|null>(null);
     const [targetFile , setTargetFile] = useState<Item|null>(null);
     const [onBackBtn ,setOnBackBtn] = useState<boolean>(false);
+    const{openModal} = useModal();
 ////////////////// ANIMATION HANDLER HERE //////////////////
     useEffect(()=>{
         setAnimationClass("hidden");
@@ -135,9 +135,9 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     if(isDeskHighlighted){
                         tutorialContext?.nextStep() 
                     }
-                setShowItemPrompt(true);
                 const rect = e.currentTarget.getBoundingClientRect();
                 setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
+                openModal('createItemPrompt',{coord});
                 e.preventDefault()
                 }}
                 // Drag file handler here
@@ -185,11 +185,6 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     onMouseEnter={()=>setOnBackBtn(true)}
                     onMouseLeave={()=>setOnBackBtn(false)}
                     >←</button>}
-                    {showItemPrompt &&
-                    <CreateItemPrompt 
-                    onClose = {()=>setShowItemPrompt(false)}
-                    coord =  {coord} />
-                    }
                     {showFilePrompt &&
                     <CreateFilePrompt 
                     onClose = {()=>setShowFilePrompt(false)}

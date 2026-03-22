@@ -7,12 +7,14 @@ export function ModalProvider ({children} : {children : ReactNode}){
     const [type , setType] = useState<ModalTypes>(null);
     const [data, setData] = useState <any>(null);
 
-    function openModal(type : ModalTypes){
+    function openModal(type : ModalTypes, data = null){
     setType(type);
+    setData(data);
     }
 
     function closeModal(){
     setType(null);
+    setData(null);
     }
 
     return(

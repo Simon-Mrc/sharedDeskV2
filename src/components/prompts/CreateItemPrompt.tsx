@@ -6,11 +6,14 @@ import { SectionContext } from "../../context/SectionContext";
 import { updateViewed } from "../../api/item";
 import { TutorialContext } from "../../context/TutorialContext"; 
 import { TUTORIAL_STEPS } from "../../context/TutorialContext"; 
+import { useModal } from "../../context/ModalContext";
+import { MenuContainer } from "../../modals/Modal";
+import { ErrorDisplay } from "../ui/ErrorDisplay";
 
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
-export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord : {x:number,y:number}}) : JSX.Element{
-    
+export function CreateItemPrompt() : JSX.Element{
+    const {data, closeModal} = useModal()
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
     const sectionContext= useContext(SectionContext);
@@ -35,6 +38,7 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function itemHandler(){
+        console.log(data)
         /////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
         ///////////////////////////////LATER CONCERN /////////////////////////////
         if(deskContext?.currentDesk?.id && userContext?.user?.id){   
@@ -42,8 +46,8 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 deskId : deskContext?.currentDesk?.id,
                 name : name,
                 type : type,
-                x: coord.x,
-                y : coord.y,
+                x: data.coord.x,
+                y : data.coord.y,
                 accessPassword : null,
                 createdBy : userContext?.user?.id,
                 creatorColor : userContext?.user?.userColor,
@@ -53,31 +57,18 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
             newItem && await updateViewed(newItem.id);
             deskContext.refreshItems();
             if(isConfirmHighlighted) tutorialContext?.nextStep();
-            endwithease();       
+            closeModal();       
         }
         else{
             setError('You need to have permission to create an item !')
         }
     }
    
-   
-    ///////////////////////////////////////////////////////////////////////
-    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
-        const [animation , setAnimation] = useState<string>('');
-            function endwithease(){
-                setTimeout(()=>{
-                    setAnimation('fadeOut')
-                    setTimeout((()=>{
-                        onClose()}),500)
-            },1)
-        }
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className={`overlay ${animation}`} onClick={()=>endwithease()} style={tutorialContext?.isActive ? { pointerEvents: "none" } : {}}>
-        <div className="PopupWithBlurr" onClick={(e)=>e.stopPropagation()}>
-            <button className="popup-close" onClick={endwithease}>✕</button>
+    <>
+        <MenuContainer onClose={()=>closeModal()}>
             <h2 className="popup-title">New note , file , or folder ?</h2>
             <p className="popup-subtitle">Choose wisely</p>
             <button 
@@ -120,19 +111,14 @@ export function CreateItemPrompt({onClose ,coord} : {onClose : ()=>void , coord 
                 }}
                 placeholder={`Enter your ${type} name`} 
             />
-            {error && 
-                 <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                 <span  className="error">{error}</span>
-                 </div>
-            }
+            <ErrorDisplay error = {error}/>
             <button 
                 className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
                 onClick={()=>itemHandler()}>
                 {`Create your ${type} `}
             </button>
-        </div>
-    </div>
-
+            </MenuContainer>
+    </>
     )
 
 }

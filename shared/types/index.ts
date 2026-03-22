@@ -58,6 +58,10 @@ export type ModalTypes = 'settings'
 | 'showFriend'
 | 'login'
 | 'register'
+| 'createItemPrompt'
+| 'deskInviteMenu'
+| 'deskMenu'
+| 'deskFriendMenu'
 | null;
 
 export interface ModalContextType {
