@@ -1,28 +1,31 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { MenuContainer } from "../../modals/Modal";
+import { useModal } from "../../context/ModalContext";
 
 /////////////////// LOGIN PROMPT ////////////// NAVIGATE TO HOME IF LOGGED ////////// PROTECTED ROUTE PREVENTS IF NOT //////////////
-export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAnimation : ()=>void}){
-    
+export function LoginPrompt(){
+    const {closeModal} = useModal()  
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [mail , setMail] = useState<string>(''); 
     const [password, setPassword] = useState<string>('');
     const [error,setError] = useState<string|null>(null);
     const [inputAnimation , setInputAnimation] = useState<string>('');
+    
     useEffect(()=>{
         if(userContext?.logged){
-            onClose();
-            setAnimation();
+            closeModal();
             setTimeout(()=>{
                 navigate('/');
             },500)
         }
     },[userContext?.logged])
+
     async function handleLogin(){
         try{
-            await userContext?.login(mail,password);
+            userContext?.login(mail,password);
             if(!userContext?.logged){
                 setError('wrong Email or Password');
                 setInputAnimation('shake');
@@ -36,23 +39,11 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
     }
    
    
-    ///////////////////////////////////////////////////////////////////////
-    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
-        const [animation , setAnimationD] = useState<string>('');
-            function endwithease(){
-                setTimeout(()=>{
-                    setAnimationD('fadeOut')
-                    setTimeout((()=>{
-                        onClose()}),500)
-            },1)
-        }
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
-        <div className={`overlay ${animation}`}>
-            <div className="PopupWithBlurr">
-                <button className="popup-close" onClick={endwithease}>✕</button>
+        <>
+            <MenuContainer onClose={()=>closeModal()}>
                 <h2 className="popup-title">Welcome back</h2>
                 <p className="popup-subtitle">Log into your account</p>
                 <span>Mail</span>
@@ -69,7 +60,7 @@ export function LoginPrompt({onClose, setAnimation} :{onClose : ()=>void, setAni
                  </div>
                 }
                 <button onClick={handleLogin}> LOG IN FRIEND !</button>
-            </div>
-        </div>
+            </MenuContainer>
+        </>
     )
 }

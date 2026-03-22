@@ -5,6 +5,8 @@ import { UserProvider } from './context/UserContext.tsx'
 import { TutorialProvider } from './context/TutorialContext.tsx'
 import { DeskProvider } from './context/DeskContext.tsx'
 import { SectionProvider } from './context/SectionContext.tsx'
+import { ModalManager } from './modals/ModalManager.tsx'
+import { ModalProvider } from './context/ModalContext.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import './style/style.css'
 import './style/buttons.css'
@@ -21,15 +23,18 @@ import './style/tutorial.css'
 createRoot(document.getElementById('root')!).render(   
     <StrictMode>
         <BrowserRouter>
-            <UserProvider>
-                <TutorialProvider>    
-                    <DeskProvider>
-                        <SectionProvider>
-                            <App />
-                        </SectionProvider>
-                    </DeskProvider>
-                </TutorialProvider>
-            </UserProvider>
+            <ModalProvider>
+                <UserProvider>
+                    <TutorialProvider>    
+                        <DeskProvider>
+                            <SectionProvider>
+                                <App />
+                                <ModalManager/>
+                            </SectionProvider>
+                        </DeskProvider>
+                    </TutorialProvider>
+                </UserProvider>
+            </ModalProvider>
         </BrowserRouter>
     </StrictMode>
 )

@@ -53,6 +53,20 @@ export interface DeskContextType {
     findOneItem : (itemId : string) => Item
 }
 
+export type ModalTypes = 'settings'
+| 'social'
+| 'showFriend'
+| 'login'
+| 'register'
+| null;
+
+export interface ModalContextType {
+    type : ModalTypes
+    data? : any;
+    openModal : (type :ModalTypes, data? :any)=> void;
+    closeModal : ()=>void;
+}
+
 export interface Item {
     id : string;
     deskId : string;

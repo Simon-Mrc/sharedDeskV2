@@ -2,10 +2,11 @@ import { useContext, useEffect, useState, type JSX } from "react";
 import { LoginPrompt } from "../components/prompts/LoginPrompt";
 import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
 import { UserContext } from "../context/UserContext";
+import { useModal } from "../context/ModalContext";
 
 ///////////// LOGIN PAGE YOU DON T SAY ///////////////////
 export function LoginPage(): JSX.Element {
-    const [showLogin, setShowLogin] = useState<boolean>(false);
+    const {openModal} = useModal();
     const [showRegister, setShowRegister] = useState<boolean>(false);
         const [animation , setAnimation] = useState<string>('hidden');
         const userContext = useContext(UserContext);
@@ -57,13 +58,9 @@ export function LoginPage(): JSX.Element {
 
             {/* LOGIN AND REGISTER PART */}
             <div className="login-container">
-                <button onClick={()=>setShowLogin(true)}>Welcome Back ! Let's Login</button>
+                <button onClick={()=>openModal('login')}>Welcome Back ! Let's Login</button>
                 <button onClick={()=>setShowRegister(true)}>New to SharedDesk ? Create an account !</button>
-                {showLogin && 
-                <LoginPrompt 
-                onClose = {()=> setShowLogin(false)}
-                setAnimation = {()=>setAnimation('fadeOut')} />
-                }
+                                
                 {showRegister &&
                 <RegisterPrompt onClose = {()=> setShowRegister(false)}
                 setAnimation = {()=>setAnimation('fadeOut')} />
