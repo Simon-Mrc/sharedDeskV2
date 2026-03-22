@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
+//////////////////////////////////////////////////////////////////////
+///////////////// CLOSE FADEOUT ANIMATION ////////////////
+////////////////////////////////////////////////////////////////////
 export function useCloseAnimation (onClose : ()=>void ,timer = 500){
-    ///////////////////////////////////////////////////////////////////////
-        /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
         const [animation , setAnimation] = useState<string>('');
         function endWithEase(){
                 setAnimation('fadeOut');
@@ -20,10 +20,10 @@ export function useCloseAnimation (onClose : ()=>void ,timer = 500){
         return {animation , endWithEase}
 }
 
+//////////////////////////////////////////////////////////////////////
+///////////////// OPEN FADE IN ANIMATION ////////////////
+////////////////////////////////////////////////////////////////////
 export function useOpenAnimation (timer = 500){
-    ///////////////////////////////////////////////////////////////////////
-        /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
         const [animation , setAnimation] = useState<string>('');
         function openWithEase(){
                 setAnimation('fadeIn');
@@ -37,4 +37,20 @@ export function useOpenAnimation (timer = 500){
             }
         },[animation,timer])
         return {animation , openWithEase}
+}
+
+//////////////////////////////////////////////////////////////////////
+///////////////// ERROR RED SHAKE ANIMATION + ERROR MESSAGE  ////////////////
+////////////////////////////////////////////////////////////////////
+export function useInputErrorAnimation(time = 500){
+    const [error,setError] = useState<string|null>(null);
+    const [inputAnimation , setInputAnimation] = useState<string>('');
+    function triggerAnimation(text = ''){
+        setError(text);
+        setInputAnimation('shake');
+        setTimeout(()=>{
+            setInputAnimation('');
+        },time)
+    }
+    return {error, inputAnimation,triggerAnimation} 
 }

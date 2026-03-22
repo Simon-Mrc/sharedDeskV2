@@ -1,13 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { registerUser } from "../../api/user";
-import type { User } from "../../../shared/types";
 import { useNavigate } from "react-router-dom";
+import { MenuContainer } from "../../modals/Modal";
+import { useModal } from "../../context/ModalContext";
+import { ErrorDisplay } from "../ui/ErrorDisplay";
+import { useInputErrorAnimation } from "../../customHooks/useAnimation";
 
 
 //////////////////////////////////// REGISTER PROMPT ////////////////////////////////////
 /////////// AUTOMATIC LOG AFTER CREATION OF USER //// NAVIGATE TO HOMEPAGE //////////////
-export function RegisterPrompt({onClose, setAnimation} : {onClose : ()=>void, setAnimation : ()=>void}){
+export function RegisterPrompt(){
+    const {closeModal} = useModal();
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [name,setName] = useState<string>('');
@@ -15,13 +19,12 @@ export function RegisterPrompt({onClose, setAnimation} : {onClose : ()=>void, se
     const [mail,setMail] = useState<string>('');
     const [password,setPassword] = useState<string>('');
     const [passwordConfirm,setPasswordConfirm] = useState<string>('');
-    const [error,setError] = useState('');
-    const [inputAnimation , setInputAnimation] = useState<string>('');
+    const {error, inputAnimation, triggerAnimation} = useInputErrorAnimation()
+    const [check, setCheck] = useState<number>(0);
 /////// AS SOON AS CREATED ===> NAVIGATE TO HOME PAGE /////////////
 useEffect(()=>{
     if(userContext?.logged){
-        onClose();
-        setAnimation();
+        closeModal()
         setTimeout(()=>{
             navigate('/');
         },500)
@@ -31,42 +34,28 @@ useEffect(()=>{
     async function handleRegister (){
         if (password === passwordConfirm){
             try{
-                const newUser : Omit<User,'password'> |null = await registerUser({name,userName,mail,password});
+                const newUser = await registerUser({name,userName,mail,password});
                 if(newUser?.id){
-                    await userContext?.login(mail,password);
+                    userContext?.login(mail,password);
                 }else{
-                    setError('Email or UserName already taken');
+                    setCheck(1);
+                    triggerAnimation('Email or UserName already taken');
                 }
             }catch{
-                setError('Server issue plz try again later')
+                triggerAnimation('Server issue plz try again later')
             }
         }else{
-            setError('The passwords are not the same');
-            setInputAnimation('shake');
-                setTimeout(()=>{
-                    setInputAnimation('');
-                },500)  
+            setCheck(3);
+            triggerAnimation('The passwords are not the same');
         }
     }
     
-    ///////////////////////////////////////////////////////////////////////
-    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
-        const [animation , setAnimationd] = useState<string>('');
-            function endwithease(){
-                setTimeout(()=>{
-                    setAnimationd('fadeOut')
-                    setTimeout((()=>{
-                        onClose()}),500)
-            },1)
-        }
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
   
     return(
-        <div className={`overlay ${animation}`} onClick={endwithease}>
-            <div className="PopupWithBlurr" onClick={(e)=>{e.stopPropagation()}}>
-                <button className="popup-close" onClick={endwithease}>✕</button>
+        <>
+            <MenuContainer onClose={()=>closeModal()}>
                 <h2 className="popup-title">Welcome New Comer !</h2>
                 <p className="popup-subtitle">Create Your New account</p>
                 <span>Name</span>
@@ -74,27 +63,23 @@ useEffect(()=>{
                  onChange={(input)=>setName(input.target.value)}
                  placeholder="Enter Your Name"/>
                  <span>Username</span>
-                 <input className="ModernInput"
+                 <input className={check ===1 ?`ModernInput ${inputAnimation}` : `ModernInput`}
                  onChange={(input)=>setUserName(input.target.value)}
                  placeholder="Enter Your UserName"/> 
                  <span>Mail</span>               
-                <input className="ModernInput" type="mail"
+                <input className={check ===1 ?`ModernInput ${inputAnimation}` : `ModernInput`} type="mail"
                  onChange={(input)=>setMail(input.target.value)}
                  placeholder="Enter Your mail"/>
                  <span>Password</span>
-                <input className={`ModernInput ${inputAnimation}`} type="password"
+                <input className={check ===3 ?`ModernInput ${inputAnimation}` : `ModernInput`} type="password"
                 onChange={(input)=>setPassword(input.target.value)}
                 placeholder="Enter Your Password"/>
-                 <input className={`ModernInput ${inputAnimation}`} type="password"
+                 <input className={check ===3 ?`ModernInput ${inputAnimation}` : `ModernInput`} type="password"
                 onChange={(input)=>setPasswordConfirm(input.target.value)}
                 placeholder="Confirm Your Password"/>
-                {error && 
-                 <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                 <span  className="error">{error}</span>
-                 </div>
-                }
+                <ErrorDisplay error = {error} />
                 <button onClick={handleRegister}> REGISTER MY FRIEND !</button>
-            </div>
-        </div>
+                </MenuContainer>
+        </>
     )
 }

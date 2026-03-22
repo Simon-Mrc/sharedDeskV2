@@ -6,7 +6,14 @@ export function MenuContainer({onClose  ,children}: {onClose : ()=> void ,childr
     const {animation : animationExit , endWithEase} = useCloseAnimation(onClose);
     useEffect(()=>{
         openWithEase();
+        const handleKeyDown = (event : KeyboardEvent)=>{
+            if(event.key === "Escape") endWithEase()
+        }
+        window.addEventListener("keydown", handleKeyDown);
+        return ()=> window.removeEventListener("keydown",handleKeyDown);
     },[])
+
+    
 
     return (
         <div className={`overlay ${animationExit} ${animationEnter}`} onClick={endWithEase}>

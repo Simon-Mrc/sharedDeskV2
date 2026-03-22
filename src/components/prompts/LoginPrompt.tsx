@@ -3,6 +3,9 @@ import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { MenuContainer } from "../../modals/Modal";
 import { useModal } from "../../context/ModalContext";
+import { useInputErrorAnimation } from "../../customHooks/useAnimation";
+import { ErrorDisplay } from "../ui/ErrorDisplay";
+import { useEnterKey } from "../../customHooks/useEnterKey";
 
 /////////////////// LOGIN PROMPT ////////////// NAVIGATE TO HOME IF LOGGED ////////// PROTECTED ROUTE PREVENTS IF NOT //////////////
 export function LoginPrompt(){
@@ -11,8 +14,8 @@ export function LoginPrompt(){
     const userContext = useContext(UserContext);
     const [mail , setMail] = useState<string>(''); 
     const [password, setPassword] = useState<string>('');
-    const [error,setError] = useState<string|null>(null);
-    const [inputAnimation , setInputAnimation] = useState<string>('');
+    const {error, inputAnimation, triggerAnimation} = useInputErrorAnimation();
+    useEnterKey(handleLogin);
     
     useEffect(()=>{
         if(userContext?.logged){
@@ -27,14 +30,12 @@ export function LoginPrompt(){
         try{
             userContext?.login(mail,password);
             if(!userContext?.logged){
-                setError('wrong Email or Password');
-                setInputAnimation('shake');
                 setTimeout(()=>{
-                    setInputAnimation('');
-                },500)  
+                    triggerAnimation('Wrong mail or password')
+                },100)
             }
         }catch(error){
-            setError('wrong Email or Password')
+            triggerAnimation('Check internet connection')
         }
     }
    
@@ -53,12 +54,8 @@ export function LoginPrompt(){
                  <span>Password</span>
                 <input className={`ModernInput ${inputAnimation}`} type="password"
                 onChange={(input)=>setPassword(input.target.value)}
-                placeholder="Enter Your Password"/>
-                {error && 
-                 <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                 <span  className="error">{error}</span>
-                 </div>
-                }
+                placeholder="Enter Your Password"/>          
+                <ErrorDisplay error = {error} />        
                 <button onClick={handleLogin}> LOG IN FRIEND !</button>
             </MenuContainer>
         </>
