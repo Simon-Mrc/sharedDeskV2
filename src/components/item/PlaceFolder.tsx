@@ -6,7 +6,6 @@ import { AccessPromptFolder } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { TutorialContext } from "../../context/TutorialContext"; 
 import { TUTORIAL_STEPS } from "../../context/TutorialContext";
-import { updateItem } from "../../api/item";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////

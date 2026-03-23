@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { DeskMenu } from "../components/desk/DeskMenu";
 import { DeskFriendMenu, DeskInviteMenu } from "../components/desk/DeskMenuFunctions";
 import { CreateItemPrompt } from "../components/prompts/CreateItemPrompt";
@@ -6,6 +5,9 @@ import { LoginPrompt } from "../components/prompts/LoginPrompt";
 import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
 import { SocialMenu } from "../components/social/SocialMenu";
 import { useModal } from "../context/ModalContext";
+import { CreateFilePrompt } from "../components/prompts/CreateFilePrompt";
+import { CreateDeskPrompt } from "../components/prompts/creatingDeskPrompt";
+import { ItemDeletePrompt, ItemNamePrompt, ItemPasswordPrompt } from "../components/prompts/OptionPrompts";
 
 export function ModalManager(){
     const {type} = useModal();
@@ -13,12 +15,21 @@ export function ModalManager(){
     if(!type) return null;
     return(
         <>
+                {/* LOGIN PAGE PART */}
             {type === 'login' && <LoginPrompt/>}
             {type === 'register' && <RegisterPrompt/>}
-            {type === 'createItemPrompt' && <CreateItemPrompt/>}
+                {/* SIDEBAR PART  */}
+            {type === 'createDeskMenu' && <CreateDeskPrompt/>}
             {type === 'deskMenu' && <DeskMenu/>}
             {type === 'deskInviteMenu' && <DeskInviteMenu/>}
             {type === 'deskFriendMenu' && <DeskFriendMenu/>}
+                {/* DESK DISPLAY PART  */}
+            {type === 'createItemPrompt' && <CreateItemPrompt/>}
+            {type === 'createFilePrompt' && <CreateFilePrompt/>}
+                {/* OPTION MENU FOR ITEM */}
+            {type === 'itemNamePrompt' && <ItemNamePrompt/>}
+            {type === 'itemPasswordPrompt' && <ItemPasswordPrompt/>}
+            {type === 'itemDeletePrompt' && <ItemDeletePrompt/>}
             {/* {type === 'social' && <SocialMenu/>} */}
         </>
     )

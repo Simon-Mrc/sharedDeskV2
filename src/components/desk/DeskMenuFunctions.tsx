@@ -63,7 +63,7 @@ export function DeskInviteMenu() : JSX.Element{
 export function DeskFriendMenu() : JSX.Element{
     const [error , setError] = useState<string>('');
     const deskContext = useContext(DeskContext);
-    const {openModal,closeModal,data} = useModal();
+    const {openModal,data} = useModal();
 
     function goBack(){
         openModal('deskInviteMenu',data.selectedDesk)
@@ -80,7 +80,7 @@ export function DeskFriendMenu() : JSX.Element{
 
     return(
        <>
-            <MenuContainer onClose={()=>goBack()}>
+        <MenuContainer onClose={()=>goBack()}>
             <h2 className="popup-title"> Invite {data.selectedFriend?.userName} to {data.selectedDesk?.name} ?</h2>
             <button onClick={()=>goBack()}>NEVER</button>
             <button onClick={()=>inviteHandler()}>YEAH</button>

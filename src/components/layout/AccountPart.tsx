@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState, type JSX } from "react";
 import { UserContext } from "../../context/UserContext";
-import { getUserById, updateUserById } from "../../api/user";
+import { updateUserById } from "../../api/user";
 import { AvatarMenu } from "../userAndAccount/AccountFunctions";
+import { MenuContainer } from "../../modals/Modal";
 
 
 //////////////////// ACCOUNT PART PUR JSX NOTHING TO SEE FOR NOW ///////////////////
@@ -21,7 +22,7 @@ export function AccountPart():JSX.Element{
               </div>
                 <button id="accountSetting" onClick={()=> setSettingMenu(true)}>⚙️Account Settings</button>
                 {settingMenu && 
-                <SettingMenu
+                <AccountSettingMenu
                 onClose = {()=> setSettingMenu(false)} />}
               </div>
             </div>
@@ -31,7 +32,7 @@ export function AccountPart():JSX.Element{
 
 
 
-export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
+export function AccountSettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
 
 //// CHANGES USERNAME /// CHANGE COLOR /// CHANGE MAIL ? /// BUY PREMIUM ? // CHANGEPASSWORD //CHANGE MAIL ///
   const userContext = useContext(UserContext);
@@ -130,17 +131,9 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
       ///////////////////////////////////////////////////////////////////////
       /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
           ////////////////////////////////////////////////////////////////////
-          const [animation , setAnimation] = useState<string>('');
-              function endwithease(){
-                  setTimeout(()=>{
-                      setAnimation('fadeOut')
-                      setTimeout((()=>{
-                          onClose()}),500)
-              },1)
-          }
+
           const [colorAnimation , setColorAnimation] = useState<string>('');
             useEffect(()=>{
-              console.log('test');
               if(colorAnimation==='fadeIn tutorialMessageText'){
                 const timer = setTimeout(()=>{
                   setTimeout(()=>{
@@ -158,119 +151,117 @@ export function SettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
       ////////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////////////
     
-      return(
-              <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
-                  <div className={`PopupWithBlurrOption`} onClick={(e)=>e.stopPropagation()}>
-                  <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                  </div>
-
-                    {/* Change userColor part */}
-                     <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                        <input className="ColorPicker" type="color" value={color}   
-                        onChange={(input)=>setColor(input.target.value)} />
-                        <button  
-                        onClick={()=>{
-                        colorHandler();
-                        setColorInfo(true)
-                        setColorAnimation('fadeIn tutorialMessageText')}} 
-                        > 🎨</button>
-                      </div>
-                      {colorInfo && 
-                       <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                       Color changed with success !   
-                       </div>}
-
-                      {/* Change userName part */}
-                     <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                        <input    
-                        className={`ModernInput ${inputNameAnimation}`}
-                        onChange={(input)=>setUserNameInput(input.target.value)} 
-                        value = {userNameInput}
-                        placeholder="Enter your new userName"/>
-                        <button  
-                        onClick={async ()=>{
-                        changeUserNameHandler();
-                        setUserNameInput('');
-                        setUserNameInfo(true);
-                        setColorAnimation('fadeIn tutorialMessageText')}} 
-                        > 🎨</button>
-                      </div>
-                      {errorName && 
-                          <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                          <span  className="error">{errorName}</span>
-                        </div>
-                      }
-                      {userNameInfo && 
-                       <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                       UserName changed with success !   
-                       </div>}
-
-                      {/* Change mail part */}
-                      <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                        <input    
-                        className={`ModernInput ${inputMailAnimation}`}
-                        onChange={(input)=>setMailInput(input.target.value)}
-                        value={mailInput} 
-                        placeholder="Enter your new mailadress"/>
-                        <button  
-                        onClick={async ()=>{
-                          await changeMailHandler();
-                          setMailInput('');
-                          setColorAnimation('fadeIn tutorialMessageText')
-                          }
-                        } 
-                        > 🎨</button>
-                      </div>
-                      {errorMail && 
-                          <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                          <span  className="error">{errorMail}</span>
-                        </div>
-                      }
-                      {mailInfo && 
-                      <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
-                      Mail changed with success !   
-                      </div>}
-
-                      {/* Set avatar part */}
-                      <button onClick={()=> setAvatarMenu(true)} >Change Avatar</button>
-                      {avatarMenu &&
-                      <AvatarMenu 
-                      onClose = {()=> setAvatarMenu(false)} 
-                      />}
-                      
-                      {/* Change password part */}
-                       {/* <button onClick={()=> setPasswordMenu(true)} >Change password</button>
-                      {passwordMenu &&
-                      <FriendList 
-                      onClose = {()=> setPasswordMenu(false)} 
-                      />}
-                      */}
-                      {/* Change account type */}
-                      {/* <button onClick={()=> setPremiumMenu(true)} >Show FriendList</button>
-                      {premiumMenu &&
-                      <FriendList 
-                      onClose = {()=> setPremiumMenu(false)} 
-                      />} */}
-                      {/* <button onClick={()=> setFriendList(true)} >Show FriendList</button>
-                      {friendList &&
-                      <FriendList 
-                      onClose = {()=> setFriendList(false)} 
-                      />}
-                      <button onClick={()=> setFriendList(true)} >Show FriendList</button>
-                      {friendList &&
-                      <FriendList 
-                      onClose = {()=> setFriendList(false)} 
-                      />}
-                      <button onClick={()=> setFriendList(true)} >Show FriendList</button>
-                      {friendList &&
-                      <FriendList 
-                      onClose = {()=> setFriendList(false)} 
-                      />} */}
-                      <button className="popup-closeOption" 
-                      style={{gridColumn: "1 / -1", textAlign :"center" }}
-                      onClick={endwithease}>✕</button>
-                  </div> 
+  return(
+    <>
+      <MenuContainer onClose={onClose}>
+    
+        <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+         </div> 
+            {/* Change userColor part */}
+            <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+            <input className="ColorPicker" type="color" value={color}   
+              onChange={(input)=>setColor(input.target.value)} />
+              <button  
+              onClick={()=>{
+              colorHandler();
+              setColorInfo(true)
+              setColorAnimation('fadeIn tutorialMessageText')}} 
+              > 🎨</button>
               </div>
-          )
-        }
+                {colorInfo && 
+                <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                  Color changed with success !   
+                </div>}
+    
+              {/* Change userName part */}
+              <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                <input    
+                className={`ModernInput ${inputNameAnimation}`}
+                onChange={(input)=>setUserNameInput(input.target.value)} 
+                value = {userNameInput}
+                placeholder="Enter your new userName"/>
+                <button  
+                onClick={async ()=>{
+                changeUserNameHandler();
+                setUserNameInput('');
+                setUserNameInfo(true);
+                setColorAnimation('fadeIn tutorialMessageText')}} 
+                > 🎨</button>
+                </div>
+                  {errorName && 
+                  <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
+                    <span  className="error">{errorName}</span>
+                  </div>
+                  }
+                {userNameInfo && 
+                  <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                   UserName changed with success !   
+                </div>}
+    
+                          {/* Change mail part */}
+                <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                  <input    
+                  className={`ModernInput ${inputMailAnimation}`}
+                  onChange={(input)=>setMailInput(input.target.value)}
+                  value={mailInput} 
+                  placeholder="Enter your new mailadress"/>
+                  <button  
+                  onClick={async ()=>{
+                    await changeMailHandler();
+                    setMailInput('');
+                    setColorAnimation('fadeIn tutorialMessageText')
+                  }
+                  } 
+                  > 🎨</button>
+                </div>
+                          {errorMail && 
+                              <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
+                              <span  className="error">{errorMail}</span>
+                            </div>
+                          }
+                          {mailInfo && 
+                          <div className={`${colorAnimation}`} style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
+                          Mail changed with success !   
+                          </div>}
+    
+                          {/* Set avatar part */}
+                          <button onClick={()=> setAvatarMenu(true)} >Change Avatar</button>
+                          {avatarMenu &&
+                          <AvatarMenu 
+                          onClose = {()=> setAvatarMenu(false)} 
+                          />}
+                          
+                          {/* Change password part */}
+                           {/* <button onClick={()=> setPasswordMenu(true)} >Change password</button>
+                          {passwordMenu &&
+                          <FriendList 
+                          onClose = {()=> setPasswordMenu(false)} 
+                          />}
+                          */}
+                          {/* Change account type */}
+                          {/* <button onClick={()=> setPremiumMenu(true)} >Show FriendList</button>
+                          {premiumMenu &&
+                          <FriendList 
+                          onClose = {()=> setPremiumMenu(false)} 
+                          />} */}
+                          {/* <button onClick={()=> setFriendList(true)} >Show FriendList</button>
+                          {friendList &&
+                          <FriendList 
+                          onClose = {()=> setFriendList(false)} 
+                          />}
+                          <button onClick={()=> setFriendList(true)} >Show FriendList</button>
+                          {friendList &&
+                          <FriendList 
+                          onClose = {()=> setFriendList(false)} 
+                          />}
+                          <button onClick={()=> setFriendList(true)} >Show FriendList</button>
+                          {friendList &&
+                          <FriendList 
+                          onClose = {()=> setFriendList(false)} 
+                          />} */}
+
+      </MenuContainer>
+    </>         
+  )
+}
 

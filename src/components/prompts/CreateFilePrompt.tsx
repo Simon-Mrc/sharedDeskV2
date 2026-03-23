@@ -4,11 +4,16 @@ import { UserContext } from "../../context/UserContext";
 import type { Item } from "../../../shared/types";
 import { SectionContext } from "../../context/SectionContext";
 import { updateFile } from "../../api/file";
+import { useModal } from "../../context/ModalContext";
+import { ErrorDisplay } from "../ui/ErrorDisplay";
+import { MenuContainer } from "../../modals/Modal";
+import { useEnterKey } from "../../customHooks/useEnterKey";
 
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
-export function CreateFilePrompt({onClose ,coord, fileContent} : {onClose : ()=>void , coord : {x:number,y:number}, fileContent : File | null}) : JSX.Element{
+export function CreateFilePrompt() : JSX.Element{
     
+    const{closeModal,data} = useModal()
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
     const sectionContext= useContext(SectionContext);
@@ -29,41 +34,29 @@ export function CreateFilePrompt({onClose ,coord, fileContent} : {onClose : ()=>
                 deskId : deskContext?.currentDesk?.id,
                 name : name,
                 type : 'file',
-                x: coord.x,
-                y : coord.y,
+                x: data.coord.x,
+                y : data.coord.y,
                 accessPassword : null,
                 createdBy : userContext?.user?.id,
                 creatorColor : userContext.user.userColor,
                 parentId : sectionContext?.currentSection ?? null,
                 creatorName : userContext.user.userName
             })
-            if(newItem && fileContent){
-            await handleUpdate(fileContent,newItem);
+            if(newItem && data.fileContent){
+            await handleUpdate(data.fileContent,newItem);
             deskContext.refreshItems();
-            endwithease();}
+            closeModal();}
         }
         else{
             setError('You need to have permission to create an item !')
         }
     }
-
-        ///////////////////////////////////////////////////////////////////////
-        /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-            ////////////////////////////////////////////////////////////////////
-            const [animation , setAnimation] = useState<string>('');
-                function endwithease(){
-                    setTimeout(()=>{
-                        setAnimation('fadeOut')
-                        setTimeout((()=>{
-                            onClose()}),500)
-                },1)
-            }
+    useEnterKey(itemHandler)
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
         return(
-        <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
-            <div className="PopupWithBlurr" onClick={(e)=>e.stopPropagation()}>
-                <button className="popup-close" onClick={endwithease}>✕</button>
+            <>
+                <MenuContainer onClose={closeModal}>
                 <h2 className="popup-title">Choose a name for your upload ?</h2>
                 <p className="popup-subtitle">Don t forget the extension</p>
                 <input 
@@ -73,17 +66,12 @@ export function CreateFilePrompt({onClose ,coord, fileContent} : {onClose : ()=>
                         }}
                     placeholder={`Enter your file name`} 
                 />
-                {error && 
-                     <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                     <span  className="error">{error}</span>
-                     </div>
-                }
+                <ErrorDisplay error = {error} />
                 <button 
                     onClick={async ()=> itemHandler()}>
                     {`Create your item for upload `}
                 </button>
-            </div>
-        </div>
-    
+                </MenuContainer>
+            </> 
         )
     }

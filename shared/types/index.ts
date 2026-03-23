@@ -59,9 +59,14 @@ export type ModalTypes = 'settings'
 | 'login'
 | 'register'
 | 'createItemPrompt'
+| 'createFilePrompt'
 | 'deskInviteMenu'
 | 'deskMenu'
 | 'deskFriendMenu'
+| 'createDeskMenu'
+| 'itemNamePrompt'
+| 'itemDeletePrompt'
+| 'itemPasswordPrompt'
 | null;
 
 export interface ModalContextType {

@@ -5,6 +5,7 @@ import { AccessPromptFile } from "./../prompts/AccessPrompt";
 import { DeskContext } from "../../context/DeskContext";
 import { downloadFile, updateFile } from "../../api/file";
 import { TutorialContext } from "../../context/TutorialContext";
+import { useCloseAnimation } from "../../customHooks/useAnimation";
 
 ////////////////// PURE JSX FUNCTION ////////////////// ONLY DOM CREATION HERE //////////////////
 ////////////////// AGAIN getBoundingClientRect FOR RIGHT MOUSE POSITIONNING //////////////////
@@ -130,24 +131,13 @@ export function DropArea({onClose,item, isDropHighlighted } : {onClose : ()=>voi
         setError('File not eligible to download')
     }
     const inputRef = useRef<HTMLInputElement>(null);
-    
-    
-    ///////////////////////////////////////////////////////////////////////
-    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
-        const [animation , setAnimationD] = useState<string>('');
-            function endwithease(){
-                setTimeout(()=>{
-                    setAnimationD('fadeOut')
-                    setTimeout((()=>{
-                        onClose()}),500)
-            },1)
-        }
-        const [error,setError] = useState<string|null>(null);
+    const [error,setError] = useState<string|null>(null);
+
+    const{animation, endWithEase} = useCloseAnimation(onClose)
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
-        <div className={`overlay ${animation}`} onClick={endwithease}>
+        <div className={`overlay ${animation}`} onClick={endWithEase}>
             <div 
             className={`dropArea ${areaClass} ${isDropHighlighted ? 'tutorialHighlight' : ''}`}
             onClick={(e)=>{e.stopPropagation()}}
@@ -161,7 +151,7 @@ export function DropArea({onClose,item, isDropHighlighted } : {onClose : ()=>voi
             onDrop={async (e)=>{
                 e.preventDefault();
                 await handleUpdate(e.dataTransfer.files[0]);
-                endwithease();
+                endWithEase();
             }}
             >
                 <div className="PopupDropZone" >
@@ -180,9 +170,9 @@ export function DropArea({onClose,item, isDropHighlighted } : {onClose : ()=>voi
                 style={{display:'none'}}
                 onChange={async (e)=> 
                     {e.target.files?.[0] && await handleUpdate(e.target.files[0]);
-                    endwithease()
+                        endWithEase()
                     }} />
-                <button className="popup-close" onClick={endwithease}>✕</button>
+                <button className="popup-close" onClick={endWithEase}>✕</button>
                 </div>
                 {error && 
                  <span  className="errorDropZone">{error}</span>

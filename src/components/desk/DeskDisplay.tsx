@@ -6,7 +6,6 @@ import { PlaceFolder } from "../item/PlaceFolder";
 import { PlaceNote } from "../item/PlaceNote";
 import { getItemById, updateItem } from "../../api/item";
 import { TutorialContext } from "../../context/TutorialContext";
-import { CreateFilePrompt } from "../prompts/CreateFilePrompt";
 import type { Item } from "../../../shared/types";
 import { useModal } from "../../context/ModalContext";
 
@@ -96,8 +95,6 @@ function propsHandler(itemId:string , offCoord:{X:number, Y: number}){
     setIsDragging(true);
 }
 ////////////////DRAG FOR DOWNLOAD HERE ///////////////////////////
-
-const [showFilePrompt,setShowFilePrompt] = useState<boolean>(false);
 const [error,setError] = useState<string>('');
 const [fileContent , setFileContent] = useState<File|null>(null);
 ////////////////////USER DISPLAY HERE /////////////////////////////
@@ -125,9 +122,9 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     e.preventDefault();
                     setAreaClass('');
                     e.dataTransfer.files[0]!=null && setFileContent(e.dataTransfer.files[0])
-                    setShowFilePrompt(true);
                     const rect = e.currentTarget.getBoundingClientRect();
                     setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
+                    openModal('createItemPrompt',{coord});
                 }}
                 //////////////////////////////
                 onContextMenu={(e)=>{
@@ -137,7 +134,7 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     }
                 const rect = e.currentTarget.getBoundingClientRect();
                 setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
-                openModal('createItemPrompt',{coord});
+                openModal('createFilePrompt',{coord,fileContent});
                 e.preventDefault()
                 }}
                 // Drag file handler here
@@ -185,12 +182,6 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     onMouseEnter={()=>setOnBackBtn(true)}
                     onMouseLeave={()=>setOnBackBtn(false)}
                     >←</button>}
-                    {showFilePrompt &&
-                    <CreateFilePrompt 
-                    onClose = {()=>setShowFilePrompt(false)}
-                    coord =  {coord}
-                    fileContent = {fileContent}/>
-                    }
             {arrayOfItem.map((item)=>(
                 item.type === 'folder'
                 ? (<PlaceFolder key = {item.id} item = {item} 

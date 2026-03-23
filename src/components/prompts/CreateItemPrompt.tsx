@@ -9,6 +9,7 @@ import { TUTORIAL_STEPS } from "../../context/TutorialContext";
 import { useModal } from "../../context/ModalContext";
 import { MenuContainer } from "../../modals/Modal";
 import { ErrorDisplay } from "../ui/ErrorDisplay";
+import { useEnterKey } from "../../customHooks/useEnterKey";
 
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
@@ -20,7 +21,8 @@ export function CreateItemPrompt() : JSX.Element{
     const [type , setType] = useState<Item['type']>("file");
     const [name , setName] = useState<string>('');
     const [error,setError] = useState<string>('');
-    const tutorialContext = useContext(TutorialContext)
+    const tutorialContext = useContext(TutorialContext);
+    useEnterKey(itemHandler)
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////TUTORIAL TARGETS /////////////////////////////////////////////////////
@@ -38,7 +40,6 @@ export function CreateItemPrompt() : JSX.Element{
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function itemHandler(){
-        console.log(data)
         /////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
         ///////////////////////////////LATER CONCERN /////////////////////////////
         if(deskContext?.currentDesk?.id && userContext?.user?.id){   
