@@ -53,6 +53,36 @@ export interface DeskContextType {
     findOneItem : (itemId : string) => Item
 }
 
+export type ModalTypes = 'settings'
+| 'social'
+| 'showFriend'
+| 'login'
+| 'register'
+| 'createItemPrompt'
+| 'createFilePrompt'
+| 'deskInviteMenu'
+| 'deskMenu'
+| 'deskFriendMenu'
+| 'createDeskMenu'
+| 'itemNamePrompt'
+| 'itemDeletePrompt'
+| 'itemPasswordPrompt'
+| 'socialMenu'
+| 'searchFriendSocial'
+| 'inviteFriendSocial'
+| 'showInvitSocial'
+| 'acceptOrNotSocial'
+| 'showFriendListSocial'
+| 'friendMenuSocial'
+| null;
+
+export interface ModalContextType {
+    type : ModalTypes
+    data? : any;
+    openModal : (type :ModalTypes, data? :any)=> void;
+    closeModal : ()=>void;
+}
+
 export interface Item {
     id : string;
     deskId : string;

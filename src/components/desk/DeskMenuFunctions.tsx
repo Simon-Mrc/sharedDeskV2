@@ -4,19 +4,24 @@ import { UserContext } from "../../context/UserContext";
 import { getUserById } from "../../api/user";
 import { inviteToDesk } from "../../api/deskAccess";
 import { DeskContext } from "../../context/DeskContext";
+import { MenuContainer } from "../../modals/Modal";
+import { useModal } from "../../context/ModalContext";
+import { ErrorDisplay } from "../ui/ErrorDisplay";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 ////////////////// ALL JSX FUNCTION FOR DESKS FUNCTIONS HERE ! //////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////// INVITE MENU PART /////////////////////////////////
-export function InviteMenu({onClose,selectedDesk} : {onClose : ()=>void, selectedDesk : Desk|null}) : JSX.Element{
-    const [friendMenu , setFriendMenu] = useState<boolean>(false);
-    const [selectedFriend , setSelectedFriend] = useState<Omit<User,'password'>|null>(null);
+export function DeskInviteMenu() : JSX.Element{
     const[friendArray ,setFriendArray] = useState<(Omit<User,'password'>|null)[]>([]);
     const [error,setError] = useState<string>('');
     const userContext = useContext(UserContext);
+    const {data,openModal} = useModal()
 
+    function goBack(){
+        openModal('deskMenu',data)
+    }
     
     ///////////// GETTING ALL FRIEND SET IN NEW ARRAY //////////////////
     async function setAllFriends(){
@@ -37,98 +42,51 @@ export function InviteMenu({onClose,selectedDesk} : {onClose : ()=>void, selecte
     }),[userContext?.user?.friendList.length])
     
 
-    ///////////////////////////////////////////////////////////////////////
-    /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-        ////////////////////////////////////////////////////////////////////
-        const [animation , setAnimation] = useState<string>('');
-            function endwithease(){
-                setTimeout(()=>{
-                    setAnimation('fadeOut')
-                    setTimeout((()=>{
-                        onClose()}),500)
-            },1)
-        }
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     return(
-    <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
-        <div className={`PopupWithBlurrOption`} onClick={(e)=>e.stopPropagation()}>
+    <>
+        <MenuContainer onClose={goBack}>
             {friendArray.map((friend)=>(
-                <button style={{border: `1.5px solid ${friend?.userColor}`}}
+                <button key={friend?.id} style={{border: `1.5px solid ${friend?.userColor}`}}
                  onClick={()=>{
-                    setFriendMenu(true);
-                    setSelectedFriend(friend)
+                    openModal('deskFriendMenu',{selectedFriend : friend ,selectedDesk : data})
                 }}>{friend?.userName}</button>
             ))}
-            {friendMenu&&
-            <FriendMenu
-            onClose = {()=>setFriendMenu(false)}
-            selectedFriend={selectedFriend}
-            selectedDesk = {selectedDesk}
-            />}
-
-
-            {error && 
-                <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                <span  className="error">{error}</span>
-                </div>
-            }
-            <button className="popup-closeOption" 
-            style={{gridColumn: "1 / -1", textAlign :"center" }}
-            onClick={endwithease}>✕</button>
-        </div>
-    </div>
+            <ErrorDisplay error = {error}/>
+        </MenuContainer>
+    </>
     )
 }
 
 //////////////////// FRIEND MENU PART FOLLOWING INVITE MENU ////////////////////////
-export function FriendMenu({onClose , selectedFriend, selectedDesk} : {onClose: ()=>void , selectedFriend : Omit<User,'password'>|null, selectedDesk : Desk|null}) : JSX.Element{
+export function DeskFriendMenu() : JSX.Element{
     const [error , setError] = useState<string>('');
     const deskContext = useContext(DeskContext);
+    const {openModal,data} = useModal();
+
+    function goBack(){
+        openModal('deskInviteMenu',data.selectedDesk)
+    }
 
     async function inviteHandler(){
-        if(selectedDesk && selectedFriend){
-            const messageFromDb = await inviteToDesk(selectedFriend?.id,selectedDesk?.id);
+        if(data.selectedDesk && data.selectedFriend){
+            const messageFromDb = await inviteToDesk(data.selectedFriend?.id,data.selectedDesk?.id);
             setError(messageFromDb.message);
             deskContext?.refreshDesks();
-            setTimeout(()=>{
-                setAnimation('fadeOut')
-                setTimeout((()=>{
-                    onClose()}),500)
-                },1500)
-            }
+            goBack()
         }
-  
-  
-        ///////////////////////////////////////////////////////////////////////
-        /////////////////////// ANIMATION HANDLER PART TO BE REUSED ////////////////
-            ////////////////////////////////////////////////////////////////////
-            const [animation , setAnimation] = useState<string>('');
-                function endwithease(){
-                    setTimeout(()=>{
-                        setAnimation('fadeOut')
-                        setTimeout((()=>{
-                            onClose()}),500)
-                },1)
-            }
-        ////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////
+    }
+
     return(
-        <div className={`overlay ${animation}`} onClick={()=>endwithease()}>
-        <div className={`PopupWithBlurrOption`} onClick={(e)=>e.stopPropagation()}>
-            <h2 className="popup-title"> Invite {selectedFriend?.userName} to {selectedDesk?.name} ?</h2>
-            <button onClick={()=>endwithease()}>NEVER</button>
+       <>
+        <MenuContainer onClose={()=>goBack()}>
+            <h2 className="popup-title"> Invite {data.selectedFriend?.userName} to {data.selectedDesk?.name} ?</h2>
+            <button onClick={()=>goBack()}>NEVER</button>
             <button onClick={()=>inviteHandler()}>YEAH</button>
-            {error && 
-                <div className="PopupInside" style={{gridColumn: "1 / -1", textAlign :"center" }}>
-                <span  className="error">{error}</span>
-                </div>
-            }
-            <button className="popup-closeOption" 
-            style={{gridColumn: "1 / -1", textAlign :"center" }}
-            onClick={endwithease}>✕</button>
-        </div>
-    </div>
+            <ErrorDisplay error = {error}/>
+         </MenuContainer>
+    </> 
     )
 }
 
