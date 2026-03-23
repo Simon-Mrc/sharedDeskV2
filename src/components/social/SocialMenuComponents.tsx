@@ -94,9 +94,11 @@ export function ShowInvitSocial() : JSX.Element{
                     if(userContext && userContext.user){
                         const safeArray = await Promise.all(userContext.user.notif.map((friendId)=>getUserById(friendId)));
                         setArrayOfFriend(safeArray);
+                        return safeArray;
                     }
+                    return null;
                 }
-                fetchFriend();
+                const newArrayOfFriends = fetchFriend();
             }
     },[userContext?.user?.notif.length]) 
     const [error,setError] = useState<string>('');

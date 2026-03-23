@@ -24,7 +24,7 @@ export function useCloseAnimation (onClose : ()=>void ,timer = 500){
 ///////////////// OPEN FADE IN ANIMATION ////////////////
 ////////////////////////////////////////////////////////////////////
 export function useOpenAnimation (timer = 500){
-        const [animation , setAnimation] = useState<string>('');
+        const [animation , setAnimation] = useState<string>('hidden');
         function openWithEase(){
                 setAnimation('fadeIn');
             }

@@ -15,8 +15,9 @@ export function SocialMenu():JSX.Element{
     const [search , setSearch] = useState<string>('');
     const [arrayOfFriends , setArrayOffFriends] = useState<Omit<User,'password'>[]|null>(null);
     async function searchHandler(){
-        const arrayOfFriend = await getUserBySearch(search);
-        setArrayOffFriends(arrayOfFriend);
+        const newArrayOfFriend = await getUserBySearch(search);
+        setArrayOffFriends(newArrayOfFriend);
+        return newArrayOfFriend;
     }
 
 
@@ -31,17 +32,19 @@ export function SocialMenu():JSX.Element{
                         onChange={(input)=>setSearch(input.target.value)}
                         placeholder='Enter your friend Name or userName' />
                     <button  style={{maxWidth :"20%"}}
-                    onClick={()=>{
-                        searchHandler();
-                        openModal('searchFriendSocial', arrayOfFriends);
+                    onClick={async ()=>{
+                        const newArrayOfFriend = await searchHandler();
+                        openModal('searchFriendSocial', newArrayOfFriend);
                     }} 
                     > 🔍</button>
                 </div>
 
-                    <button className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
+                    <button 
                         onClick={()=> openModal('showFriendListSocial')} >Show FriendList
                     </button>
-                    <button onClick={()=> openModal('showInvitSocial')}
+                    <button 
+                    className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
+                    onClick={()=> openModal('showInvitSocial')}
                         >Show Invits{userContext?.user?.notif.length!=0 && ('🔔')}
                     </button>
             </MenuContainer>

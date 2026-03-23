@@ -123,8 +123,9 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     setAreaClass('');
                     e.dataTransfer.files[0]!=null && setFileContent(e.dataTransfer.files[0])
                     const rect = e.currentTarget.getBoundingClientRect();
+                    const newCoord = {x : e.clientX -rect.left ,y:e.clientY - rect.top };
                     setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
-                    openModal('createItemPrompt',{coord});
+                    openModal('createFilePrompt',{newCoord,fileContent});
                 }}
                 //////////////////////////////
                 onContextMenu={(e)=>{
@@ -134,7 +135,8 @@ const {allUsersNameNColor, ...restOfDesk} = existingDesk ?? {};
                     }
                 const rect = e.currentTarget.getBoundingClientRect();
                 setCoord({x : e.clientX -rect.left ,y:e.clientY - rect.top });
-                openModal('createFilePrompt',{coord,fileContent});
+                const newCoord = {x : e.clientX -rect.left ,y:e.clientY - rect.top };
+                openModal('createItemPrompt',{newCoord})
                 e.preventDefault()
                 }}
                 // Drag file handler here

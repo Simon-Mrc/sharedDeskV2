@@ -40,6 +40,7 @@ export function CreateItemPrompt() : JSX.Element{
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async function itemHandler(){
+        console.log(data);
         /////////////////////////////NEED TO ADD A CHECK RIGHT HERE /////////////////////////
         ///////////////////////////////LATER CONCERN /////////////////////////////
         if(deskContext?.currentDesk?.id && userContext?.user?.id){   
@@ -47,8 +48,8 @@ export function CreateItemPrompt() : JSX.Element{
                 deskId : deskContext?.currentDesk?.id,
                 name : name,
                 type : type,
-                x: data.coord.x,
-                y : data.coord.y,
+                x: data.newCoord.x,
+                y : data.newCoord.y,
                 accessPassword : null,
                 createdBy : userContext?.user?.id,
                 creatorColor : userContext?.user?.userColor,
