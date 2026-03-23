@@ -6,6 +6,7 @@ import { MenuContainer } from "../../modals/Modal";
 import { useModal } from "../../context/ModalContext";
 import { ErrorDisplay } from "../ui/ErrorDisplay";
 import { useInputErrorAnimation } from "../../customHooks/useAnimation";
+import { useEnterKey } from "../../customHooks/useEnterKey";
 
 
 //////////////////////////////////// REGISTER PROMPT ////////////////////////////////////
@@ -49,7 +50,7 @@ useEffect(()=>{
             triggerAnimation('The passwords are not the same');
         }
     }
-    
+    useEnterKey(handleRegister)
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
   

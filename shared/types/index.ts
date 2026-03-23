@@ -67,6 +67,13 @@ export type ModalTypes = 'settings'
 | 'itemNamePrompt'
 | 'itemDeletePrompt'
 | 'itemPasswordPrompt'
+| 'socialMenu'
+| 'searchFriendSocial'
+| 'inviteFriendSocial'
+| 'showInvitSocial'
+| 'acceptOrNotSocial'
+| 'showFriendListSocial'
+| 'friendMenuSocial'
 | null;
 
 export interface ModalContextType {

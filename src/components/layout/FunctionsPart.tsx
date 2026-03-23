@@ -12,7 +12,6 @@ export function FunctionsPart():JSX.Element{
     const {openModal} = useModal()
     const userContext = useContext(UserContext);
     const [notAshamedTree , setNotAshamedTree] = useState<boolean>(false);
-    const [socialMenu , setSocialMenu] = useState<boolean>(false);
     const sectionContext = useContext(SectionContext);
     const tutorialContext = useContext(TutorialContext);
     const isHighlighted = (tutorialContext?.currentTarget === 'createDesk' && tutorialContext.isActive);
@@ -38,11 +37,9 @@ export function FunctionsPart():JSX.Element{
             <button id="getLinkBtn">🔗GET LINK</button>
             <button id="socialBtn" 
             className={isConfirmHighlighted ? 'tutorialHighlight' : ''}
-            onClick={()=>setSocialMenu(true)}>
+            onClick={()=>openModal('socialMenu')}>
                 👥 Friends{userContext?.user?.notif.length!=0 && '🔔'}
             </button>
-            {socialMenu &&
-            <SocialMenu onClose = {()=> setSocialMenu(false)} />}
             <button 
                 id="shamingTree" 
                 className={`icon-btn ${isTreeHighlighted ? 'tutorialHighlight' : ''}`}

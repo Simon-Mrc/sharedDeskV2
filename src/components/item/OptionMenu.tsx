@@ -7,7 +7,7 @@ import { useModal } from "../../context/ModalContext";
 ////////////////////////////////////BIG ONE HERE OPTION MENU FOR FILES AND FOLDERS ////////////////////////////////////
 ////////////////////////////USE EFFECT FOR ARRAY OF TRUTH ACTUALLY NOT NEEDED FOR NOW ////////////////////////////////////
 export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord : {x:number,y:number}, item : Item}){
-    const {closeModal,openModal,data} = useModal();
+    const {openModal} = useModal();
     const {animation, endWithEase} = useCloseAnimation(onClose);
     const [duplicatePrompt , setDuplicatePrompt] = useState<boolean>(false);
     const [hidden,setHidden] = useState<string>('');

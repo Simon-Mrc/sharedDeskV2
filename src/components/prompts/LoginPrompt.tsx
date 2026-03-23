@@ -15,7 +15,7 @@ export function LoginPrompt(){
     const [mail , setMail] = useState<string>(''); 
     const [password, setPassword] = useState<string>('');
     const {error, inputAnimation, triggerAnimation} = useInputErrorAnimation();
-    useEnterKey(handleLogin);
+
     
     useEffect(()=>{
         if(userContext?.logged){
@@ -38,6 +38,7 @@ export function LoginPrompt(){
             triggerAnimation('Check internet connection')
         }
     }
+    useEnterKey(handleLogin);
    
    
     ////////////////////////////////////////////////////////////////////////////////

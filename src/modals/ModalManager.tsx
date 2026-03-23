@@ -8,6 +8,7 @@ import { useModal } from "../context/ModalContext";
 import { CreateFilePrompt } from "../components/prompts/CreateFilePrompt";
 import { CreateDeskPrompt } from "../components/prompts/creatingDeskPrompt";
 import { ItemDeletePrompt, ItemNamePrompt, ItemPasswordPrompt } from "../components/prompts/OptionPrompts";
+import { AcceptOrNotSocial, FriendMenuSocial, InviteFriendSocial, SearchFriendSocial, ShowFriendListSocial, ShowInvitSocial } from "../components/social/SocialMenuComponents";
 
 export function ModalManager(){
     const {type} = useModal();
@@ -30,7 +31,15 @@ export function ModalManager(){
             {type === 'itemNamePrompt' && <ItemNamePrompt/>}
             {type === 'itemPasswordPrompt' && <ItemPasswordPrompt/>}
             {type === 'itemDeletePrompt' && <ItemDeletePrompt/>}
-            {/* {type === 'social' && <SocialMenu/>} */}
+                {/* SOCIAL PART */}
+            {type === 'socialMenu' && <SocialMenu/>}
+            {type === 'searchFriendSocial' && <SearchFriendSocial/>}
+            {type === 'inviteFriendSocial' && <InviteFriendSocial/>}
+            {type === 'showInvitSocial' && <ShowInvitSocial/>}
+            {type === 'acceptOrNotSocial' && <AcceptOrNotSocial/>}
+            {type === 'showFriendListSocial' && <ShowFriendListSocial/>}
+            {type === 'friendMenuSocial' && <FriendMenuSocial/>}
+
         </>
     )
 }

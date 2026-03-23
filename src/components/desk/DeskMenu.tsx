@@ -5,7 +5,7 @@ import { useModal } from "../../context/ModalContext";
 ////////////////////////////////////BIG ONE HERE OPTION MENU  ////////////////////////////////////
 //////////////////////////// ROOT OF ALL STATE FOR SHAREDDESK MENU FUNCTIONS ////////////////////////////////////
 export function DeskMenu () : JSX.Element{
-    const {closeModal,openModal,data} = useModal();
+    const {closeModal,openModal,data } = useModal();
     const [input , setInput] = useState<string>('');
 
     return(
