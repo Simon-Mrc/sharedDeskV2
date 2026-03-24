@@ -12,7 +12,7 @@ import { useEnterKey } from "../../customHooks/useEnterKey";
 //////////////////////////////////// REGISTER PROMPT ////////////////////////////////////
 /////////// AUTOMATIC LOG AFTER CREATION OF USER //// NAVIGATE TO HOMEPAGE //////////////
 export function RegisterPrompt(){
-    const {closeModal} = useModal();
+    const {prevModal} = useModal();
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [name,setName] = useState<string>('');
@@ -25,7 +25,7 @@ export function RegisterPrompt(){
 /////// AS SOON AS CREATED ===> NAVIGATE TO HOME PAGE /////////////
 useEffect(()=>{
     if(userContext?.logged){
-        closeModal()
+        prevModal()
         setTimeout(()=>{
             navigate('/');
         },500)
@@ -56,7 +56,7 @@ useEffect(()=>{
   
     return(
         <>
-            <MenuContainer onClose={()=>closeModal()}>
+            <MenuContainer onClose={()=>prevModal()}>
                 <h2 className="popup-title">Welcome New Comer !</h2>
                 <p className="popup-subtitle">Create Your New account</p>
                 <span>Name</span>

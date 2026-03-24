@@ -1,11 +1,11 @@
 import { useContext, useRef, useState, type JSX } from "react";
-import { DeskContext } from "../../context/DeskContext";
 import { changeAvatar } from "../../api/user";
 import { UserContext } from "../../context/UserContext";
+import { useModal } from "../../context/ModalContext";
 
-export function AvatarMenu({onClose} : {onClose : ()=>void}) : JSX.Element{
+export function AvatarMenu() : JSX.Element{
+    const {prevModal} = useModal();
     const [areaClass , setAreaClass] = useState<string>('');
-       const deskContext = useContext(DeskContext);
        const userContext = useContext(UserContext);
     
         async function handleUpdate(file : File){
@@ -27,7 +27,7 @@ export function AvatarMenu({onClose} : {onClose : ()=>void}) : JSX.Element{
                     setTimeout(()=>{
                         setAnimationD('fadeOut')
                         setTimeout((()=>{
-                            onClose()}),500)
+                            prevModal()}),500)
                 },1)
             }
             const [error,setError] = useState<string|null>(null);

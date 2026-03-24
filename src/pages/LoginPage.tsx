@@ -1,6 +1,4 @@
 import { useContext, useEffect, useState, type JSX } from "react";
-import { LoginPrompt } from "../components/prompts/LoginPrompt";
-import { RegisterPrompt } from "../components/prompts/RegisterPrompt";
 import { UserContext } from "../context/UserContext";
 import { useModal } from "../context/ModalContext";
 

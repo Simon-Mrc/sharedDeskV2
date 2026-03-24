@@ -14,7 +14,7 @@ import { useEnterKey } from "../../customHooks/useEnterKey";
 
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
 export function CreateItemPrompt() : JSX.Element{
-    const {data, closeModal} = useModal()
+    const {data, prevModal} = useModal()
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
     const sectionContext= useContext(SectionContext);
@@ -59,7 +59,7 @@ export function CreateItemPrompt() : JSX.Element{
             newItem && await updateViewed(newItem.id);
             deskContext.refreshItems();
             if(isConfirmHighlighted) tutorialContext?.nextStep();
-            closeModal();       
+            prevModal();       
         }
         else{
             setError('You need to have permission to create an item !')
@@ -70,7 +70,7 @@ export function CreateItemPrompt() : JSX.Element{
     ////////////////////////////////////////////////////////////////////////////////
     return(
     <>
-        <MenuContainer onClose={()=>closeModal()}>
+        <MenuContainer onClose={()=>prevModal()}>
             <h2 className="popup-title">New note , file , or folder ?</h2>
             <p className="popup-subtitle">Choose wisely</p>
             <button 

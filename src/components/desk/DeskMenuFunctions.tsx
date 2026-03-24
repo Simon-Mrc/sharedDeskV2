@@ -17,10 +17,10 @@ export function DeskInviteMenu() : JSX.Element{
     const[friendArray ,setFriendArray] = useState<(Omit<User,'password'>|null)[]>([]);
     const [error,setError] = useState<string>('');
     const userContext = useContext(UserContext);
-    const {data,openModal} = useModal()
+    const {data,prevModal,openModal} = useModal()
 
     function goBack(){
-        openModal('deskMenu',data)
+        prevModal()
     }
     
     ///////////// GETTING ALL FRIEND SET IN NEW ARRAY //////////////////
@@ -63,10 +63,10 @@ export function DeskInviteMenu() : JSX.Element{
 export function DeskFriendMenu() : JSX.Element{
     const [error , setError] = useState<string>('');
     const deskContext = useContext(DeskContext);
-    const {openModal,data} = useModal();
+    const {prevModal,data} = useModal();
 
     function goBack(){
-        openModal('deskInviteMenu',data.selectedDesk)
+        prevModal();
     }
 
     async function inviteHandler(){

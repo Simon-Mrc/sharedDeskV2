@@ -5,12 +5,12 @@ import { useModal } from "../../context/ModalContext";
 ////////////////////////////////////BIG ONE HERE OPTION MENU  ////////////////////////////////////
 //////////////////////////// ROOT OF ALL STATE FOR SHAREDDESK MENU FUNCTIONS ////////////////////////////////////
 export function DeskMenu () : JSX.Element{
-    const {closeModal,openModal,data } = useModal();
+    const {prevModal,openModal,data } = useModal();
     const [input , setInput] = useState<string>('');
 
     return(
         <>
-            <MenuContainer onClose={()=>closeModal()}>
+            <MenuContainer onClose={()=>prevModal()}>
                 <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
                     <input className="ModernInput"
                     onChange={(e)=>setInput(e.target.value)}

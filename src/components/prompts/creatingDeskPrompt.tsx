@@ -10,7 +10,7 @@ import { useEnterKey } from "../../customHooks/useEnterKey";
 
 /////////////// CREATING DESK PROMPT ////////////////// SWITCH CURRENT DESK ON CREATION : DESKCONTEXT//////////////////////
 export function CreateDeskPrompt():JSX.Element{
-    const{closeModal} = useModal();
+    const{prevModal} = useModal();
     const {error, inputAnimation, triggerAnimation} = useInputErrorAnimation();
     const deskContext = useContext(DeskContext);
     const [input,setInput] = useState<string>('');
@@ -24,7 +24,7 @@ export function CreateDeskPrompt():JSX.Element{
         if(newDesk){
             deskContext?.switchDesk(newDesk.id);
             if(isConfirmHighlighted) tutorialContext?.nextStep()
-            closeModal();            
+            prevModal();            
         }
         else{
             triggerAnimation('choose another name')
@@ -37,7 +37,7 @@ export function CreateDeskPrompt():JSX.Element{
     ////////////////////////////////////////////////////////////////////////////////
     return(
         <>
-            <MenuContainer onClose={closeModal}>
+            <MenuContainer onClose={prevModal}>
                 <h2 className="popup-title">Create you Shared (or not) Desk !</h2>
                 <p className="popup-subtitle">Invite friends family coworkers or keep it for you only</p>
                 <input 

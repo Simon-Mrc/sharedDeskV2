@@ -15,7 +15,7 @@ import { useEnterKey } from "../../customHooks/useEnterKey";
 
 //////////////////////////////////// NAME PROMPT ////////////////////////////////////
 export function ItemNamePrompt() : JSX.Element{
-    const {closeModal,data} = useModal();
+    const {prevModal,data} = useModal();
     const [name , setName] = useState<string>(data.name);
     const deskContext = useContext(DeskContext);
     const arrayOfItem = deskContext?.items;
@@ -31,7 +31,7 @@ export function ItemNamePrompt() : JSX.Element{
         }catch(error){
             console.log('fail to access db')
         }
-        closeModal()
+        prevModal()
     }
     useEnterKey(handleUpdate)
     
@@ -39,7 +39,7 @@ export function ItemNamePrompt() : JSX.Element{
     ////////////////////////////////////////////////////////////////////////////////
     return(
     <>
-        <MenuContainer onClose={closeModal}>
+        <MenuContainer onClose={prevModal}>
             <h2 className="popup-title">About to change item name !</h2>
             <input className="ModernInput"
             onChange={(input)=>setName(input.target.value)}
@@ -53,7 +53,7 @@ export function ItemNamePrompt() : JSX.Element{
 
 //////////////////////////////////// PASSWORD PROMPT ////////////////////////////////////
 export function ItemPasswordPrompt() : JSX.Element{
-    const {closeModal,data} = useModal()
+    const {prevModal,data} = useModal()
     const [password , setPassword] = useState<string|null>(null);
     const deskContext = useContext(DeskContext);
     const arrayOfItem = deskContext?.items;
@@ -69,7 +69,7 @@ export function ItemPasswordPrompt() : JSX.Element{
         }catch(error){
             console.log('fail to access db')
         }
-        closeModal()
+        prevModal()
     }
     useEnterKey(handleUpdate)
     
@@ -77,7 +77,7 @@ export function ItemPasswordPrompt() : JSX.Element{
     ////////////////////////////////////////////////////////////////////////////////
     return(
         <>
-            <MenuContainer onClose={closeModal}>
+            <MenuContainer onClose={prevModal}>
             <h2 className="popup-title">About to change item password !</h2>
             <input className="ModernInput" type="password"
             onChange={(input)=>setPassword(input.target.value)}
@@ -91,7 +91,7 @@ export function ItemPasswordPrompt() : JSX.Element{
 
 //////////////////////////////////// DELETE PROMPT ////////////////////////////////////
 export function ItemDeletePrompt() : JSX.Element{
-    const {closeModal,data} = useModal();
+    const {prevModal,data} = useModal();
     const {error, inputAnimation, triggerAnimation} = useInputErrorAnimation();
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
@@ -105,7 +105,7 @@ export function ItemDeletePrompt() : JSX.Element{
             //// DELETE IS RECURSIVE FOR FILES AND FOLDER AND HANDLE BY FOREIGN KEY IN DB //////
             //// SO REFRESH ITEMS JUST CALL THE NEW ARRAY OF ITEM TO UPDATE DESKCONTEXT /////////
             deskContext?.refreshItems();
-            closeModal()
+            prevModal()
         }else{
             triggerAnimation('Look better and don t typo ! (you moron)')
         }
@@ -116,14 +116,14 @@ export function ItemDeletePrompt() : JSX.Element{
     ////////////////////////////////////////////////////////////////////////////////
     return(
         <>
-            <MenuContainer onClose={closeModal}>
+            <MenuContainer onClose={prevModal}>
             <h2 className="popup-title">{`enter ${data.name} to confirm the delete`}</h2>
             <input className={`ModernInput ${inputAnimation}`}
             onChange={(input)=>setInput(input.target.value)}
             placeholder={`enter ${data.name} to confirm`}/>
             <ErrorDisplay error={error}/>
             <button onClick={()=>deleteHandler()}> Delete Item</button>
-            <button onClick={()=>closeModal()}> Cancel Delete</button>
+            <button onClick={()=>prevModal()}> Cancel Delete</button>
             </MenuContainer>
         </>
     )

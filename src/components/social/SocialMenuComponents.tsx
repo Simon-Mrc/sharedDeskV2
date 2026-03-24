@@ -13,12 +13,12 @@ import { ErrorDisplay } from "../ui/ErrorDisplay";
 
 ///////////////////////////////// SEARCH FRIEND PART ///////////////////////////////////
 export function SearchFriendSocial(): JSX.Element{
-    const {openModal, data } = useModal();
+    const {openModal, data ,prevModal} = useModal();
     const userContext = useContext(UserContext);
     
     return(
         <>
-            <MenuContainer onClose={()=>openModal('socialMenu')}>
+            <MenuContainer onClose={()=>prevModal()}>
                 {data?.map((user :  Omit<User,'password'>)=>!userContext?.user?.friendList.includes(user.id) && (
                     <div key= {user.id}>
                         <button style={{border: `1.5px solid ${user.userColor}`}}
@@ -35,7 +35,7 @@ export function SearchFriendSocial(): JSX.Element{
 
 ///////////////////////////////// SEND INVITE PART ///////////////////////////////////
 export function InviteFriendSocial() : JSX.Element{
-    const {openModal,data} = useModal();
+    const {openModal,data, prevModal} = useModal();
     const userContext = useContext(UserContext);
     const [error , setError] = useState<string>('');
     
@@ -53,7 +53,7 @@ export function InviteFriendSocial() : JSX.Element{
                 await updateUserById(data);
                 setError('Invite sent =D');
                 setTimeout(()=>{
-                    openModal('socialMenu');
+                    prevModal();
                 },1500)
             }
         }
@@ -64,7 +64,7 @@ export function InviteFriendSocial() : JSX.Element{
   
     return(
         <>
-            <MenuContainer onClose={()=> openModal('socialMenu')}>
+            <MenuContainer onClose={()=> prevModal()}>
                 <button style={{gridColumn: "1 / -1", textAlign :"center" ,border: `3px solid ${data?.userColor}`}}
                 onClick={()=>inviteHandler()}
                 >{`you wish to invite ${data?.userName}?`}</button>
@@ -80,7 +80,7 @@ export function InviteFriendSocial() : JSX.Element{
 
 ///////////////////////////////////////// SHOW NOTIF PART /////////////////////////////////////
 export function ShowInvitSocial() : JSX.Element{
-    const {openModal} = useModal()
+    const {openModal, prevModal} = useModal()
     const userContext = useContext(UserContext);
     const [arrayOfFriend , setArrayOfFriend] = useState<(Omit<User,'password'>|null)[]>([])
   ////////////////// REUPDATE ON EACH CHANGE OF NOTIF ARRAY /////////////////// 
@@ -109,7 +109,7 @@ export function ShowInvitSocial() : JSX.Element{
   
     return(
         <>
-            <MenuContainer onClose={()=>openModal('socialMenu')}>
+            <MenuContainer onClose={()=>prevModal()}>
                 {arrayOfFriend?.map((friend)=> (friend&&
                     <button style={{border: `3px solid ${friend.userColor}`}}
                     onClick={()=>{
@@ -125,7 +125,7 @@ export function ShowInvitSocial() : JSX.Element{
 }
  /////////////////////////////// ACCEPT OR NOT PART /////////////////////////////////////
 export function AcceptOrNotSocial () : JSX.Element{
-    const {openModal,data} = useModal();
+    const {data, prevModal} = useModal();
     const userContext = useContext(UserContext);
     const currentUser = userContext?.user;
     const [error,setError] = useState<string>('');
@@ -168,17 +168,17 @@ export function AcceptOrNotSocial () : JSX.Element{
   
     return(
     <>
-        <MenuContainer onClose={()=>openModal('socialMenu')}>
+        <MenuContainer onClose={()=>prevModal()}>
             <button style={{border: `3px solid #02a32b`}}
                 onClick={async()=>{
                     await acceptHandler(true);
-                    openModal('socialMenu')
+                    prevModal();
                 }
                 }>{`Accept ${data?.userName} as a friend`}</button>
             <button style={{border: `3px solid #a33002`}}
                 onClick={async ()=>{
                     await acceptHandler(false);
-                    openModal('socialMenu');
+                    prevModal();
                 }
                 }>{`Refuse ${data?.userName} as a friend`}</button>   
             <ErrorDisplay error={error}/>
@@ -192,7 +192,7 @@ export function AcceptOrNotSocial () : JSX.Element{
 
 ///////////////////////////////////// SHOW ALL FRIENDS PART ////////////////////////////
 export function ShowFriendListSocial() : JSX.Element{
-    const {openModal} = useModal();
+    const {openModal, prevModal} = useModal();
     const userContext = useContext(UserContext);
     const [error, setError] = useState<string>("");
     const [arrayOfFriend , setArrayOffFriends] = useState<(Omit<User , 'password'>|null)[]>([]);
@@ -219,7 +219,7 @@ export function ShowFriendListSocial() : JSX.Element{
 /////////////////////////////////JSX PART //////////////////////////////
     return(
     <>
-        <MenuContainer onClose={()=>openModal('socialMenu')}>
+        <MenuContainer onClose={()=>prevModal()}>
             {arrayOfFriend.map((user)=>(
                 <button style={{border: `3px solid ${user?.userColor}`}}
                 onClick={()=>{
@@ -234,7 +234,7 @@ export function ShowFriendListSocial() : JSX.Element{
 
 /////////////////////////////////////// SHOW FRIEND MENU PART //////////////////////////
 export function FriendMenuSocial() : JSX.Element{
-    const {openModal,data} = useModal();
+    const {data, prevModal} = useModal();
     const userContext = useContext(UserContext);
     const [error, setError] = useState<string>('');
     async function deleteHandler(){
@@ -249,7 +249,7 @@ export function FriendMenuSocial() : JSX.Element{
                 /////////////////// UPDATE IN DB /////////////////
                 await updateUserById(updatedFriend);
                 await updateUserById(updatedUser);
-                openModal('socialMenu');
+                prevModal();
             }else{
                 setError('He deleted you before you did ;) !')
             }
@@ -261,7 +261,7 @@ export function FriendMenuSocial() : JSX.Element{
   
     return(
     <>
-        <MenuContainer onClose={()=>openModal('socialMenu')}>
+        <MenuContainer onClose={()=>prevModal()}>
             <button style={{border: `3px solid ${data?.userColor},gridColumn: "1 / -1", textAlign :"center"`}}
             onClick={()=>deleteHandler()}
             >DELETE {data?.userName} !!</button>
