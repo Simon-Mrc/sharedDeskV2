@@ -9,6 +9,9 @@ import { CreateFilePrompt } from "../components/prompts/CreateFilePrompt";
 import { CreateDeskPrompt } from "../components/prompts/creatingDeskPrompt";
 import { ItemDeletePrompt, ItemNamePrompt, ItemPasswordPrompt } from "../components/prompts/OptionPrompts";
 import { AcceptOrNotSocial, FriendMenuSocial, InviteFriendSocial, SearchFriendSocial, ShowFriendListSocial, ShowInvitSocial } from "../components/social/SocialMenuComponents";
+import { ConfirmModal } from "../components/prompts/ConfirmPrompt";
+import { AccountSettingMenu } from "../components/layout/AccountPart";
+import { AvatarMenu } from "../components/userAndAccount/AccountFunctions";
 
 export function ModalManager(){
     const {type} = useModal();
@@ -17,29 +20,33 @@ export function ModalManager(){
     return(
         <>
                 {/* LOGIN PAGE PART */}
-            {type === 'login' && <LoginPrompt/>}
-            {type === 'register' && <RegisterPrompt/>}
+            {type.includes('login') && <LoginPrompt/>}
+            {type.includes('register') && <RegisterPrompt/>}
                 {/* SIDEBAR PART  */}
-            {type === 'createDeskMenu' && <CreateDeskPrompt/>}
-            {type === 'deskMenu' && <DeskMenu/>}
-            {type === 'deskInviteMenu' && <DeskInviteMenu/>}
-            {type === 'deskFriendMenu' && <DeskFriendMenu/>}
+            {type.includes('createDeskMenu') && <CreateDeskPrompt/>}
+            {type.includes('deskMenu') && <DeskMenu/>}
+            {type.includes('deskInviteMenu') && <DeskInviteMenu/>}
+            {type.includes('deskFriendMenu') && <DeskFriendMenu/>}
                 {/* DESK DISPLAY PART  */}
-            {type === 'createItemPrompt' && <CreateItemPrompt/>}
-            {type === 'createFilePrompt' && <CreateFilePrompt/>}
+            {type.includes('createItemPrompt') && <CreateItemPrompt/>}
+            {type.includes('createFilePrompt') && <CreateFilePrompt/>}
                 {/* OPTION MENU FOR ITEM */}
-            {type === 'itemNamePrompt' && <ItemNamePrompt/>}
-            {type === 'itemPasswordPrompt' && <ItemPasswordPrompt/>}
-            {type === 'itemDeletePrompt' && <ItemDeletePrompt/>}
+            {type.includes('itemNamePrompt') && <ItemNamePrompt/>}
+            {type.includes('itemPasswordPrompt') && <ItemPasswordPrompt/>}
+            {type.includes('itemDeletePrompt') && <ItemDeletePrompt/>}
                 {/* SOCIAL PART */}
-            {type === 'socialMenu' && <SocialMenu/>}
-            {type === 'searchFriendSocial' && <SearchFriendSocial/>}
-            {type === 'inviteFriendSocial' && <InviteFriendSocial/>}
-            {type === 'showInvitSocial' && <ShowInvitSocial/>}
-            {type === 'acceptOrNotSocial' && <AcceptOrNotSocial/>}
-            {type === 'showFriendListSocial' && <ShowFriendListSocial/>}
-            {type === 'friendMenuSocial' && <FriendMenuSocial/>}
-
+            {type.includes('socialMenu') && <SocialMenu/>}
+            {type.includes('searchFriendSocial') && <SearchFriendSocial/>}
+            {type.includes('inviteFriendSocial') && <InviteFriendSocial/>}
+            {type.includes('showInvitSocial') && <ShowInvitSocial/>}
+            {type.includes('acceptOrNotSocial') && <AcceptOrNotSocial/>}
+            {type.includes('showFriendListSocial') && <ShowFriendListSocial/>}
+            {type.includes('friendMenuSocial') && <FriendMenuSocial/>}
+                {/* ACCOUNT SETTINGS */}
+            {type.includes('accountSettingMenu') && <AccountSettingMenu/>}
+            {type.includes('avatarMenu') && <AvatarMenu/>}
+                {/* CONFIRM PATTERN */}
+            {type.includes('confirm') && <ConfirmModal/>}
         </>
     )
 }

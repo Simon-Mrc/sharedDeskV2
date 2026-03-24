@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import type { Item } from "../../../shared/types"
 import { TutorialContext } from "../../context/TutorialContext";
 import { useCloseAnimation } from "../../customHooks/useAnimation";
@@ -9,8 +9,6 @@ import { useModal } from "../../context/ModalContext";
 export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord : {x:number,y:number}, item : Item}){
     const {openModal} = useModal();
     const {animation, endWithEase} = useCloseAnimation(onClose);
-    const [duplicatePrompt , setDuplicatePrompt] = useState<boolean>(false);
-    const [hidden,setHidden] = useState<string>('');
     const tutorialContext = useContext(TutorialContext);
     const isHighlighted = (tutorialContext?.step === 15 && tutorialContext.isActive);
 
@@ -19,7 +17,7 @@ export function OptionMenu({onClose ,coord, item} : {onClose : ()=>void , coord 
 //////////////////////////////////// JSX PART //// LAUNCHING ALL STATES FOR OPTIONS FUNCTIONS ////////////////////////////////////
     return(
         <div className={`overlay ${animation}`} onClick={()=>endWithEase()}>
-            <div className={`PopupWithBlurrOption ${hidden}`} onClick={(e)=>e.stopPropagation()} style={{
+            <div className={`PopupWithBlurrOption `} onClick={(e)=>e.stopPropagation()} style={{
                 left : coord.x,
                 top : coord.y}}>
                 <button onClick={()=>openModal('itemNamePrompt',item)}>Rename!</button>

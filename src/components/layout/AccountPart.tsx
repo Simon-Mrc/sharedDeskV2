@@ -1,18 +1,18 @@
 import { useContext, useState, type JSX } from "react";
 import { UserContext } from "../../context/UserContext";
 import { updateUserById } from "../../api/user";
-import { AvatarMenu } from "../userAndAccount/AccountFunctions";
 import { MenuContainer } from "../../modals/Modal";
 import { MessageDisplay } from "../ui/MessageDipslay";
 import { useMessage } from "../../customHooks/useMessage";
 import { useInputErrorAnimation } from "../../customHooks/useAnimation";
 import { ErrorDisplay } from "../ui/ErrorDisplay";
+import { useModal } from "../../context/ModalContext";
 
 
 //////////////////// ACCOUNT PART PUR JSX NOTHING TO SEE FOR NOW ///////////////////
 export function AccountPart():JSX.Element{
     const context= useContext(UserContext);
-    const [settingMenu, setSettingMenu] = useState<boolean>(false);
+    const {openModal} = useModal()
     return(
         <div>
           <div className="sidebar-section">
@@ -24,10 +24,7 @@ export function AccountPart():JSX.Element{
                 <span id="userNameDisplay" className="user-name">{context?.user?.userName ?? "?"}</span>
                 <span id="userTypeDisplay" className="user-type"></span>
               </div>
-                <button id="accountSetting" onClick={()=> setSettingMenu(true)}>⚙️Account Settings</button>
-                {settingMenu && 
-                <AccountSettingMenu
-                onClose = {()=> setSettingMenu(false)} />}
+                <button id="accountSetting" onClick={()=> openModal('accountSettingMenu')}>⚙️Account Settings</button>
               </div>
             </div>
         </div>
@@ -36,10 +33,11 @@ export function AccountPart():JSX.Element{
 
 
 
-export function AccountSettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Element{
+export function AccountSettingMenu () : JSX.Element{
 
 //// CHANGES USERNAME /// CHANGE COLOR /// CHANGE MAIL ? /// BUY PREMIUM ? // CHANGEPASSWORD //CHANGE MAIL ///
   const userContext = useContext(UserContext);
+  const {prevModal, openModal} = useModal();
   const {message,triggerKey,showMessage} = useMessage();
   const {error : errorMail, inputAnimation : inputAnimationMail, triggerAnimation : triggerAnimationMail} = useInputErrorAnimation();
   const [mailInput,setMailInput] = useState<string>('');
@@ -47,8 +45,6 @@ export function AccountSettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Elem
   const {error : errorName, inputAnimation : inputAnimationName, triggerAnimation : triggerAnimationName} = useInputErrorAnimation();
   const [userNameInput,setUserNameInput] = useState<string>('');
 
-  
-  
   const [passwordMenu,setPasswordMenu] = useState<boolean>(false);
   
   const [premiumMenu,setPremiumMenu] = useState<boolean>(false);
@@ -117,8 +113,7 @@ export function AccountSettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Elem
     
   return(
     <>
-      <MenuContainer onClose={onClose}>
-    
+      <MenuContainer onClose={prevModal}>  
         <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
          </div> 
             {/* Change userColor part */}
@@ -174,11 +169,8 @@ export function AccountSettingMenu ({onClose} : {onClose : ()=>void}) : JSX.Elem
 
     
                       {/* Set avatar part */}
-            <button onClick={()=> setAvatarMenu(true)} >Change Avatar</button>
-            {avatarMenu &&
-            <AvatarMenu 
-            onClose = {()=> setAvatarMenu(false)} 
-            />}
+            <button onClick={()=> openModal('avatarMenu')} >Change Avatar</button>
+            
                           
             {/* Change password part */}
             {/* <button onClick={()=> setPasswordMenu(true)} >Change password</button>

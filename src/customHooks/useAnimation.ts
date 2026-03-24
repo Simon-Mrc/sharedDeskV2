@@ -48,9 +48,10 @@ export function useInputErrorAnimation(time = 500){
     function triggerAnimation(text = ''){
         setError(text);
         setInputAnimation('shake');
-        setTimeout(()=>{
+        const timer = setTimeout(()=>{
             setInputAnimation('');
         },time)
+        clearTimeout(timer)
     }
     return {error, inputAnimation,triggerAnimation} 
 }

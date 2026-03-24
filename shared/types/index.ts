@@ -74,13 +74,27 @@ export type ModalTypes = 'settings'
 | 'acceptOrNotSocial'
 | 'showFriendListSocial'
 | 'friendMenuSocial'
+| 'confirm'
+| 'accountSettingMenu'
+| 'avatarMenu'
 | null;
 
+export interface ConfirmOptions {
+    title: string;
+    message: string;
+    confirmLabel?: string;  // default: "Confirm"
+    cancelLabel?: string;   // default: "Cancel"
+    variant?: 'danger' | 'warning' | 'info'; // controls button color
+  }
+
 export interface ModalContextType {
-    type : ModalTypes
-    data? : any;
-    openModal : (type :ModalTypes, data? :any)=> void;
+    type : ModalTypes[]
+    data? : any | ConfirmOptions;
+    openModal : (type :ModalTypes, data? :any | ConfirmOptions)=> void;
     closeModal : ()=>void;
+    prevModal : ()=>void;
+    confirm: (options: ConfirmOptions) => Promise<boolean>; 
+    resolveConfirm: (value: boolean) => void;              
 }
 
 export interface Item {

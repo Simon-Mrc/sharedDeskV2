@@ -9,7 +9,7 @@ import { useEnterKey } from "../../customHooks/useEnterKey";
 
 /////////////////// LOGIN PROMPT ////////////// NAVIGATE TO HOME IF LOGGED ////////// PROTECTED ROUTE PREVENTS IF NOT //////////////
 export function LoginPrompt(){
-    const {closeModal} = useModal()  
+    const {prevModal} = useModal()  
     const navigate = useNavigate();
     const userContext = useContext(UserContext);
     const [mail , setMail] = useState<string>(''); 
@@ -19,7 +19,7 @@ export function LoginPrompt(){
     
     useEffect(()=>{
         if(userContext?.logged){
-            closeModal();
+            prevModal();
             setTimeout(()=>{
                 navigate('/');
             },500)
@@ -45,7 +45,7 @@ export function LoginPrompt(){
     ////////////////////////////////////////////////////////////////////////////////
     return(
         <>
-            <MenuContainer onClose={()=>closeModal()}>
+            <MenuContainer onClose={()=>prevModal()}>
                 <h2 className="popup-title">Welcome back</h2>
                 <p className="popup-subtitle">Log into your account</p>
                 <span>Mail</span>

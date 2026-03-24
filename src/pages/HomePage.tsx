@@ -3,7 +3,6 @@ import { Sidebar } from "../components/layout/Sidebar";
 import { DeskDisplay } from "../components/desk/DeskDisplay";
 import { UserContext } from "../context/UserContext";
 import { TutorialContext } from "../context/TutorialContext";
-import type { Desk } from "../../shared/types";
 import { DeskContext } from "../context/DeskContext";
 
 //////// HOME PAGE YOU DON T SAY //////////////

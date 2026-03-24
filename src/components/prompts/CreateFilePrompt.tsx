@@ -13,7 +13,7 @@ import { useEnterKey } from "../../customHooks/useEnterKey";
 //////////////////// CREATE ITEM PROMPT ////////////////////////NOTHING TO COMMENT ON /////////////////////////
 export function CreateFilePrompt() : JSX.Element{
     
-    const{closeModal,data} = useModal()
+    const{prevModal,data} = useModal()
     const deskContext = useContext(DeskContext);
     const userContext = useContext(UserContext);
     const sectionContext= useContext(SectionContext);
@@ -45,7 +45,7 @@ export function CreateFilePrompt() : JSX.Element{
             if(newItem && data.fileContent){
             await handleUpdate(data.fileContent,newItem);
             deskContext.refreshItems();
-            closeModal();}
+            prevModal();}
         }
         else{
             setError('You need to have permission to create an item !')
@@ -56,7 +56,7 @@ export function CreateFilePrompt() : JSX.Element{
         ////////////////////////////////////////////////////////////////////////////////
         return(
             <>
-                <MenuContainer onClose={closeModal}>
+                <MenuContainer onClose={prevModal}>
                 <h2 className="popup-title">Choose a name for your upload ?</h2>
                 <p className="popup-subtitle">Don t forget the extension</p>
                 <input 

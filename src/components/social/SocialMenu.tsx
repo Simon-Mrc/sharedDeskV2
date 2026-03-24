@@ -8,7 +8,7 @@ import { MenuContainer } from "../../modals/Modal";
 /////////////////////////////// SOCIAL MENU PURE JSX FUNCTION ////////////////////////////////
 //////////// ROOT FOR ALL SOCIAL FEATURES ///////// HANDLES THE STATES OF PROMPTS////////////////
 export function SocialMenu():JSX.Element{
-    const {closeModal, openModal} = useModal()
+    const {prevModal, openModal} = useModal()
     let isConfirmHighlighted =false;
     const userContext = useContext(UserContext);
     isConfirmHighlighted = (userContext?.user?.notif.length !==0);
@@ -26,7 +26,7 @@ export function SocialMenu():JSX.Element{
   
     return(
         <>
-            <MenuContainer onClose={closeModal}>
+            <MenuContainer onClose={prevModal}>
                 <div style={{gridColumn: "1 / -1", display : "flex", maxWidth : "100%" }}>
                     <input className="ModernInput"
                         onChange={(input)=>setSearch(input.target.value)}
